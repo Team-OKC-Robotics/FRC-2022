@@ -1,17 +1,20 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-    private Victor left1Motor;
-    private Victor left2Motor;
     private SpeedControllerGroup leftSide;
+    private WPI_TalonFX left1Motor;
+    private WPI_TalonFX left2Motor;
 
-    private Victor right1Motor;
-    private Victor right2Motor;
+    private WPI_TalonFX right1Motor;
+    private WPI_TalonFX right2Motor;
     private SpeedControllerGroup rightSide;
 
     private DifferentialDrive drivetrain;
@@ -19,12 +22,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     //TODO add shuffleboard support
 
     public DrivetrainSubsystem() {
-        left1Motor = new Victor(2);
-        left2Motor = new Victor(3);
+        left1Motor = new WPI_TalonFX(2);
+        left2Motor = new WPI_TalonFX(3);
         leftSide = new SpeedControllerGroup(left1Motor, left2Motor);
 
-        right1Motor = new Victor(0);
-        right2Motor = new Victor(1);
+        right1Motor = new WPI_TalonFX(0);
+        right2Motor = new WPI_TalonFX(1);
         rightSide = new SpeedControllerGroup(right1Motor, right2Motor);
 
         drivetrain = new DifferentialDrive(leftSide, rightSide);
