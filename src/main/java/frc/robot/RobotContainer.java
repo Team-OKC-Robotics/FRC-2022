@@ -4,12 +4,11 @@
 
 package frc.robot;
 
+import autos.DriveOffLineAuto;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
@@ -29,6 +28,8 @@ public class RobotContainer {
 
   private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(gamepad1.getRawAxis(5), gamepad1.getRawAxis(1)), drivetrain);
 
+  private final DriveOffLineAuto autoCommand = new DriveOffLineAuto(drivetrain);
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -56,8 +57,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    //return m_autoCommand;
-    return null;
+    return autoCommand;
   }
 }

@@ -1,24 +1,29 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     private SpeedControllerGroup leftSide;
     private WPI_TalonFX left1Motor;
-    //private WPI_TalonFX left2Motor;
 
     private WPI_TalonFX right1Motor;
-    //private WPI_TalonFX right2Motor;
+    
     private SpeedControllerGroup rightSide;
 
     private DifferentialDrive drivetrain;
-    //TODO add built-in Rio accelerometer to this subsystem
+
+    private PIDController distancePID;
+    private PIDController headingPID;
+    private PIDController turnPID;
+
+    private BuiltInAccelerometer gyro;
     //TODO add shuffleboard support
 
     public DrivetrainSubsystem() {
@@ -31,6 +36,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rightSide = new SpeedControllerGroup(right1Motor);
 
         drivetrain = new DifferentialDrive(leftSide, rightSide);
+
+        gyro = new BuiltInAccelerometer();
+
+        distancePID = new PIDController(0, 0, 0);
+        headingPID = new PIDController(0, 0, 0);
+        turnPID = new PIDController(0, 0, 0);
     }
 
     /**
@@ -51,5 +62,50 @@ public class DrivetrainSubsystem extends SubsystemBase {
         drivetrain.arcadeDrive(speed, turn, false);
     }
     
+    /**
+     * Drives the drivetrain straight for the given distance
+     * @param distance the distance, in inches, to drive forwards
+     */
+    public void driveDistance(double distance) {
+        distancePID.setSetpoint(distance);
 
+        arcadeDrive(distancePID.calculate(getEncoderAverage()), headingPID.calculate(getHeading()));
+    }
+
+    /**
+     * Gets the average of both sides of the drivetrain
+     * @return the average distance of the drivetrain, in inches
+     */
+    public double getEncoderAverage() {
+        return (getLeftEncoderAverage() + getRightEncoderAverage()) / 2;
+    }
+
+    /**
+     * Gets the average of the left side of the drivetrain
+     * @return the average distance of the left side of the drivetrain, in inches
+     */
+    public double getLeftEncoderAverage() {
+        return left1Motor.getSensorCollection().getIntegratedSensorAbsolutePosition();
+    }
+
+    /**
+     * Gets the average of the right side of the drivetrain
+     * @return the average distance of the right side of the drivetrain, in inches
+     */
+    public double getRightEncoderAverage() {
+        return right1Motor.getSensorCollection().getIntegratedSensorAbsolutePosition();
+    }
+
+    public boolean atDistanceSetpoint() {
+        return distancePID.atSetpoint();
+    }
+
+    /**
+     * Gets the heading of the built-in roboRIO gyro, in degrees, 0-360
+     * @return the heading of the gyro
+     */
+    public double getHeading() {
+        //return gyro.get
+        return 0;
+    }
 }
