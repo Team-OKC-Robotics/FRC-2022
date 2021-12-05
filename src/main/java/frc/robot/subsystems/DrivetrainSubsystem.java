@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     private SpeedControllerGroup leftSide;
@@ -39,7 +39,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         gyro = new BuiltInAccelerometer();
 
-        distancePID = new PIDController(0, 0, 0);
+        distancePID = new PIDController(0.5, 0, 0);
         headingPID = new PIDController(0, 0, 0);
         turnPID = new PIDController(0, 0, 0);
     }
@@ -69,7 +69,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void driveDistance(double distance) {
         distancePID.setSetpoint(distance);
 
-        arcadeDrive(distancePID.calculate(getEncoderAverage()), headingPID.calculate(getHeading()));
+        arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), headingPID.calculate(getHeading()));
     }
 
     /**
@@ -93,7 +93,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the right side of the drivetrain, in inches
      */
     public double getRightEncoderAverage() {
-        return right1Motor.getSensorCollection().getIntegratedSensorAbsolutePosition();
+        return -right1Motor.getSensorCollection().getIntegratedSensorAbsolutePosition();
+    }
+
+    public void resetEncoders() {
+        right1Motor.getSensorCollection().setIntegratedSensorPosition(0, 200);
+        left1Motor.getSensorCollection().setIntegratedSensorPosition(0, 200);
+    }
+
+    public double getInches(double encoderTicks) {
+        return encoderTicks / Constants.ticksPerRev * Constants.gearRatio * Math.PI * Constants.wheelDiameter;
     }
 
     public boolean atDistanceSetpoint() {

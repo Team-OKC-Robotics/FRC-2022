@@ -12,6 +12,10 @@ public class DriveCommand extends CommandBase {
         this.distance = distance;
     }
 
+    public void init() {
+        drivetrain.resetEncoders();
+    }
+
     public void execute() {
         drivetrain.driveDistance(distance);
     }
