@@ -16,4 +16,5 @@ public final class Constants {
     public static final double ticksPerRev = 2048;
     public static final double gearRatio = 1;
     public static final double wheelDiameter = 6;
+    public static final double trackWidth = 10;
 }

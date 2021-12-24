@@ -1,12 +1,31 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.hal.SimDevice;
+import edu.wpi.first.hal.SimDevice.Direction;
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.system.LinearSystem;
+import edu.wpi.first.wpilibj.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.numbers.N2;
 import frc.robot.Constants;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -23,8 +42,24 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private PIDController headingPID;
     private PIDController turnPID;
 
-    private BuiltInAccelerometer gyro;
-    //TODO add shuffleboard support
+    private AHRS gyro;
+
+    private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.trackWidth);
+    private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
+
+    //Simulation
+    private PIDController leftPID;
+    private PIDController rightPID;
+    private Field2d fieldSim = new Field2d();
+    private SimDevice gyroSim = SimDevice.create("ahrs", 0);
+    private SimDeviceSim gyroSimSim = new SimDeviceSim("ahrs", 0);
+    private Encoder leftDummyEncoder = new Encoder(0, 1);
+    private Encoder rightDummyEncoder = new Encoder(2, 3);
+    private EncoderSim leftEncoderSim = new EncoderSim(leftDummyEncoder);
+    private EncoderSim rightEncoderSim = new EncoderSim(rightDummyEncoder);
+    private LinearSystem<N2, N2, N2> drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(1.98, 0.2, 1.5, 0.3);
+    private DifferentialDrivetrainSim drivetrainSim = new DifferentialDrivetrainSim(drivetrainSystem, DCMotor.getFalcon500(2), 8, Constants.trackWidth, 6, null);
+    private SimDouble simHeading = gyroSim.createDouble("heading", Direction.kBidir, 0);
 
     public DrivetrainSubsystem() {
         left1Motor = new WPI_TalonFX(1);
@@ -35,13 +70,42 @@ public class DrivetrainSubsystem extends SubsystemBase {
         //right2Motor = new WPI_TalonFX(1);
         rightSide = new SpeedControllerGroup(right1Motor);
 
+        leftDummyEncoder.setDistancePerPulse(Math.PI * 2 * 6 / 2048);
+        rightDummyEncoder.setDistancePerPulse(Math.PI * 2 * 6 / 2048);
+
+        leftDummyEncoder.reset();
+        rightDummyEncoder.reset();
+
         drivetrain = new DifferentialDrive(leftSide, rightSide);
 
-        gyro = new BuiltInAccelerometer();
+        gyro = new AHRS(SPI.Port.kMXP); // TODO add correct port
 
         distancePID = new PIDController(0.5, 0, 0);
         headingPID = new PIDController(0, 0, 0);
         turnPID = new PIDController(0, 0, 0);
+        
+        leftPID = new PIDController(1, 0, 0);
+        rightPID = new PIDController(1, 0, 0);
+    }
+
+    public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        leftSide.setVoltage(leftPID.calculate(leftDummyEncoder.getRate(), speeds.leftMetersPerSecond));
+        rightSide.setVoltage(rightPID.calculate(rightDummyEncoder.getRate(), speeds.rightMetersPerSecond));
+    }
+
+    public void drive(double xSpeed, double rotation) {
+        setSpeeds(kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0, rotation)));
+    }
+
+    public void updateOdemetry() {
+        odometry.update(gyro.getRotation2d(), leftDummyEncoder.getDistance(), rightDummyEncoder.getDistance());
+    }
+
+    public void resetOdemtry(Pose2d pose) {
+        leftDummyEncoder.reset();
+        rightDummyEncoder.reset();
+        drivetrainSim.setPose(pose);
+        odometry.resetPosition(pose, gyro.getRotation2d());
     }
 
     /**
@@ -107,6 +171,24 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public boolean atDistanceSetpoint() {
         return distancePID.atSetpoint();
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        drivetrainSim.setInputs(left1Motor.get() * RobotController.getInputVoltage(), -right1Motor.get() * RobotController.getInputVoltage());
+        drivetrainSim.update(0.02);
+
+        leftEncoderSim.setDistance(drivetrainSim.getLeftPositionMeters());
+        leftEncoderSim.setRate(drivetrainSim.getLeftVelocityMetersPerSecond());
+        rightEncoderSim.setDistance(drivetrainSim.getRightPositionMeters());
+        rightEncoderSim.setRate(drivetrainSim.getRightVelocityMetersPerSecond());
+        simHeading.set(-drivetrainSim.getHeading().getDegrees());
+    }
+
+    @Override
+    public void periodic() {
+        updateOdemetry();
+        fieldSim.setRobotPose(odometry.getPoseMeters());
     }
 
     /**
