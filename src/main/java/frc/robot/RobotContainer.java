@@ -26,7 +26,7 @@ public class RobotContainer {
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(gamepad1.getRawAxis(5), gamepad1.getRawAxis(1)), drivetrain);
+  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.drive(gamepad1.getRawAxis(5), gamepad1.getRawAxis(1)), drivetrain);
 
   private final DriveOffLineAuto autoCommand = new DriveOffLineAuto(drivetrain);
   

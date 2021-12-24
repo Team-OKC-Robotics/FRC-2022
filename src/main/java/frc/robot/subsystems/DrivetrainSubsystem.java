@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.system.LinearSystem;
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
@@ -45,7 +47,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private AHRS gyro;
 
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.trackWidth);
-    private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
+    private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(new Rotation2d());
 
     //Simulation
     private PIDController leftPID;
@@ -86,6 +88,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         
         leftPID = new PIDController(1, 0, 0);
         rightPID = new PIDController(1, 0, 0);
+
+        SmartDashboard.putData("Field", fieldSim);
     }
 
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
