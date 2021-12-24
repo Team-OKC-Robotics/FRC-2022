@@ -4,9 +4,12 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.hal.SimDevice;
+import edu.wpi.first.hal.SimDeviceJNI;
 import edu.wpi.first.hal.SimDevice.Direction;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -61,7 +64,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private EncoderSim rightEncoderSim = new EncoderSim(rightDummyEncoder);
     private LinearSystem<N2, N2, N2> drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(1.98, 0.2, 1.5, 0.3);
     private DifferentialDrivetrainSim drivetrainSim = new DifferentialDrivetrainSim(drivetrainSystem, DCMotor.getFalcon500(2), 8, Constants.trackWidth, 6, null);
-    private SimDouble simHeading = gyroSim.createDouble("heading", Direction.kBidir, 0);
+    //private SimDouble simHeading = gyroSim.createDouble("heading", Direction.kBidir, 0);
+    private int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+    private SimDouble headingSim = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
 
     public DrivetrainSubsystem() {
         left1Motor = new WPI_TalonFX(1);
@@ -90,6 +95,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rightPID = new PIDController(1, 0, 0);
 
         SmartDashboard.putData("Field", fieldSim);
+        headingSim.set(0);
     }
 
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
@@ -102,14 +108,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void updateOdemetry() {
-        odometry.update(gyro.getRotation2d(), leftDummyEncoder.getDistance(), rightDummyEncoder.getDistance());
+        if (RobotBase.isSimulation()) {
+            odometry.update(Rotation2d.fromDegrees(headingSim.get()), leftDummyEncoder.getDistance(), rightDummyEncoder.getDistance());
+        } else {
+            odometry.update(gyro.getRotation2d(), leftDummyEncoder.getDistance(), rightDummyEncoder.getDistance());
+        }
     }
 
     public void resetOdemtry(Pose2d pose) {
         leftDummyEncoder.reset();
         rightDummyEncoder.reset();
         drivetrainSim.setPose(pose);
-        odometry.resetPosition(pose, gyro.getRotation2d());
+        if (RobotBase.isSimulation()) {
+            odometry.resetPosition(pose, Rotation2d.fromDegrees(headingSim.get()));
+        } else {
+            odometry.resetPosition(pose, gyro.getRotation2d());
+        }
     }
 
     /**
@@ -186,7 +200,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         leftEncoderSim.setRate(drivetrainSim.getLeftVelocityMetersPerSecond());
         rightEncoderSim.setDistance(drivetrainSim.getRightPositionMeters());
         rightEncoderSim.setRate(drivetrainSim.getRightVelocityMetersPerSecond());
-        simHeading.set(-drivetrainSim.getHeading().getDegrees());
+        headingSim.set(-drivetrainSim.getHeading().getDegrees());
     }
 
     @Override
