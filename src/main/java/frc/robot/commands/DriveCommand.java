@@ -14,6 +14,7 @@ public class DriveCommand extends CommandBase {
 
     public void init() {
         drivetrain.resetEncoders();
+        drivetrain.resetDistancePID();
     }
 
     public void execute() {

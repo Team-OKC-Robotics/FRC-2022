@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.function.Function;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -28,7 +26,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private PIDController headingPID;
     private PIDController turnPID;
 
-    private double speedModifier = 1;
+    public double speedModifier = 1;
 
     private BuiltInAccelerometer gyro;
 
@@ -55,7 +53,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         gyro = new BuiltInAccelerometer();
 
-        distancePID = new PIDController(0.00001, 0, 0.0001);
+        distancePID = new PIDController(0.1, 0, 0.0001);
         headingPID = new PIDController(0, 0, 0);
         turnPID = new PIDController(0, 0, 0);
 
@@ -63,6 +61,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rightTicks.setDouble(0);
         totalTicks.setDouble(0);
         resetEncoders();
+        resetDistancePID();
     }
 
     /**
@@ -80,6 +79,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @param turn how much to turn the robot
      */
     public void arcadeDrive(double speed, double turn) {
+        drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, false);
+    }
+
+    /**
+     * Arcade drives the robot. Does not square the inputs.
+     * @param speed the speed of the robot
+     * @param turn how much to turn the robot
+     * @param maxOutput the max output of the drivtrain
+     */
+    public void arcadeDrive(double speed, double turn, double maxOutput) {
+        drivetrain.setMaxOutput(maxOutput);
         drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, false);
     }
     
@@ -118,8 +128,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void resetEncoders() {
-        right1Motor.getSensorCollection().setIntegratedSensorPosition(0, 200);
-        left1Motor.getSensorCollection().setIntegratedSensorPosition(0, 200);
+        right1Motor.getSensorCollection().setIntegratedSensorPosition(0, 500);
+        left1Motor.getSensorCollection().setIntegratedSensorPosition(0, 500);
         totalTicks.setDouble(0);
         leftTicks.setDouble(0);
         rightTicks.setDouble(0);
