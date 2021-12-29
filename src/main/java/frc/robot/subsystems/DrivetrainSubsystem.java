@@ -1,20 +1,25 @@
 package frc.robot.subsystems;
 
+import java.util.function.Function;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-    private SpeedControllerGroup leftSide;
     private WPI_TalonFX left1Motor;
-
     private WPI_TalonFX right1Motor;
     
+    private SpeedControllerGroup leftSide;
     private SpeedControllerGroup rightSide;
 
     private DifferentialDrive drivetrain;
@@ -23,8 +28,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private PIDController headingPID;
     private PIDController turnPID;
 
+    private double speedModifier = 1;
+
     private BuiltInAccelerometer gyro;
-    //TODO add shuffleboard support
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("drivetrain");
+    private NetworkTableEntry leftTicks = tab.addPersistent("left ticks", 0).getEntry();
+    private NetworkTableEntry rightTicks = tab.addPersistent("right ticks", 0).getEntry();
+    private NetworkTableEntry totalTicks = tab.addPersistent("total ticks", 0).getEntry();
+    //private NetworkTableEntry distanceP = tab.addPersistent("Distance kP", 0).withWidget(widgetType).getEntry();
+    private NetworkTableEntry distanceD = tab.addPersistent("Distance kD", 0).getEntry();
 
     public DrivetrainSubsystem() {
         left1Motor = new WPI_TalonFX(1);
@@ -35,13 +48,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
         //right2Motor = new WPI_TalonFX(1);
         rightSide = new SpeedControllerGroup(right1Motor);
 
+        left1Motor.setNeutralMode(NeutralMode.Brake);
+        right1Motor.setNeutralMode(NeutralMode.Brake);
+
         drivetrain = new DifferentialDrive(leftSide, rightSide);
 
         gyro = new BuiltInAccelerometer();
 
-        distancePID = new PIDController(0.5, 0, 0);
+        distancePID = new PIDController(0.00001, 0, 0.0001);
         headingPID = new PIDController(0, 0, 0);
         turnPID = new PIDController(0, 0, 0);
+
+        leftTicks.setDouble(0);
+        rightTicks.setDouble(0);
+        totalTicks.setDouble(0);
+        resetEncoders();
     }
 
     /**
@@ -50,7 +71,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @param rightSpeed right speed
      */
     public void tankDrive(double leftSpeed, double rightSpeed) {
-        drivetrain.tankDrive(leftSpeed / 1, rightSpeed / 1, false);
+        drivetrain.tankDrive(leftSpeed * speedModifier, rightSpeed * speedModifier, false);
     }
 
     /**
@@ -59,7 +80,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @param turn how much to turn the robot
      */
     public void arcadeDrive(double speed, double turn) {
-        drivetrain.arcadeDrive(speed, turn, false);
+        drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, false);
     }
     
     /**
@@ -85,7 +106,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the left side of the drivetrain, in inches
      */
     public double getLeftEncoderAverage() {
-        return left1Motor.getSensorCollection().getIntegratedSensorAbsolutePosition();
+        return left1Motor.getSensorCollection().getIntegratedSensorPosition();
     }
 
     /**
@@ -93,12 +114,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the right side of the drivetrain, in inches
      */
     public double getRightEncoderAverage() {
-        return -right1Motor.getSensorCollection().getIntegratedSensorAbsolutePosition();
+        return -right1Motor.getSensorCollection().getIntegratedSensorPosition();
     }
 
     public void resetEncoders() {
         right1Motor.getSensorCollection().setIntegratedSensorPosition(0, 200);
         left1Motor.getSensorCollection().setIntegratedSensorPosition(0, 200);
+        totalTicks.setDouble(0);
+        leftTicks.setDouble(0);
+        rightTicks.setDouble(0);
     }
 
     public double getInches(double encoderTicks) {
@@ -109,6 +133,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return distancePID.atSetpoint();
     }
 
+    public void resetDistancePID() {
+        distancePID.reset();
+    }
+
     /**
      * Gets the heading of the built-in roboRIO gyro, in degrees, 0-360
      * @return the heading of the gyro
@@ -116,5 +144,24 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public double getHeading() {
         //return gyro.get
         return 0;
+    }
+
+    /**
+     * Our periodic function, gets called every robot loop iteration
+     * Updates shuffleboard values.
+     */
+    @Override
+    public void periodic() {
+        leftTicks.setDouble(getLeftEncoderAverage());
+        rightTicks.setDouble(getRightEncoderAverage());
+        totalTicks.setDouble(getEncoderAverage());
+
+        // if (distanceP.getDouble(0) != distancePID.getP()) {
+        //     distancePID.setP(distanceP.getDouble(0));
+        // }
+
+        // if (distanceD.getDouble(0) != distancePID.getD()) {
+        //     distancePID.setD(distanceD.getDouble(0));
+        // }
     }
 }

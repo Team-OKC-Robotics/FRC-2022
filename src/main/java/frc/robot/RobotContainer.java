@@ -26,7 +26,7 @@ public class RobotContainer {
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(gamepad1.getRawAxis(5), gamepad1.getRawAxis(1)), drivetrain);
+  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
 
   private final DriveOffLineAuto autoCommand = new DriveOffLineAuto(drivetrain);
   
@@ -34,7 +34,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    drivetrain.setDefaultCommand(teleopDrive); // this may work better than other scheduling hacks but might mess up auto idk
+    //drivetrain.setDefaultCommand(teleopDrive); // this may work better than other scheduling hacks but might mess up auto idk
   }
 
   /**

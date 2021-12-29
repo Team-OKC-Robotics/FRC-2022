@@ -7,7 +7,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class DriveOffLineAuto extends SequentialCommandGroup {
     public DriveOffLineAuto(DrivetrainSubsystem drivetrain) {
         super(
-            new DriveCommand(drivetrain, 10)
+            new DriveCommand(drivetrain, 50)
         );
     }
 }
