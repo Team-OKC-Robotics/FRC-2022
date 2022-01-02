@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.DriveK;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     private WPI_TalonFX left1Motor;
@@ -31,10 +31,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private BuiltInAccelerometer gyro;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("drivetrain");
+    private NetworkTableEntry writeMode = tab.addPersistent("Write Mode", false).getEntry();
     private NetworkTableEntry leftTicks = tab.addPersistent("left ticks", 0).getEntry();
     private NetworkTableEntry rightTicks = tab.addPersistent("right ticks", 0).getEntry();
     private NetworkTableEntry totalTicks = tab.addPersistent("total ticks", 0).getEntry();
-    //private NetworkTableEntry distanceP = tab.addPersistent("Distance kP", 0).withWidget(widgetType).getEntry();
+    private NetworkTableEntry distanceP = tab.addPersistent("Distance kP", 0).getEntry();
     private NetworkTableEntry distanceD = tab.addPersistent("Distance kD", 0).getEntry();
 
     public DrivetrainSubsystem() {
@@ -53,7 +54,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         gyro = new BuiltInAccelerometer();
 
-        distancePID = new PIDController(0.1, 0, 0.0001);
+        distancePID = new PIDController(DriveK.distanceP, DriveK.distanceI, DriveK.distanceD);
         headingPID = new PIDController(0, 0, 0);
         turnPID = new PIDController(0, 0, 0);
 
@@ -136,7 +137,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public double getInches(double encoderTicks) {
-        return encoderTicks / Constants.ticksPerRev * Constants.gearRatio * Math.PI * Constants.wheelDiameter;
+        return encoderTicks / DriveK.ticksPerRev * DriveK.gearRatio * Math.PI * DriveK.wheelDiameter;
     }
 
     public boolean atDistanceSetpoint() {
@@ -166,12 +167,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rightTicks.setDouble(getRightEncoderAverage());
         totalTicks.setDouble(getEncoderAverage());
 
-        // if (distanceP.getDouble(0) != distancePID.getP()) {
-        //     distancePID.setP(distanceP.getDouble(0));
-        // }
-
-        // if (distanceD.getDouble(0) != distancePID.getD()) {
-        //     distancePID.setD(distanceD.getDouble(0));
-        // }
+        if (writeMode.getBoolean(false)) {
+            distancePID.setP(distanceP.getDouble(DriveK.distanceP));
+            distancePID.setD(distanceD.getDouble(DriveK.distanceD));
+        }
     }
 }

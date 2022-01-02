@@ -13,7 +13,13 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final double ticksPerRev = 2048;
-    public static final double gearRatio = 1;
-    public static final double wheelDiameter = 6;
+    public final class DriveK {
+        public static final double ticksPerRev = 2048;
+        public static final double gearRatio = 1;
+        public static final double wheelDiameter = 6;
+
+        public static final double distanceP = 0.1;
+        public static final double distanceI = 0;
+        public static final double distanceD = 0.001;
+    }
 }

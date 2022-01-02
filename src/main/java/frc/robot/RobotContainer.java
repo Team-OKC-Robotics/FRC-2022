@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,16 +21,21 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  // gamepads
   private final Joystick gamepad1 = new Joystick(0);
+
+  // buttons
+  private JoystickButton backButton = new JoystickButton(gamepad1, 8);
 
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
 
-  //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  // autos
+  private final DriveOffLineAuto autoCommand = new DriveOffLineAuto(drivetrain);
 
+  // commands
   private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
 
-  private final DriveOffLineAuto autoCommand = new DriveOffLineAuto(drivetrain);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -44,7 +51,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
+      backButton.whenPressed(teleopDrive);
   }
 
   public Command getDriveCommand() {
