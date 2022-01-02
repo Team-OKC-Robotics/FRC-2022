@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveK;
 
 public class DrivetrainSubsystem extends SubsystemBase {
+    // actuators
     private WPI_TalonFX left1Motor;
     private WPI_TalonFX right1Motor;
     
@@ -22,14 +23,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private DifferentialDrive drivetrain;
 
+    // sensors
+    private BuiltInAccelerometer gyro;
+    
+    // PID controllers
     private PIDController distancePID;
     private PIDController headingPID;
     private PIDController turnPID;
+    
+    // other variables
+    public double speedModifier = 1; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
 
-    public double speedModifier = 1;
-
-    private BuiltInAccelerometer gyro;
-
+    // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("drivetrain");
     private NetworkTableEntry writeMode = tab.addPersistent("Write Mode", false).getEntry();
     private NetworkTableEntry leftTicks = tab.addPersistent("left ticks", 0).getEntry();
@@ -39,6 +44,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private NetworkTableEntry distanceD = tab.addPersistent("Distance kD", 0).getEntry();
 
     public DrivetrainSubsystem() {
+        // motor configuration
         left1Motor = new WPI_TalonFX(1);
         //left2Motor = new WPI_TalonFX(3);
         leftSide = new SpeedControllerGroup(left1Motor);
@@ -52,15 +58,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         drivetrain = new DifferentialDrive(leftSide, rightSide);
 
+        // sensor configuration
         gyro = new BuiltInAccelerometer();
 
+        // PID configuration
         distancePID = new PIDController(DriveK.distanceP, DriveK.distanceI, DriveK.distanceD);
         headingPID = new PIDController(0, 0, 0);
         turnPID = new PIDController(0, 0, 0);
 
+        // Shuffleboard initilization
         leftTicks.setDouble(0);
         rightTicks.setDouble(0);
         totalTicks.setDouble(0);
+
+        // reset the subsystem
         resetEncoders();
         resetDistancePID();
     }
@@ -128,6 +139,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return -right1Motor.getSensorCollection().getIntegratedSensorPosition();
     }
 
+    /**
+     * Resets the encoders and the corresponding Shuffleboard entries
+     */
     public void resetEncoders() {
         right1Motor.getSensorCollection().setIntegratedSensorPosition(0, 500);
         left1Motor.getSensorCollection().setIntegratedSensorPosition(0, 500);
@@ -136,14 +150,26 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rightTicks.setDouble(0);
     }
 
+    /**
+     * Converts ticks from encoders into inches using the constants in Constants.DriveK
+     * @param encoderTicks the number of ticks to convert
+     * @return the number of inches that the ticks is equal to
+     */
     public double getInches(double encoderTicks) {
         return encoderTicks / DriveK.ticksPerRev * DriveK.gearRatio * Math.PI * DriveK.wheelDiameter;
     }
 
+    /**
+     * Gets if the distancePID is at its setpoint
+     * @return true if the distancePID is at its setpoing
+     */
     public boolean atDistanceSetpoint() {
         return distancePID.atSetpoint();
     }
 
+    /**
+     * Resets the distance PID
+     */
     public void resetDistancePID() {
         distancePID.reset();
     }
@@ -163,10 +189,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     @Override
     public void periodic() {
+        // update Shuffelboard values
         leftTicks.setDouble(getLeftEncoderAverage());
         rightTicks.setDouble(getRightEncoderAverage());
         totalTicks.setDouble(getEncoderAverage());
 
+        // Shuffleboard on-the-fly tuning
         if (writeMode.getBoolean(false)) {
             distancePID.setP(distanceP.getDouble(DriveK.distanceP));
             distancePID.setD(distanceD.getDouble(DriveK.distanceD));
