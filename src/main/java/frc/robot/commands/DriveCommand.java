@@ -7,6 +7,11 @@ public class DriveCommand extends CommandBase {
     private final DrivetrainSubsystem drivetrain;
     private double distance = 0;
 
+    /**
+     * Drives the drivetrain on the heading it had when the command started, for the given distance
+     * @param drivetrain the drivetrain subsystem for the command to control
+     * @param distance the distance, in inches, to drive the robot
+     */
     public DriveCommand(DrivetrainSubsystem drivetrain, double distance) {
         this.drivetrain = drivetrain;
         this.distance = distance;
@@ -15,6 +20,8 @@ public class DriveCommand extends CommandBase {
     public void init() {
         drivetrain.resetEncoders();
         drivetrain.resetDistancePID();
+        drivetrain.resetHeadingPID();
+        drivetrain.setHeading();
     }
 
     public void execute() {
@@ -22,6 +29,6 @@ public class DriveCommand extends CommandBase {
     }
 
     public boolean isFinished(boolean interrupted) {
-        return drivetrain.atDistanceSetpoint();
+        return drivetrain.atDistanceSetpoint() && drivetrain.atHeadingSetpoint();
     }
 }
