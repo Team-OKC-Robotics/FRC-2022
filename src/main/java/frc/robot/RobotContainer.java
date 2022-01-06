@@ -41,6 +41,7 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // add the autos to the chooser
     AutoChooser.addAutos(driveOffLine, driveOffLineReverse, doNothingAuto);
     AutoChooser.addGamepad(gamepad1);
 

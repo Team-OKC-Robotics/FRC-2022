@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    autoChooser.update();
+    autoChooser.update(); // run the auto chooser so it can handle gamepad inputs and update the Shuffleboard values
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

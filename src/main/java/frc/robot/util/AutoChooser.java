@@ -1,5 +1,10 @@
 package frc.robot.util;
 
+/**
+ * Our AutoChooser. Sends a list of autos to Shuffleboard, showing information
+ * such as description and points, and the driver can choose which auto they want to run
+ * using the gamepad d-pad (aka 'POV').
+ */
 public class AutoChooser {
     private static ArrayList<Auto> autos;
     private static int index = 0;
@@ -12,6 +17,10 @@ public class AutoChooser {
     private static NetworkTableEntry autoDesc = tab.addPersistent("Auto Description", "no auto selected").getEntry();
     private static NetworkTableEntry allAutos = tab.addPersistent("All Autos", "no autos loaded").getEntry();
 
+    /**
+     * Adds all of the autos to the chooser
+     * @param autos the autos to add
+     */
     public static addAutos(Auto autos...) {
         autos = new ArrayList<>();
         for (Auto auto : autos) {
@@ -19,19 +28,27 @@ public class AutoChooser {
         }
     }
 
-    public static int getAutoCommand() {
-        return autos.get(index);
-    }
-
+    /**
+     * Adds the gamepad to the chooser so the driver can change which auto to run
+     * @param gamepad the gamepad instance
+     */
     public static void addGamepad(Joystick gamepad) {
         this.gamepad = gamepad;
     }
 
+    /**
+     * Gets the auto command to be run in autonomous mode. Used in Robot.java
+     * @return the command to be run in auto
+     */
     public static Command getAutoCommand() {
         return autos.get(index);
     }
 
-    public static void run() {
+    /**
+     * Updates the auto chooser. Put this in disabledPeriodic() so it's called once per iteration while we're waiting
+     * for the match to start
+     */
+    public static void update() {
         int pov = gamepad.getPOV();
         if(pov == -1) {
             wasPressed = false;
