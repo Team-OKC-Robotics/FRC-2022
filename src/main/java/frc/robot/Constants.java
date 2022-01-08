@@ -21,5 +21,13 @@ public final class Constants {
         public static final double distanceP = 0.1;
         public static final double distanceI = 0;
         public static final double distanceD = 0.001;
+
+        public static final double headingP = 0;
+        public static final double headingI = 0;
+        public static final double headingD = 0;
+
+        public static final double turnP = 0;
+        public static final double turnI = 0;
+        public static final double turnD = 0;
     }
 }

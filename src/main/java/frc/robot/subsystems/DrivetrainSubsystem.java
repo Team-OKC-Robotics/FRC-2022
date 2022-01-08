@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -32,7 +34,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     // other variables
     private double speedModifier = 1; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
-    private double heading = 0; // the heading of the robot. used to drive straight in auto.
+    private double headingAngle = 0; // the heading of the robot. used to drive straight in auto.
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("drivetrain");
@@ -147,7 +149,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * Stores the heading that the robot is currently on so it can PID to that in driveDistance()
      */
     public void setHeading() {
-        heading = getHeading();
+        headingAngle = getHeading();
     }
 
     /**
@@ -244,7 +246,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the heading of the gyro
      */
     public double getHeading() {
-        return gyro.getRotation2d(); // I think this is the right method but I'm not sure
+        return gyro.getRotation2d().getDegrees(); // I think this is the right method but I'm not sure
     }
 
     /**

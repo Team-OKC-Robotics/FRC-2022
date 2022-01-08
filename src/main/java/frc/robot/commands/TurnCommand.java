@@ -12,7 +12,7 @@ public class TurnCommand extends CommandBase {
      * @param drivetrain the drivetrain subsystem for the command to control
      * @param angle the angle, in degrees, to turn the robot by
      */
-    public DriveCommand(DrivetrainSubsystem drivetrain, double angle) {
+    public TurnCommand(DrivetrainSubsystem drivetrain, double angle) {
         this.drivetrain = drivetrain;
         this.angle = angle;
     }
@@ -22,7 +22,7 @@ public class TurnCommand extends CommandBase {
     }
 
     public void execute() {
-        drivetrain.turnHeading(angle);
+        drivetrain.turnToHeading(angle);
     }
 
     public boolean isFinished(boolean interrupted) {
