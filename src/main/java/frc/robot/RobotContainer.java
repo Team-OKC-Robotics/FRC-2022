@@ -4,14 +4,16 @@
 
 package frc.robot;
 
+import autos.DoNothingAuto;
 import autos.DriveOffLineAuto;
+import autos.DriveOffLineReverse;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -31,7 +33,9 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
 
   // autos
-  private final DriveOffLineAuto autoCommand = new DriveOffLineAuto(drivetrain);
+  private final DriveOffLineAuto driveOffLine = new DriveOffLineAuto(drivetrain); // drives the robot forwards
+  private final DriveOffLineReverse driveOffLineReverse = new DriveOffLineReverse(drivetrain); // drives the robot backwards
+  private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
 
   // commands
   private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
@@ -39,6 +43,10 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // add the autos to the chooser
+    AutoChooser.addAutos(driveOffLine, driveOffLineReverse, doNothingAuto);
+    AutoChooser.addGamepad(gamepad1);
+
     // Configure the button bindings
     configureButtonBindings();
     //drivetrain.setDefaultCommand(teleopDrive); // this may work better than other scheduling hacks but might mess up auto idk
@@ -56,14 +64,5 @@ public class RobotContainer {
 
   public Command getDriveCommand() {
     return teleopDrive;
-  }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return autoCommand;
   }
 }

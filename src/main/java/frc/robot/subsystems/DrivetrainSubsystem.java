@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -34,7 +34,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     // other variables
     private double speedModifier = 1; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
-    private double headingAngle = 0; // the heading of the robot. used to drive straight in auto.
+    //private double headingAngle = 0; // the heading of the robot. used to drive straight in auto.
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("drivetrain");
@@ -149,7 +149,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * Stores the heading that the robot is currently on so it can PID to that in driveDistance()
      */
     public void setHeading() {
-        headingAngle = getHeading();
+        // uh wait why is this here
+        //headingAngle = getHeading();
+        headingPID.setSetpoint(getHeading());
     }
 
     /**
