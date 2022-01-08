@@ -1,0 +1,10 @@
+firmware
+ - spark max
+ - falcon 500s
+ - whatever other motor controllers (talons etc)
+ - pdp/pdh
+ - probably the other new hub stuff we got (radio power hub etc)
+ - RoboRIO image
+ - radio image and configuration
+update
+ - I think we're good as far as installing things and libraries and stuff
