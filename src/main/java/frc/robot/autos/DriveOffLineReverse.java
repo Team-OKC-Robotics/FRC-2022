@@ -1,8 +1,8 @@
-package autos;
+package frc.robot.autos;
 
-import frc.robot.util.Auto;
-import frc.robot.commands.DriveCommand;
+import frc.robot.commands.drivetrain.DriveCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.util.Auto;
 
 public class DriveOffLineReverse extends Auto {
     public DriveOffLineReverse(DrivetrainSubsystem drivetrain) {

@@ -1,9 +1,22 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ShootK;
+
 public class ShooterSubsystem extends SubsystemBase {
     // actuators
     private CANSparkMax shooterMotor1;
     private CANSparkMax shooterMotor2;
+    private RelativeEncoder encoder;
     private PIDController shooterPID;
 
     // shuffleboard
@@ -28,11 +41,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public ShooterSubsystem() {
         //TODO change port numbers these are temporary
-        shooterMotor1 = new CANSparkMax(MotorType.kBrushless, 20);
-        shooterMotor2 = new CANSparkMax(MotorType.kBrushless, 21);
+        shooterMotor1 = new CANSparkMax(20, MotorType.kBrushless);
+        shooterMotor2 = new CANSparkMax(21, MotorType.kBrushless);
 
         shooterMotor2.follow(shooterMotor1);
         //TODO actually configure the motors and whatnot we DO NOT want to break anything
+
+        encoder = shooterMotor1.getEncoder();
 
         shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD, ShootK.shootF);
         // might be better to use the built-in PID loop or whatever (actually it's probably all in REVLib and not native)
@@ -41,22 +56,22 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void set(double RPM) {
-        shooterMotor1.set(shooterPID.calculate(RPM, shooterMotor1.getVelocity()));
+        shooterMotor1.set(shooterPID.calculate(RPM, encoder.getVelocity()));
     }
 
     @Override
     public void periodic() {
         // update Shuffelboard values
-        ticks.setDouble(shooterMotor1.get()); //TODO honestly idk what the motor methods need to be
-        shooterRPM.setDouble(shooterMotor1.get()); //FIXME
+        ticks.setDouble(encoder.getPosition());
+        shooterRPM.setDouble(encoder.getVelocity());
         velocityError.setDouble(shooterMotor1.get()); //FIXME
         
         // Shuffleboard on-the-fly tuning
         if (writeMode.getBoolean(false)) {
-            shooterPID.setP(shooterP.getDouble(ShootK.shootP));
-            shooterPID.setI(shooterI.getDouble(ShootK.shootI));
-            shooterPID.setD(shooterD.getDouble(ShootK.shootD));
-            shooterPID.setF(shooterF.getDouble(ShootK.shootF));
+            shooterPID.setP(shootP.getDouble(ShootK.shootP));
+            shooterPID.setI(shootI.getDouble(ShootK.shootI));
+            shooterPID.setD(shootD.getDouble(ShootK.shootD));
+            //shooterPID.setFF(shootF.getDouble(ShootK.shootF)); //TODO make able to tune FF on shuffleboard
         }
     }
 }

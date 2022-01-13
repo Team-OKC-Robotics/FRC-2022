@@ -4,12 +4,10 @@
 
 package frc.robot;
 
-import autos.DoNothingAuto;
-import autos.DriveOffLineAuto;
-import autos.DriveOffLineReverse;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.autos.*;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
