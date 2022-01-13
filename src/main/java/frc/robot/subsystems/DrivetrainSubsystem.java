@@ -44,6 +44,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private NetworkTableEntry leftTicks = tab.addPersistent("left ticks", 0).getEntry();
     private NetworkTableEntry rightTicks = tab.addPersistent("right ticks", 0).getEntry();
     private NetworkTableEntry totalTicks = tab.addPersistent("total ticks", 0).getEntry();
+    
     private NetworkTableEntry distanceP = tab.addPersistent("Distance kP", DriveK.distanceP).getEntry();
     private NetworkTableEntry distanceI = tab.addPersistent("Distance kI", DriveK.distanceI).getEntry();
     private NetworkTableEntry distanceD = tab.addPersistent("Distance kD", DriveK.distanceD).getEntry();

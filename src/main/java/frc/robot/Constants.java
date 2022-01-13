@@ -30,4 +30,18 @@ public final class Constants {
         public static final double turnI = 0;
         public static final double turnD = 0;
     }
+
+    public final class ArmK {
+
+    }
+
+    public final class ShootK {
+        public static final double shootP = 0.5;
+        public static final double shootI = 0;
+        public static final double shootD = 0.01;
+        public static final double shootF = 0;
+
+        public static final double preset1 = 1000; // in RPM, close launchpad distance
+        public static final double preset2 = 2000; // in RPM, far launchpad distance
+    }
 }
