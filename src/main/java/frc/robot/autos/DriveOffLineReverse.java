@@ -9,7 +9,7 @@ public class DriveOffLineReverse extends Auto {
         super(
             "Drive Off Line Reverse Auto",
             "An auto that drives off the line backwards (towards alliance station), scoring points",
-            -1,
+            2,
             new DriveCommand(drivetrain, -50)
         );
     }
