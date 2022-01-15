@@ -3,12 +3,16 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax deployMotor;
-    private CANSparkMax intakeMotor;
+    //private CANSparkMax intakeMotor;
     private CANSparkMax indexerMotor;
+
+    //FIXME temporary motor because we don't have the NEOs wired up/mounted yet
+    private PWMSparkMax intakeMotor;
 
     private boolean extended = false;
 
@@ -17,9 +21,11 @@ public class IntakeSubsystem extends SubsystemBase {
     
     public IntakeSubsystem() {
         //TODO change id numbers
-        deployMotor = new CANSparkMax(10, MotorType.kBrushless);
-        intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
-        indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
+        //deployMotor = new CANSparkMax(10, MotorType.kBrushless);
+        //intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
+        //indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
+        
+        intakeMotor = new PWMSparkMax(1);
     }
 
     public void setIntake(double power) {

@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.autos.*;
+import frc.robot.commands.intake.SetIntakeCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -25,10 +27,12 @@ public class RobotContainer {
   private final Joystick gamepad1 = new Joystick(0);
 
   // buttons
+  private JoystickButton aButton = new JoystickButton(gamepad1, 1);
   private JoystickButton backButton = new JoystickButton(gamepad1, 8);
 
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
+  private final IntakeSubsystem intake = new IntakeSubsystem();
 
   // autos
   private final DriveOffLineAuto driveOffLine = new DriveOffLineAuto(drivetrain); // drives the robot forwards
@@ -36,8 +40,11 @@ public class RobotContainer {
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
 
   // commands
-  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
+  //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(4), gamepad1.getRawAxis(1)), drivetrain);
+  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(5)), drivetrain);
 
+  private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
+  private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -58,6 +65,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
       backButton.whenPressed(teleopDrive);
+
+      aButton.whenPressed(intakeIn);
+      aButton.whenReleased(stopIntake);
   }
 
   public Command getDriveCommand() {

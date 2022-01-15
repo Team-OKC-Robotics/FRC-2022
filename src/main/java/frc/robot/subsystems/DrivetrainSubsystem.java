@@ -33,7 +33,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private PIDController turnPID;
     
     // other variables
-    private double speedModifier = 1; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
+    private double speedModifier = 0.5; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
     //private double headingAngle = 0; // the heading of the robot. used to drive straight in auto.
 
     // shuffleboard
