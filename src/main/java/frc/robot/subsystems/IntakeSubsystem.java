@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeK;
 
 public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax deployMotor;
@@ -15,17 +18,23 @@ public class IntakeSubsystem extends SubsystemBase {
     private PWMSparkMax intakeMotor;
 
     private boolean extended = false;
+    private RelativeEncoder deployEncoder;
+    private PIDController deployPID;
 
     // I don't think there needs to be any shuffleboard stuff here
     // we could do some weird stuff with like hasBall() but that's not important right now
     
     public IntakeSubsystem() {
         //TODO change id numbers
-        //deployMotor = new CANSparkMax(10, MotorType.kBrushless);
+        deployMotor = new CANSparkMax(10, MotorType.kBrushless);
         //intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
-        //indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
+        indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
         
+        //TEMP TEMP TEMP
         intakeMotor = new PWMSparkMax(1);
+
+        deployPID = new PIDController(IntakeK.deployP, IntakeK.deployI, IntakeK.deployD);
+        deployEncoder = deployMotor.getEncoder();
     }
 
     public void setIntake(double power) {
@@ -38,6 +47,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setExtended(boolean extended) {
         this.extended = extended;
+        if (extended) {
+            deployMotor.set(deployPID.calculate(deployEncoder.getPosition()));
+        }
         //TODO logic here
         // idk if we even want this method like this having two separate methods (like extend() and retract()) might be better
     }

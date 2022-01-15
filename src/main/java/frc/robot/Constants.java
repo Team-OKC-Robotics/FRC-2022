@@ -44,4 +44,13 @@ public final class Constants {
         public static final double preset1 = 1000; // in RPM, close launchpad distance
         public static final double preset2 = 2000; // in RPM, far launchpad distance
     }
+
+    public final class IntakeK {
+        public static final double deployP = 0.1;
+        public static final double deployI = 0;
+        public static final double deployD = 0.01;
+    }
+
+    public final class ClimbK {
+    }
 }

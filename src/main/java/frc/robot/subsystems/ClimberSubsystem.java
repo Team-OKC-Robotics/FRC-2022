@@ -26,4 +26,8 @@ public class ClimberSubsystem extends SubsystemBase {
     public void climb() {
         //??????? how the heck does this subsystem work?????
     }
+
+    public void extend() {
+        
+    }
 }
