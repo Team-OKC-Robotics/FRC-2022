@@ -43,6 +43,7 @@ public final class Constants {
 
         public static final double preset1 = 1000; // in RPM, close launchpad distance
         public static final double preset2 = 2000; // in RPM, far launchpad distance
+        public static final double tarmacPreset = 500; //TODO test and tune
     }
 
     public final class IntakeK {

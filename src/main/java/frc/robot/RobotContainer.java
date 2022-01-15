@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.autos.*;
 import frc.robot.commands.intake.SetIntakeCommand;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -33,11 +35,16 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
+  private final ShooterSubsystem shooter = new ShooterSubsystem();
+  private final ClimberSubsystem climber = new ClimberSubsystem();
 
   // autos
-  private final DriveOffLineAuto driveOffLine = new DriveOffLineAuto(drivetrain); // drives the robot forwards
-  private final DriveOffLineReverse driveOffLineReverse = new DriveOffLineReverse(drivetrain); // drives the robot backwards
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
+  private final DriveOffLineAuto driveOffLine = new DriveOffLineAuto(drivetrain); // drives the robot forwards
+  private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter); // drives the robot backwards
+  private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
+  private final ThreeBallAuto threeBallAuto = new ThreeBallAuto(drivetrain, shooter, intake); // drives the robot backwards
+  
 
   // commands
   //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(4), gamepad1.getRawAxis(1)), drivetrain);
@@ -49,7 +56,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // add the autos to the chooser
-    AutoChooser.addAutos(driveOffLine, driveOffLineReverse, doNothingAuto);
+    AutoChooser.addAutos(doNothingAuto, driveOffLine, shootThenDrive, twoBallAuto, threeBallAuto);
     AutoChooser.addGamepad(gamepad1);
 
     // Configure the button bindings
