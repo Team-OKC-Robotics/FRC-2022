@@ -16,6 +16,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // actuators
     private CANSparkMax shooterMotor1;
     private CANSparkMax shooterMotor2;
+    private CANSparkMax triggerMotor;
     private RelativeEncoder encoder;
     private PIDController shooterPID;
 
@@ -43,6 +44,7 @@ public class ShooterSubsystem extends SubsystemBase {
         //TODO change port numbers these are temporary
         shooterMotor1 = new CANSparkMax(20, MotorType.kBrushless);
         shooterMotor2 = new CANSparkMax(21, MotorType.kBrushless);
+        triggerMotor = new CANSparkMax(22, MotorType.kBrushless);
 
         shooterMotor2.follow(shooterMotor1);
         //TODO actually configure the motors and whatnot we DO NOT want to break anything
@@ -57,6 +59,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void set(double RPM) {
         shooterMotor1.set(shooterPID.calculate(RPM, encoder.getVelocity()));
+    }
+
+    public void setTrigger(double power) {
+        triggerMotor.set(power);
+    }
+
+    public boolean atShooterSetpoint() {
+        return shooterPID.atSetpoint();
     }
 
     @Override
