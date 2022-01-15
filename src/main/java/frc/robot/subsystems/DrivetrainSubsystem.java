@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveK;
 
@@ -58,6 +59,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private NetworkTableEntry turnP = tab.addPersistent("Turn kP", DriveK.turnP).getEntry();
     private NetworkTableEntry turnI = tab.addPersistent("Turn kI", DriveK.turnI).getEntry();
     private NetworkTableEntry turnD = tab.addPersistent("Turn kD", DriveK.turnD).getEntry();
+
+    private NetworkTableEntry resetGyro = tab.addPersistent("reset gyro", false).getEntry();
 
 
     public DrivetrainSubsystem() {
@@ -252,6 +255,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return gyro.getRotation2d().getDegrees(); // I think this is the right method but I'm not sure
     }
 
+    public void resetGyro() {
+        gyro.reset();
+    }
+
     /**
      * Our periodic function, gets called every robot loop iteration
      * Updates shuffleboard values.
@@ -277,6 +284,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
             turnPID.setP(turnP.getDouble(DriveK.turnP));
             turnPID.setI(turnI.getDouble(DriveK.turnI));
             turnPID.setD(turnD.getDouble(DriveK.turnD));
+        }
+
+        if (resetGyro.getBoolean(false)) {
+            resetGyro();
+            resetGyro.setBoolean(false);
         }
     }
 }

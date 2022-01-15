@@ -44,7 +44,7 @@
               "_title": "Auto Points"
             }
           },
-          "0,1": {
+          "0,0": {
             "size": [
               1,
               1
@@ -55,18 +55,30 @@
               "_title": "Write Mode"
             }
           },
-          "0,0": {
+          "5,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Gyro",
+              "_source0": "network_table:///LiveWindow/Ungrouped/navX-Sensor[4]",
+              "_title": "NavX",
+              "Visuals/Major tick spacing": 45.0,
+              "Visuals/Starting angle": 180.0,
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": false
+            }
+          },
+          "0,1": {
             "size": [
               1,
               1
             ],
             "content": {
-              "_type": "Simple Dial",
-              "_source0": "network_table:///LiveWindow/Ungrouped/navX-Sensor[4]/Value",
-              "_title": "NavX",
-              "Range/Min": 0.0,
-              "Range/Max": 100.0,
-              "Visuals/Show value": true
+              "_type": "Toggle Button",
+              "_source0": "network_table:///Shuffleboard/drivetrain/reset gyro",
+              "_title": "Reset Gyro"
             }
           }
         }
@@ -193,20 +205,6 @@
               "_title": "total ticks"
             }
           },
-          "8,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Simple Dial",
-              "_source0": "network_table:///Shuffleboard/drivetrain/heading",
-              "_title": "heading",
-              "Range/Min": 0.0,
-              "Range/Max": 360.0,
-              "Visuals/Show value": true
-            }
-          },
           "7,0": {
             "size": [
               3,
@@ -252,6 +250,21 @@
               "_type": "Text View",
               "_source0": "network_table:///Shuffleboard/drivetrain/Turn kD",
               "_title": "turn kD"
+            }
+          },
+          "7,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Gyro",
+              "_source0": "network_table:///LiveWindow/Ungrouped/navX-Sensor[4]",
+              "_title": "NavX",
+              "Visuals/Major tick spacing": 45.0,
+              "Visuals/Starting angle": 180.0,
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": false
             }
           }
         }
