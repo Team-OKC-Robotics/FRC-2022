@@ -6,9 +6,9 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,8 +19,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private WPI_TalonFX left1Motor;
     private WPI_TalonFX right1Motor;
     
-    private SpeedControllerGroup leftSide;
-    private SpeedControllerGroup rightSide;
+    private MotorControllerGroup leftSide;
+    private MotorControllerGroup rightSide;
 
     private DifferentialDrive drivetrain;
 
@@ -64,11 +64,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // motor configuration
         left1Motor = new WPI_TalonFX(1);
         //left2Motor = new WPI_TalonFX(3);
-        leftSide = new SpeedControllerGroup(left1Motor);
+        leftSide = new MotorControllerGroup(left1Motor);
 
         right1Motor = new WPI_TalonFX(2);
         //right2Motor = new WPI_TalonFX(1);
-        rightSide = new SpeedControllerGroup(right1Motor);
+        rightSide = new MotorControllerGroup(right1Motor);
 
         left1Motor.setNeutralMode(NeutralMode.Brake);
         right1Motor.setNeutralMode(NeutralMode.Brake);

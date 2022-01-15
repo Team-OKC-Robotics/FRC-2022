@@ -14,7 +14,7 @@ public class SetShooterCommand extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.set(RPM);
+        shooter.setShooter(RPM);
     }
 
     @Override

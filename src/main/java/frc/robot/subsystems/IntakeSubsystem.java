@@ -10,6 +10,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax intakeMotor;
     private CANSparkMax indexerMotor;
 
+    private boolean extended = false;
+
     // I don't think there needs to be any shuffleboard stuff here
     // we could do some weird stuff with like hasBall() but that's not important right now
     
@@ -29,8 +31,13 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setExtended(boolean extended) {
+        this.extended = extended;
         //TODO logic here
         // idk if we even want this method like this having two separate methods (like extend() and retract()) might be better
+    }
+
+    public boolean isExtended() {
+        return extended;
     }
 
     @Override

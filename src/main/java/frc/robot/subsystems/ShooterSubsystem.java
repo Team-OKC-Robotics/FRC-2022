@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -13,12 +12,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShootK;
 
 public class ShooterSubsystem extends SubsystemBase {
+
+    private enum ShooterPresets {
+        CLOSE_LAUNCHPAD,
+        FAR_LAUNCHPAD,
+        TARMAC_LINE,
+        CENTER_LINE,
+        LOW_GOAL
+    }
+
     // actuators
     private CANSparkMax shooterMotor1;
     private CANSparkMax shooterMotor2;
     private CANSparkMax triggerMotor;
     private RelativeEncoder encoder;
     private PIDController shooterPID;
+
+    private double shootFF = ShootK.shootF; // idk how to do feedforward controllers
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("shooter");
@@ -51,14 +61,22 @@ public class ShooterSubsystem extends SubsystemBase {
 
         encoder = shooterMotor1.getEncoder();
 
-        shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD, ShootK.shootF);
+        shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
         // might be better to use the built-in PID loop or whatever (actually it's probably all in REVLib and not native)
         // for effeciency and optimization reasons (probably helps with CAN bus utilization)
         // but for now this will work
     }
 
-    public void set(double RPM) {
-        shooterMotor1.set(shooterPID.calculate(RPM, encoder.getVelocity()));
+    public void setShooter(double RPM) {
+        shooterMotor1.set(shooterPID.calculate(RPM, encoder.getVelocity()) + shootFF);
+    }
+
+    public void setShooterPreset(ShooterPresets preset) {
+        if (preset == ShooterPresets.CLOSE_LAUNCHPAD) {
+            setShooter(preset1.getDouble(ShootK.preset1));
+        } else if (preset == ShooterPresets.FAR_LAUNCHPAD) {
+            setShooter(preset2.getDouble(ShootK.preset2));
+        }
     }
 
     public void setTrigger(double power) {
@@ -81,7 +99,7 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterPID.setP(shootP.getDouble(ShootK.shootP));
             shooterPID.setI(shootI.getDouble(ShootK.shootI));
             shooterPID.setD(shootD.getDouble(ShootK.shootD));
-            //shooterPID.setFF(shootF.getDouble(ShootK.shootF)); //TODO make able to tune FF on shuffleboard
+            shootFF = shootF.getDouble(ShootK.shootF);
         }
     }
 }
