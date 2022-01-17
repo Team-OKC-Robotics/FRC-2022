@@ -50,6 +50,9 @@ public final class Constants {
         public static final double deployP = 0.1;
         public static final double deployI = 0;
         public static final double deployD = 0.01;
+
+        public static final double RAISED = 0; // ticks for intake at raised position (actually this would be 0)
+        public static final double EXTENDED = 1000; // ticks for intake being extended
     }
 
     public final class ClimbK {
