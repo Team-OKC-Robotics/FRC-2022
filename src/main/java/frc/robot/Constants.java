@@ -53,5 +53,12 @@ public final class Constants {
     }
 
     public final class ClimbK {
+        public static final double leftP = 0.1;
+        public static final double leftI = 0.1;
+        public static final double leftD = 0.1;
+
+        public static final double rightP = 0.1;
+        public static final double rightI = 0.1;
+        public static final double rightD = 0.1;
     }
 }
