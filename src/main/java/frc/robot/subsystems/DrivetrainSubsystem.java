@@ -75,6 +75,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         left1Motor.setNeutralMode(NeutralMode.Brake);
         right1Motor.setNeutralMode(NeutralMode.Brake);
 
+        leftSide.setInverted(true);
         drivetrain = new DifferentialDrive(leftSide, rightSide);
 
         // sensor configuration

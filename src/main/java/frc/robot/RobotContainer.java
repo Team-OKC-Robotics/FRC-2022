@@ -48,7 +48,7 @@ public class RobotContainer {
 
   // commands
   //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(4), gamepad1.getRawAxis(1)), drivetrain);
-  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(5)), drivetrain);
+  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(gamepad1.getRawAxis(1), gamepad1.getRawAxis(5)), drivetrain);
 
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
