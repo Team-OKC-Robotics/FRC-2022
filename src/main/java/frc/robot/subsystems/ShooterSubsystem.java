@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -25,8 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     // actuators
-    private TalonFX shooterMotor1; //FIXME temporary shooter for prototype testing
-    //private CANSparkMax shooterMotor1;
+    private CANSparkMax shooterMotor1;
     private CANSparkMax shooterMotor2;
     private CANSparkMax triggerMotor;
     private RelativeEncoder encoder;
@@ -56,17 +52,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public ShooterSubsystem() {
         //TODO change port numbers these are temporary
-        //shooterMotor1 = new CANSparkMax(20, MotorType.kBrushless);
-        shooterMotor1 = new TalonFX(10);
+        shooterMotor1 = new CANSparkMax(20, MotorType.kBrushless);
         shooterMotor2 = new CANSparkMax(21, MotorType.kBrushless);
         triggerMotor = new CANSparkMax(22, MotorType.kBrushless);
 
-        shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());
-
-        //shooterMotor2.follow(shooterMotor1);
+        shooterMotor2.follow(shooterMotor1);
         //TODO actually configure the motors and whatnot we DO NOT want to break anything
 
-        //encoder = shooterMotor1.getEncoder();
+        encoder = shooterMotor1.getEncoder();
 
         shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
         // might be better to use the built-in PID loop or whatever (actually it's probably all in REVLib and not native)
@@ -75,7 +68,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setShooter(double RPM) {
-        shooterMotor1.set(ControlMode.PercentOutput, shooterPID.calculate(RPM, encoder.getVelocity()) + shootFF);
+        shooterMotor1.set(shooterPID.calculate(RPM, encoder.getVelocity()) + shootFF);
     }
 
     public void setShooterPreset(ShooterPresets preset) {
@@ -97,11 +90,9 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // update Shuffelboard values
-        // ticks.setDouble(encoder.getPosition());
-        // shooterRPM.setDouble(encoder.getVelocity());
-        // velocityError.setDouble(shooterPID.getVelocityError()); //FIXME
-        ticks.setDouble(shooterMotor1.getSelectedSensorPosition());
-        shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
+        ticks.setDouble(encoder.getPosition());
+        shooterRPM.setDouble(encoder.getVelocity());
+        velocityError.setDouble(shooterPID.getVelocityError());
         
         // Shuffleboard on-the-fly tuning
         if (writeMode.getBoolean(false)) {
