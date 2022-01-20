@@ -4,10 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -25,14 +23,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     // actuators
-    private TalonFX shooterMotor1; //FIXME temporary shooter for prototype testing
-    //private CANSparkMax shooterMotor1;
-    private CANSparkMax shooterMotor2;
+    private TalonFX shooterMotor1;
     private CANSparkMax triggerMotor;
-    private RelativeEncoder encoder;
-    private PIDController shooterPID;
-
-    private double shootFF = ShootK.shootF; // idk how to do feedforward controllers
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("shooter");
@@ -56,26 +48,19 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public ShooterSubsystem() {
         //TODO change port numbers these are temporary
-        //shooterMotor1 = new CANSparkMax(20, MotorType.kBrushless);
         shooterMotor1 = new TalonFX(10);
-        shooterMotor2 = new CANSparkMax(21, MotorType.kBrushless);
         triggerMotor = new CANSparkMax(22, MotorType.kBrushless);
 
-        shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());
-
-        //shooterMotor2.follow(shooterMotor1);
-        //TODO actually configure the motors and whatnot we DO NOT want to break anything
-
-        //encoder = shooterMotor1.getEncoder();
-
-        shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
-        // might be better to use the built-in PID loop or whatever (actually it's probably all in REVLib and not native)
-        // for effeciency and optimization reasons (probably helps with CAN bus utilization)
-        // but for now this will work
+        shooterMotor1.configFactoryDefault();
+        shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, 200);
+        shooterMotor1.config_kP(0, ShootK.shootP, 200);
+        shooterMotor1.config_kI(0, ShootK.shootI, 200);
+        shooterMotor1.config_kD(0, ShootK.shootD, 200);
+        shooterMotor1.config_kF(0, ShootK.shootF, 200);
     }
 
     public void setShooter(double RPM) {
-        shooterMotor1.set(ControlMode.PercentOutput, shooterPID.calculate(RPM, encoder.getVelocity()) + shootFF);
+        shooterMotor1.set(ControlMode.Velocity, RPM * 2048.0 / 600.0); // have to convert to units / 100ms or somethingS
     }
 
     public void setShooterPreset(ShooterPresets preset) {
@@ -91,24 +76,22 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public boolean atShooterSetpoint() {
-        return shooterPID.atSetpoint();
+        return Math.abs(shooterMotor1.getClosedLoopError()) < 100;
     }
 
     @Override
     public void periodic() {
         // update Shuffelboard values
-        // ticks.setDouble(encoder.getPosition());
-        // shooterRPM.setDouble(encoder.getVelocity());
-        // velocityError.setDouble(shooterPID.getVelocityError()); //FIXME
         ticks.setDouble(shooterMotor1.getSelectedSensorPosition());
         shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
+        velocityError.setDouble(shooterMotor1.getSelectedSensorVelocity());
         
         // Shuffleboard on-the-fly tuning
         if (writeMode.getBoolean(false)) {
-            shooterPID.setP(shootP.getDouble(ShootK.shootP));
-            shooterPID.setI(shootI.getDouble(ShootK.shootI));
-            shooterPID.setD(shootD.getDouble(ShootK.shootD));
-            shootFF = shootF.getDouble(ShootK.shootF);
+            shooterMotor1.config_kP(0, shootP.getDouble(ShootK.shootP));
+            shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
+            shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
+            shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
         }
     }
 }

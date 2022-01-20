@@ -30,6 +30,12 @@ public class RobotContainer {
 
   // buttons
   private JoystickButton aButton = new JoystickButton(gamepad1, 1);
+  private JoystickButton bButton = new JoystickButton(gamepad1, 2);
+  private JoystickButton xButton = new JoystickButton(gamepad1, 3);
+  private JoystickButton yButton = new JoystickButton(gamepad1, 4);
+  private JoystickButton leftBumper = new JoystickButton(gamepad1, 5);
+  private JoystickButton rightBumper = new JoystickButton(gamepad1, 6);
+  private JoystickButton startButton = new JoystickButton(gamepad1, 7);
   private JoystickButton backButton = new JoystickButton(gamepad1, 8);
 
   // The robot's subsystems and commands are defined here...
