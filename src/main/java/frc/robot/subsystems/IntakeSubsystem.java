@@ -6,7 +6,6 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -16,15 +15,11 @@ import frc.robot.Constants.IntakeK;
 
 public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax deployMotor;
-    //private CANSparkMax intakeMotor;
     private CANSparkMax indexerMotor;
-
-    //FIXME temporary motor because we don't have the NEOs wired up/mounted yet
     private PWMSparkMax intakeMotor;
 
     private boolean extended = false;
     private RelativeEncoder deployEncoder;
-    private PIDController deployPID;
     private SparkMaxPIDController extendPID;
 
     // shuffleboard
@@ -47,15 +42,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem() {
         //TODO change id numbers
         deployMotor = new CANSparkMax(10, MotorType.kBrushless);
-        //intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
         indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
-        
-        //TEMP TEMP TEMP
-        intakeMotor = new PWMSparkMax(1);
+        intakeMotor = new PWMSparkMax(1); // temporary prototype stuff
 
-        deployPID = new PIDController(IntakeK.deployP, IntakeK.deployI, IntakeK.deployD);
-        extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
-        deployEncoder = deployMotor.getEncoder();
+        if (deployMotor != null) {
+            extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
+            deployEncoder = deployMotor.getEncoder();
+        }
     }
 
     public void setIntake(double power) {
@@ -83,8 +76,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        ticks.setDouble(deployEncoder.getPosition());
-        velocity.setDouble(deployEncoder.getVelocity());
+        if (deployEncoder != null) {
+            ticks.setDouble(deployEncoder.getPosition());
+            velocity.setDouble(deployEncoder.getVelocity());
+        }
 
         if (writeMode.getBoolean(false)) {
             extendPID.setP(intakeP.getDouble(IntakeK.deployP));

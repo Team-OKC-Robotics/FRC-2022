@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
@@ -74,9 +75,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         left1Motor.setNeutralMode(NeutralMode.Brake);
         right1Motor.setNeutralMode(NeutralMode.Brake);
+        left1Motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());
+        right1Motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());
 
-        leftSide.setInverted(true);
+        rightSide.setInverted(true);
         drivetrain = new DifferentialDrive(leftSide, rightSide);
+       
+        //TEMP FIXME
+        drivetrain.setMaxOutput(0.1);
 
         // sensor configuration
         gyro = new AHRS(SPI.Port.kMXP); // plugged into the big port thing on the RoboRIO
@@ -171,7 +177,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the left side of the drivetrain, in inches
      */
     public double getLeftEncoderAverage() {
-        return left1Motor.getSensorCollection().getIntegratedSensorPosition();
+        return left1Motor.getSelectedSensorPosition();
     }
 
     /**
@@ -179,15 +185,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the right side of the drivetrain, in inches
      */
     public double getRightEncoderAverage() {
-        return -right1Motor.getSensorCollection().getIntegratedSensorPosition();
+        return -right1Motor.getSelectedSensorPosition();
     }
 
     /**
      * Resets the encoders and the corresponding Shuffleboard entries
      */
     public void resetEncoders() {
-        right1Motor.getSensorCollection().setIntegratedSensorPosition(0, 500);
-        left1Motor.getSensorCollection().setIntegratedSensorPosition(0, 500);
+        left1Motor.setSelectedSensorPosition(0);
+        right1Motor.setSelectedSensorPosition(0);
         totalTicks.setDouble(0);
         leftTicks.setDouble(0);
         rightTicks.setDouble(0);

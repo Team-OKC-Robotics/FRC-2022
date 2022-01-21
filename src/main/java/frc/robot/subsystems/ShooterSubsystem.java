@@ -48,15 +48,15 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public ShooterSubsystem() {
         //TODO change port numbers these are temporary
-        shooterMotor1 = new TalonFX(21);
-        triggerMotor = new CANSparkMax(22, MotorType.kBrushless);
+        //shooterMotor1 = new TalonFX(21);
+        //triggerMotor = new CANSparkMax(22, MotorType.kBrushless);
 
-        shooterMotor1.configFactoryDefault();
-        shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, 200);
-        shooterMotor1.config_kP(0, ShootK.shootP, 200);
-        shooterMotor1.config_kI(0, ShootK.shootI, 200);
-        shooterMotor1.config_kD(0, ShootK.shootD, 200);
-        shooterMotor1.config_kF(0, ShootK.shootF, 200);
+        //shooterMotor1.configFactoryDefault();
+        //shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, 200);
+        //shooterMotor1.config_kP(0, ShootK.shootP, 200);
+        //shooterMotor1.config_kI(0, ShootK.shootI, 200);
+        //shooterMotor1.config_kD(0, ShootK.shootD, 200);
+        //shooterMotor1.config_kF(0, ShootK.shootF, 200);
     }
 
     public void setShooter(double RPM) {
@@ -82,9 +82,11 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // update Shuffelboard values
-        ticks.setDouble(shooterMotor1.getSelectedSensorPosition());
-        shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
-        velocityError.setDouble(shooterMotor1.getSelectedSensorVelocity());
+        if (shooterMotor1 != null) {
+            ticks.setDouble(shooterMotor1.getSelectedSensorPosition());
+            shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
+            velocityError.setDouble(shooterMotor1.getSelectedSensorVelocity());
+        }
         
         // Shuffleboard on-the-fly tuning
         if (writeMode.getBoolean(false)) {

@@ -1,5 +1,6 @@
 package frc.robot.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
@@ -26,6 +27,7 @@ public class DriveCommand extends CommandBase {
 
     public void execute() {
         drivetrain.driveDistance(distance);
+        DriverStation.reportWarning("something is happening", false);
     }
 
     public boolean isFinished(boolean interrupted) {
