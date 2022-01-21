@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.autos.*;
 import frc.robot.commands.intake.SetIntakeCommand;
+import frc.robot.commands.shooter.SetShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -59,6 +60,11 @@ public class RobotContainer {
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
+
+  // shooter
+  private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
+  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 3000);
+  private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -82,6 +88,10 @@ public class RobotContainer {
 
       aButton.whenPressed(intakeIn);
       aButton.whenReleased(stopIntake);
+
+      bButton.whenPressed(slowShooter);
+      xButton.whenPressed(fastShooter);
+      yButton.whenPressed(maxShooter);
   }
 
   public Command getDriveCommand() {
