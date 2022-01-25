@@ -15,6 +15,8 @@ public class TurnCommand extends CommandBase {
     public TurnCommand(DrivetrainSubsystem drivetrain, double angle) {
         this.drivetrain = drivetrain;
         this.angle = angle;
+
+        addRequirements(drivetrain);
     }
 
     public void init() {
