@@ -10,6 +10,8 @@ public class SetIntakeCommand extends CommandBase {
     public SetIntakeCommand(IntakeSubsystem intake, double power) {
         this.intake = intake;
         this.power = power;
+
+        addRequirements(intake);
     }
 
     @Override

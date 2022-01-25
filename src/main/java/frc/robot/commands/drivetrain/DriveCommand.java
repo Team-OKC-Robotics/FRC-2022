@@ -16,6 +16,8 @@ public class DriveCommand extends CommandBase {
     public DriveCommand(DrivetrainSubsystem drivetrain, double distance) {
         this.drivetrain = drivetrain;
         this.distance = distance;
+
+        addRequirements(drivetrain);
     }
 
     public void init() {
