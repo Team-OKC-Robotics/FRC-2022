@@ -14,6 +14,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -44,6 +45,7 @@ public class RobotContainer {
   private final IntakeSubsystem intake = new IntakeSubsystem();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
   private final ClimberSubsystem climber = new ClimberSubsystem();
+  private final VisionSubsystem vision = new VisionSubsystem();
 
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
