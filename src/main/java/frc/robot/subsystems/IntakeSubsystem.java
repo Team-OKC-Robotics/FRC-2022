@@ -52,19 +52,25 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setIntake(double power) {
-        intakeMotor.set(power);
+        if (intakeMotor != null) {
+            intakeMotor.set(power);
+        }
     }
 
     public void setIndexer(double power) {
-        indexerMotor.set(power);
+        if (indexerMotor != null) {
+            indexerMotor.set(power);
+        }
     }
 
     public void setExtended(boolean extended) {
         if (this.extended != extended) {
-            if (extended) {
-                extendPID.setReference(IntakeK.EXTENDED, ControlType.kPosition);
-            } else {
-                extendPID.setReference(IntakeK.RAISED, ControlType.kPosition);
+            if (extendPID != null) {
+                if (extended) {
+                    extendPID.setReference(IntakeK.EXTENDED, ControlType.kPosition);
+                } else {
+                    extendPID.setReference(IntakeK.RAISED, ControlType.kPosition);
+                }
             }
         }
         this.extended = extended;

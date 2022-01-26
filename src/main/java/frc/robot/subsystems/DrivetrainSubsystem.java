@@ -66,11 +66,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public DrivetrainSubsystem() {
         // motor configuration
         left1Motor = new WPI_TalonFX(1);
-        //left2Motor = new WPI_TalonFX(3);
         leftSide = new MotorControllerGroup(left1Motor);
 
         right1Motor = new WPI_TalonFX(2);
-        //right2Motor = new WPI_TalonFX(1);
         rightSide = new MotorControllerGroup(right1Motor);
 
         left1Motor.setNeutralMode(NeutralMode.Brake);
@@ -82,7 +80,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         drivetrain = new DifferentialDrive(leftSide, rightSide);
        
         //TEMP FIXME
-        drivetrain.setMaxOutput(0.1);
+        drivetrain.setMaxOutput(0.5);
 
         // sensor configuration
         gyro = new AHRS(SPI.Port.kMXP); // plugged into the big port thing on the RoboRIO
@@ -141,7 +139,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void driveDistance(double distance) {
         distancePID.setSetpoint(distance);
 
-        arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), headingPID.calculate(getHeading()));
+        arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), -headingPID.calculate(getHeading()));
     }
 
     /**
@@ -169,7 +167,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the drivetrain, in inches
      */
     public double getEncoderAverage() {
-        return (getLeftEncoderAverage() + getRightEncoderAverage()) / 2;
+        return getInches(getLeftEncoderAverage() + getRightEncoderAverage()) / 2;
     }
 
     /**

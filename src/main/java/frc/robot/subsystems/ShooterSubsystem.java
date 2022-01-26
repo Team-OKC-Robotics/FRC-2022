@@ -60,7 +60,9 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setShooter(double RPM) {
-        shooterMotor1.set(ControlMode.Velocity, RPM * 2048.0 / 600.0); // have to convert to units / 100ms or somethingS
+        if (shooterMotor1 != null) {
+            shooterMotor1.set(ControlMode.Velocity, RPM * 2048.0 / 600.0); // have to convert to units / 100ms or somethingS
+        }
     }
 
     public void setShooterPreset(ShooterPresets preset) {
@@ -72,11 +74,16 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setTrigger(double power) {
-        triggerMotor.set(power);
+        if (triggerMotor != null) {
+            triggerMotor.set(power);
+        }
     }
 
     public boolean atShooterSetpoint() {
-        return Math.abs(shooterMotor1.getClosedLoopError()) < 100;
+        if (shooterMotor1 != null) {
+            return Math.abs(shooterMotor1.getClosedLoopError()) < 100;
+        }
+        return true;
     }
 
     @Override
