@@ -80,7 +80,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         drivetrain = new DifferentialDrive(leftSide, rightSide);
        
         //TEMP FIXME
-        drivetrain.setMaxOutput(0.5);
+        drivetrain.setMaxOutput(0.2);
 
         // sensor configuration
         gyro = new AHRS(SPI.Port.kMXP); // plugged into the big port thing on the RoboRIO

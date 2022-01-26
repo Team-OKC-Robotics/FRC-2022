@@ -19,18 +19,29 @@ public class DriveCommand extends CommandBase {
         addRequirements(drivetrain);
     }
 
-    public void init() {
+    @Override
+    public void initialize() {
         drivetrain.resetEncoders();
         drivetrain.resetDistancePID();
         drivetrain.resetHeadingPID();
         drivetrain.setHeading();
     }
 
+    @Override
     public void execute() {
         drivetrain.driveDistance(distance);
     }
 
-    public boolean isFinished(boolean interrupted) {
+    @Override
+    public void end(boolean executed) {
+        drivetrain.resetDistancePID();
+        drivetrain.resetEncoders();
+        drivetrain.resetGyro();
+        drivetrain.resetHeadingPID();
+    }
+
+    @Override
+    public boolean isFinished() {
         return drivetrain.atDistanceSetpoint() && drivetrain.atHeadingSetpoint();
     }
 }

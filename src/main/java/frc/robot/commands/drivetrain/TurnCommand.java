@@ -19,15 +19,18 @@ public class TurnCommand extends CommandBase {
         addRequirements(drivetrain);
     }
 
-    public void init() {
+    @Override
+    public void initialize() {
         drivetrain.resetTurnPID();
     }
 
+    @Override
     public void execute() {
         drivetrain.turnToHeading(angle);
     }
 
-    public boolean isFinished(boolean interrupted) {
+    @Override
+    public boolean isFinished() {
         return drivetrain.atTurnSetpoint();
     }
 }
