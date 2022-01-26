@@ -25,6 +25,9 @@ public class AutoChooser {
     private static NetworkTableEntry autoDesc = tab.addPersistent("Auto Description", "no auto selected").getEntry();
     private static NetworkTableEntry allAutos = tab.addPersistent("All Autos", "no autos loaded").getEntry();
 
+    private static NetworkTableEntry increaseAutoIndex = tab.addPersistent("increase auto index", false).getEntry();
+    private static NetworkTableEntry decreaseAutoIndex = tab.addPersistent("decrease auto index", false).getEntry();
+
     /**
      * Adds all of the autos to the chooser
      * 
@@ -71,6 +74,18 @@ public class AutoChooser {
                 index -= 1;
                 wasPressed = true;
             }
+        }
+
+        if (increaseAutoIndex.getBoolean(false)) {
+            if (index < autos.size()-1) {
+                index += 1;
+            }
+            increaseAutoIndex.setBoolean(false);
+        } else if (decreaseAutoIndex.getBoolean(false)) {
+            if (index > 0) {
+                index -= 1;
+            }
+            decreaseAutoIndex.setBoolean(false);
         }
 
         autoName.setString(autos.get(index).name);
