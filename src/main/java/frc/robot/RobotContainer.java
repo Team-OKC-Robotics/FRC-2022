@@ -43,16 +43,16 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
-  private final ShooterSubsystem shooter = new ShooterSubsystem();
-  private final ClimberSubsystem climber = new ClimberSubsystem();
-  private final VisionSubsystem vision = new VisionSubsystem();
+  //private final ShooterSubsystem shooter = new ShooterSubsystem();
+  //private final ClimberSubsystem climber = new ClimberSubsystem();
+  //private final VisionSubsystem vision = new VisionSubsystem();
 
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
   private final DriveOffLineAuto driveOffLine = new DriveOffLineAuto(drivetrain); // drives the robot forwards
-  private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter); // drives the robot backwards
-  private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
-  private final ThreeBallAuto threeBallAuto = new ThreeBallAuto(drivetrain, shooter, intake); // drives the robot backwards
+  //private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter); // drives the robot backwards
+  //private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
+  //private final ThreeBallAuto threeBallAuto = new ThreeBallAuto(drivetrain, shooter, intake); // drives the robot backwards
   private final GyroTestAuto gyroTestAuto = new GyroTestAuto(drivetrain);
 
   // commands
@@ -64,14 +64,14 @@ public class RobotContainer {
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
 
   // shooter
-  private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
-  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 3000);
-  private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
+  //private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
+  //private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 3000);
+  //private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // add the autos to the chooser
-    AutoChooser.addAutos(doNothingAuto, driveOffLine, shootThenDrive, twoBallAuto, threeBallAuto, gyroTestAuto);
+    AutoChooser.addAutos(doNothingAuto, driveOffLine, /*shootThenDrive, twoBallAuto, threeBallAuto,*/ gyroTestAuto);
     AutoChooser.addGamepad(gamepad1);
 
     // Configure the button bindings
@@ -91,9 +91,9 @@ public class RobotContainer {
       aButton.whenPressed(intakeIn);
       aButton.whenReleased(stopIntake);
 
-      bButton.whenPressed(slowShooter);
-      xButton.whenPressed(fastShooter);
-      yButton.whenPressed(maxShooter);
+      //bButton.whenPressed(slowShooter);
+      //xButton.whenPressed(fastShooter);
+      //yButton.whenPressed(maxShooter);
   }
 
   public Command getDriveCommand() {
