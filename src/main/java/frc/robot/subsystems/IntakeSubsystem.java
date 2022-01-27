@@ -31,9 +31,9 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry velocity = tab.addPersistent("intake velocity", 0).getEntry();
     
     // PID
-    private NetworkTableEntry intakeP = tab.addPersistent("Intake kP", 0).getEntry();
-    private NetworkTableEntry intakeI = tab.addPersistent("Intake kI", 0).getEntry();
-    private NetworkTableEntry intakeD = tab.addPersistent("Intake kD", 0).getEntry();
+    private NetworkTableEntry intakeP = tab.addPersistent("Intake kP", IntakeK.deployP).getEntry();
+    private NetworkTableEntry intakeI = tab.addPersistent("Intake kI", IntakeK.deployI).getEntry();
+    private NetworkTableEntry intakeD = tab.addPersistent("Intake kD", IntakeK.deployD).getEntry();
     
 
     // I don't think there needs to be any shuffleboard stuff here

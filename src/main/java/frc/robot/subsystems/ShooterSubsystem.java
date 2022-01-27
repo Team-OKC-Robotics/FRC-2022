@@ -36,10 +36,10 @@ public class ShooterSubsystem extends SubsystemBase {
     private NetworkTableEntry velocityError = tab.addPersistent("velocity error", 0).getEntry();
 
     // PID
-    private NetworkTableEntry shootP = tab.addPersistent("Shooter kP", 0).getEntry();
-    private NetworkTableEntry shootI = tab.addPersistent("Shooter kI", 0).getEntry();
-    private NetworkTableEntry shootD = tab.addPersistent("Shooter kD", 0).getEntry();
-    private NetworkTableEntry shootF = tab.addPersistent("Shooter kF", 0).getEntry();
+    private NetworkTableEntry shootP = tab.addPersistent("Shooter kP", ShootK.shootP).getEntry();
+    private NetworkTableEntry shootI = tab.addPersistent("Shooter kI", ShootK.shootI).getEntry();
+    private NetworkTableEntry shootD = tab.addPersistent("Shooter kD", ShootK.shootD).getEntry();
+    private NetworkTableEntry shootF = tab.addPersistent("Shooter kF", ShootK.shootF).getEntry();
 
     // presets
     private NetworkTableEntry preset1 = tab.addPersistent("close launchpad preset", ShootK.preset1).getEntry();
