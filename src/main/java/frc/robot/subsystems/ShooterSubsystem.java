@@ -48,15 +48,15 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public ShooterSubsystem() {
         //TODO change port numbers these are temporary
-        //shooterMotor1 = new TalonFX(21);
-        //triggerMotor = new CANSparkMax(22, MotorType.kBrushless);
+        shooterMotor1 = new TalonFX(21);
+        triggerMotor = new CANSparkMax(22, MotorType.kBrushless); //TODO configure this motor
 
-        //shooterMotor1.configFactoryDefault();
-        //shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, 200);
-        //shooterMotor1.config_kP(0, ShootK.shootP, 200);
-        //shooterMotor1.config_kI(0, ShootK.shootI, 200);
-        //shooterMotor1.config_kD(0, ShootK.shootD, 200);
-        //shooterMotor1.config_kF(0, ShootK.shootF, 200);
+        shooterMotor1.configFactoryDefault();
+        shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, 200);
+        shooterMotor1.config_kP(0, ShootK.shootP, 200);
+        shooterMotor1.config_kI(0, ShootK.shootI, 200);
+        shooterMotor1.config_kD(0, ShootK.shootD, 200);
+        shooterMotor1.config_kF(0, ShootK.shootF, 200);
     }
 
     public void setShooter(double RPM) {

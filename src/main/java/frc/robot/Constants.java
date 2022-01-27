@@ -36,6 +36,7 @@ public final class Constants {
     }
 
     public final class ShootK {
+        //TODO test and tune this
         public static final double shootP = 0.5;
         public static final double shootI = 0;
         public static final double shootD = 0.01;
@@ -47,27 +48,41 @@ public final class Constants {
     }
 
     public final class IntakeK {
+        //TODO test and tune this
         public static final double deployP = 0.1;
         public static final double deployI = 0;
         public static final double deployD = 0.01;
 
+        //TODO test and tune this
         public static final double RAISED = 0; // ticks for intake at raised position (actually this would be 0)
         public static final double EXTENDED = 1000; // ticks for intake being extended
     }
 
     public final class ClimbK {
-        public static final double leftP = 0.1;
-        public static final double leftI = 0.1;
-        public static final double leftD = 0.1;
-
-        public static final double rightP = 0.1;
-        public static final double rightI = 0.1;
-        public static final double rightD = 0.1;
+        //TODO test and tune the entire climber subsystem
+        public static final double leftTiltP = 0;
+        public static final double leftTiltD = 0;
+        public static final double leftTiltI = 0;
+        
+        public static final double leftExtendP = 0;
+        public static final double leftExtendI = 0;
+        public static final double leftExtendD = 0;
+        public static final double leftExtendF = 0;
+        
+        public static final double rightTiltP = 0;
+        public static final double rightTiltI = 0;
+        public static final double rightTiltD = 0;
+        
+        public static final double rightExtendP = 0;
+        public static final double rightExtendI = 0;
+        public static final double rightExtendD = 0;
+        public static final double rightExtendF = 0;
     }
 
     public final class VisionK {
+        //TODO test and tune
         public static final double kP = 0.1;
-        public static final double kI = 0.1;
-        public static final double kD = 0.1;
+        public static final double kI = 0;
+        public static final double kD = 0;
     }
 }

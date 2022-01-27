@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // gamepads
   private final Joystick gamepad1 = new Joystick(0);
-
+  
   // buttons
   private JoystickButton aButton = new JoystickButton(gamepad1, 1);
   private JoystickButton bButton = new JoystickButton(gamepad1, 2);
