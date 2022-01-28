@@ -88,8 +88,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
       backButton.whenPressed(teleopDrive);
 
-      aButton.whenPressed(intakeIn);
-      aButton.whenReleased(stopIntake);
+      leftBumper.whenPressed(intakeIn);
+      leftBumper.whenReleased(stopIntake);
 
       //bButton.whenPressed(slowShooter);
       //xButton.whenPressed(fastShooter);

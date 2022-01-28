@@ -80,7 +80,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         drivetrain = new DifferentialDrive(leftSide, rightSide);
        
         //TEMP FIXME
-        drivetrain.setMaxOutput(0.1);
+        drivetrain.setMaxOutput(1);
 
         // sensor configuration
         gyro = new AHRS(SPI.Port.kMXP); // plugged into the big port thing on the RoboRIO
@@ -256,7 +256,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the heading of the gyro
      */
     public double getHeading() {
-        return gyro.getRotation2d().getDegrees(); // I think this is the right method but I'm not sure
+        return gyro.getYaw();
+        //return gyro.getAngle();
+        //return gyro.getRotation2d().getDegrees(); // I think this is the right method but I'm not sure
     }
 
     public void resetGyro() {

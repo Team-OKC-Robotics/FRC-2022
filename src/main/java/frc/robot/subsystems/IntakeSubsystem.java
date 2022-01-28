@@ -41,8 +41,8 @@ public class IntakeSubsystem extends SubsystemBase {
     
     public IntakeSubsystem() {
         //TODO change id numbers
-        deployMotor = new CANSparkMax(10, MotorType.kBrushless);
-        indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
+        //deployMotor = new CANSparkMax(10, MotorType.kBrushless);
+        //indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
         intakeMotor = new PWMSparkMax(1); // temporary prototype stuff
 
         if (deployMotor != null) {

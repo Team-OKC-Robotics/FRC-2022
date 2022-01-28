@@ -22,6 +22,8 @@ public class TurnCommand extends CommandBase {
     @Override
     public void initialize() {
         drivetrain.resetTurnPID();
+        drivetrain.resetEncoders();
+        //drivetrain.resetGyro(); //???
     }
 
     @Override
