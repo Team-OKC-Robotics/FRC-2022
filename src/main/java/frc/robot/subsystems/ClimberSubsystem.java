@@ -57,6 +57,11 @@ public class ClimberSubsystem extends SubsystemBase {
     private NetworkTableEntry rightTiltI = tab.addPersistent("Right Tilt kI", ClimbK.rightTiltI).getEntry();
     private NetworkTableEntry rightTiltD = tab.addPersistent("Right Tilt kD", ClimbK.rightTiltD).getEntry();
     
+    /**
+     * Makes a new ClimberSubsystem
+     * the climber consists (maybe) of some motors to move like an arm thing and also two winches
+     * but also like idk what's going on
+     */
     public ClimberSubsystem() {
         //TODO change port numbers
         rightExtendMotor = new WPI_TalonFX(14);
@@ -92,26 +97,43 @@ public class ClimberSubsystem extends SubsystemBase {
         }
 
         //TODO configure the falcon 500s and their PIDs and stuff
+        //TODO also set the encoder conversion factor or whatever so using inches actually works
     }
 
+    /**
+     * sets the left winch? motor to the specified distance
+     * @param inches the distance to set the left winch motor to
+     */
     public void setLeftExtend(double inches) {
         if (leftExtendMotor != null) {
             leftExtendMotor.set(TalonFXControlMode.Position, inches);
         }
     }
 
+    /**
+     * Sets the left tilt motor to the specified angle, in degrees (probably)
+     * @param angle the angle to set the left climber arm to 
+     */
     public void setLeftTilt(double angle) {
         if (leftPID != null) {
             leftPID.setReference(angle, ControlType.kPosition);
         }
     }
 
+    /**
+     * sets the right winch? motor to the specified distance
+     * @param inches the distance to set the right winch motor to
+     */
     public void setRightExtend(double inches) {
         if (rightExtendMotor != null) {
             rightExtendMotor.set(TalonFXControlMode.Position, inches);
         }
     }
 
+    /**
+     * Sets the right tilt motor to the specified angle, in degrees (probably)
+     * @param angle the angle to set the right climber arm to 
+     */
     public void setRightTilt(double angle) {
         if (rightPID != null) {
             rightPID.setReference(angle, ControlType.kPosition);
