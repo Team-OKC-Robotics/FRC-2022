@@ -51,12 +51,14 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotor1 = new TalonFX(21);
         triggerMotor = new CANSparkMax(22, MotorType.kBrushless); //TODO configure this motor
 
-        shooterMotor1.configFactoryDefault();
-        shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, 200);
-        shooterMotor1.config_kP(0, ShootK.shootP, 200);
-        shooterMotor1.config_kI(0, ShootK.shootI, 200);
-        shooterMotor1.config_kD(0, ShootK.shootD, 200);
-        shooterMotor1.config_kF(0, ShootK.shootF, 200);
+        if (shooterMotor1 != null) {
+            shooterMotor1.configFactoryDefault();
+            shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, 200);
+            shooterMotor1.config_kP(0, ShootK.shootP, 200);
+            shooterMotor1.config_kI(0, ShootK.shootI, 200);
+            shooterMotor1.config_kD(0, ShootK.shootD, 200);
+            shooterMotor1.config_kF(0, ShootK.shootF, 200);
+        }
     }
 
     public void setShooter(double RPM) {
@@ -97,10 +99,12 @@ public class ShooterSubsystem extends SubsystemBase {
         
         // Shuffleboard on-the-fly tuning
         if (writeMode.getBoolean(false)) {
-            shooterMotor1.config_kP(0, shootP.getDouble(ShootK.shootP));
-            shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
-            shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
-            shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
+            if (shooterMotor1 != null) {
+                shooterMotor1.config_kP(0, shootP.getDouble(ShootK.shootP));
+                shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
+                shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
+                shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
+            }
         }
     }
 }

@@ -22,10 +22,12 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public double getXDifference() {
-        PhotonPipelineResult result = camera.getLatestResult();
-
-        if (result.hasTargets()) {
-            return result.getBestTarget().getYaw();
+        if (camera != null) {
+            PhotonPipelineResult result = camera.getLatestResult();
+    
+            if (result.hasTargets()) {
+                return result.getBestTarget().getYaw();
+            }
         }
         return 0;
     }

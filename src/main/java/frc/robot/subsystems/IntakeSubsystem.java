@@ -87,9 +87,11 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         if (writeMode.getBoolean(false)) {
-            extendPID.setP(intakeP.getDouble(IntakeK.deployP));
-            extendPID.setI(intakeI.getDouble(IntakeK.deployI));
-            extendPID.setD(intakeD.getDouble(IntakeK.deployD));
+            if (extendPID != null) {
+                extendPID.setP(intakeP.getDouble(IntakeK.deployP));
+                extendPID.setI(intakeI.getDouble(IntakeK.deployI));
+                extendPID.setD(intakeD.getDouble(IntakeK.deployD));
+            }
         }
     }
 }
