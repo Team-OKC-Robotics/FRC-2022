@@ -9,10 +9,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.autos.*;
 import frc.robot.commands.intake.SetIntakeCommand;
+import frc.robot.commands.shooter.SetShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -27,37 +29,49 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // gamepads
   private final Joystick gamepad1 = new Joystick(0);
-
+  
   // buttons
   private JoystickButton aButton = new JoystickButton(gamepad1, 1);
+  private JoystickButton bButton = new JoystickButton(gamepad1, 2);
+  private JoystickButton xButton = new JoystickButton(gamepad1, 3);
+  private JoystickButton yButton = new JoystickButton(gamepad1, 4);
+  private JoystickButton leftBumper = new JoystickButton(gamepad1, 5);
+  private JoystickButton rightBumper = new JoystickButton(gamepad1, 6);
+  private JoystickButton startButton = new JoystickButton(gamepad1, 7);
   private JoystickButton backButton = new JoystickButton(gamepad1, 8);
 
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
-  private final ShooterSubsystem shooter = new ShooterSubsystem();
-  private final ClimberSubsystem climber = new ClimberSubsystem();
+  //private final ShooterSubsystem shooter = new ShooterSubsystem();
+  //private final ClimberSubsystem climber = new ClimberSubsystem();
+  //private final VisionSubsystem vision = new VisionSubsystem();
 
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
   private final DriveOffLineAuto driveOffLine = new DriveOffLineAuto(drivetrain); // drives the robot forwards
-  private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter); // drives the robot backwards
-  private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
-  private final ThreeBallAuto threeBallAuto = new ThreeBallAuto(drivetrain, shooter, intake); // drives the robot backwards
-  
+  //private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter); // drives the robot backwards
+  //private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
+  //private final ThreeBallAuto threeBallAuto = new ThreeBallAuto(drivetrain, shooter, intake); // drives the robot backwards
+  private final GyroTestAuto gyroTestAuto = new GyroTestAuto(drivetrain);
 
   // commands
   //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(4), gamepad1.getRawAxis(1)), drivetrain);
-  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(gamepad1.getRawAxis(1), gamepad1.getRawAxis(5)), drivetrain);
+  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)), drivetrain);
 
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
+
+  // shooter
+  //private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
+  //private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 3000);
+  //private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // add the autos to the chooser
-    AutoChooser.addAutos(doNothingAuto, driveOffLine, shootThenDrive, twoBallAuto, threeBallAuto);
+    AutoChooser.addAutos(doNothingAuto, driveOffLine, /*shootThenDrive, twoBallAuto, threeBallAuto,*/ gyroTestAuto);
     AutoChooser.addGamepad(gamepad1);
 
     // Configure the button bindings
@@ -74,8 +88,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
       backButton.whenPressed(teleopDrive);
 
-      aButton.whenPressed(intakeIn);
-      aButton.whenReleased(stopIntake);
+      leftBumper.whenPressed(intakeIn);
+      leftBumper.whenReleased(stopIntake);
+
+      //bButton.whenPressed(slowShooter);
+      //xButton.whenPressed(fastShooter);
+      //yButton.whenPressed(maxShooter);
   }
 
   public Command getDriveCommand() {

@@ -96,8 +96,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         right2Motor.setIdleMode(IdleMode.kBrake);
         right3Motor.setIdleMode(IdleMode.kBrake);
 
-        leftSide.setInverted(true); //TODO figure out if this is the right way to do this
+        rightSide.setInverted(true); //TODO figure out if this is the right way to do this
         drivetrain = new DifferentialDrive(leftSide, rightSide);
+       
+        //TEMP FIXME
+        drivetrain.setMaxOutput(1);
 
         left1Encoder = left1Motor.getEncoder();
         left2Encoder = left2Motor.getEncoder();
@@ -164,7 +167,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void driveDistance(double distance) {
         distancePID.setSetpoint(distance);
 
-        arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), headingPID.calculate(getHeading()));
+        arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), -headingPID.calculate(getHeading()));
     }
 
     /**
@@ -192,7 +195,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the drivetrain, in inches
      */
     public double getEncoderAverage() {
-        return (getLeftEncoderAverage() + getRightEncoderAverage()) / 2;
+        return getInches(getLeftEncoderAverage() + getRightEncoderAverage()) / 2;
     }
 
     /**
@@ -286,7 +289,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the heading of the gyro
      */
     public double getHeading() {
-        return gyro.getRotation2d().getDegrees(); // I think this is the right method but I'm not sure
+        return gyro.getYaw();
+        //return gyro.getAngle();
+        //return gyro.getRotation2d().getDegrees(); // I think this is the right method but I'm not sure
     }
 
     public void resetGyro() {

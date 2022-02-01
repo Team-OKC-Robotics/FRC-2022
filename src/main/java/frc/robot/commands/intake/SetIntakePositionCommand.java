@@ -10,6 +10,8 @@ public class SetIntakePositionCommand extends CommandBase {
     public SetIntakePositionCommand(IntakeSubsystem intake, boolean extended) {
         this.intake = intake;
         this.extended = extended;
+
+        addRequirements(intake);
     }
 
     @Override

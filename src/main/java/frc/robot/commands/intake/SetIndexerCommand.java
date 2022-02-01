@@ -10,6 +10,8 @@ public class SetIndexerCommand extends CommandBase {
     public SetIndexerCommand(IntakeSubsystem intake, double power) {
         this.intake = intake;
         this.power = power;
+
+        addRequirements(intake);
     }
 
     @Override

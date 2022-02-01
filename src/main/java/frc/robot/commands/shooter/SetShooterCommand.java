@@ -10,6 +10,8 @@ public class SetShooterCommand extends CommandBase {
     public SetShooterCommand(ShooterSubsystem shooter, double RPM) {
         this.shooter = shooter;
         this.RPM = RPM;
+
+        addRequirements(shooter);
     }
 
     @Override

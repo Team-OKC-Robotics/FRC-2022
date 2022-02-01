@@ -15,17 +15,24 @@ public class TurnCommand extends CommandBase {
     public TurnCommand(DrivetrainSubsystem drivetrain, double angle) {
         this.drivetrain = drivetrain;
         this.angle = angle;
+
+        addRequirements(drivetrain);
     }
 
-    public void init() {
+    @Override
+    public void initialize() {
         drivetrain.resetTurnPID();
+        drivetrain.resetEncoders();
+        //drivetrain.resetGyro(); //???
     }
 
+    @Override
     public void execute() {
         drivetrain.turnToHeading(angle);
     }
 
-    public boolean isFinished(boolean interrupted) {
+    @Override
+    public boolean isFinished() {
         return drivetrain.atTurnSetpoint();
     }
 }
