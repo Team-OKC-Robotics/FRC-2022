@@ -76,6 +76,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private NetworkTableEntry resetGyro = tab.addPersistent("reset gyro", false).getEntry();
 
+    private Timer timer;
+
 
     public DrivetrainSubsystem() {
         // motor configuration
@@ -123,6 +125,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rightTicks.setDouble(0);
         totalTicks.setDouble(0);
         heading.setDouble(0);
+
+        // logging initilization
+        logger = new Logger("drivetrain", 0); //TODO figure out how to do line numbers and whatnot
+        logger.headers("left ticks, right ticks, heading");
 
         // reset the subsystem
         resetEncoders();
@@ -328,6 +334,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
         if (resetGyro.getBoolean(false)) {
             resetGyro();
             resetGyro.setBoolean(false);
+        }
+
+        if (timer.periodElapsed()) {
+            logger.newline();
+            logger.log("left ticks", getLeftEncoderAverage())
+            logger.log("right ticks", getRightEncoderAverage())
+            logger.log("heading", getHeading())
         }
     }
 }

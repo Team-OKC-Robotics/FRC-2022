@@ -33,6 +33,9 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry intakeP = tab.addPersistent("Intake kP", IntakeK.deployP).getEntry();
     private NetworkTableEntry intakeI = tab.addPersistent("Intake kI", IntakeK.deployI).getEntry();
     private NetworkTableEntry intakeD = tab.addPersistent("Intake kD", IntakeK.deployD).getEntry();
+
+    private Logger logger;
+    private Timer timer;
     
     /**
      * makes a new IntakeSubsystem
@@ -49,6 +52,11 @@ public class IntakeSubsystem extends SubsystemBase {
             extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
             deployEncoder = deployMotor.getEncoder();
         }
+
+        logger = new Logger("intake", 0); //TODO figure out a way to do match numbers
+        logger.headers("ticks, velocity");
+
+        timer = new Timer(); //TODO configure
     }
 
     /**
@@ -109,6 +117,12 @@ public class IntakeSubsystem extends SubsystemBase {
                 extendPID.setI(intakeI.getDouble(IntakeK.deployI));
                 extendPID.setD(intakeD.getDouble(IntakeK.deployD));
             }
+        }
+
+        if (timer) { //TODO
+            logger.newline();
+            logger.log("intake ticks", deployEncoder.getPosition());
+            logger.log("intake velocity", deployEncoder.getVelocity());
         }
     }
 }

@@ -32,11 +32,23 @@ public class Logger {
         writer = new BufferedWriter(out);
     }
 
-    public void log(String data, Subsystem subsystem) {
-        RobotController.getFPGATime();
+    public void headers(String headers) {
+        writer.write(headers);
     }
 
-    public void log(String data) throws IOException {
-        writer.write(data);
+    public void newline() {
+        writer.write("\n" + RobotController.getFPGATime());
     }
+
+    public void log(String name, double data) {
+        writer.write(data + ",");
+    }
+
+    // public void log(String data, Subsystem subsystem) throws IOException {
+    //     writer.write(RobotController.getFPGATime());
+    // }
+
+    // public void log(String data) throws IOException {
+    //     writer.write(data);
+    // }
 }
