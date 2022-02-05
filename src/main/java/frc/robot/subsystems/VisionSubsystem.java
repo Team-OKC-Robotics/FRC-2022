@@ -13,7 +13,7 @@ public class VisionSubsystem extends SubsystemBase {
     private PIDController visionPID;
 
     public VisionSubsystem() {
-        camera = new PhotonCamera("photonvision");
+        camera = new PhotonCamera("mmal_service_16.1");
         camera.setPipelineIndex(0);
         camera.setDriverMode(false);
 

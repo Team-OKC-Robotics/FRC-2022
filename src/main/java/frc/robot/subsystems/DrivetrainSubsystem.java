@@ -39,7 +39,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("drivetrain");
-    private NetworkTableEntry writeMode = tab.addPersistent("Write Mode", false).getEntry();
+    private NetworkTableEntry writeMode = tab.add("Write Mode", false).getEntry();
     
     // distance
     private NetworkTableEntry leftTicks = tab.addPersistent("left ticks", 0).getEntry();
@@ -80,7 +80,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         drivetrain = new DifferentialDrive(leftSide, rightSide);
        
         //TEMP FIXME
-        drivetrain.setMaxOutput(1);
+        drivetrain.setMaxOutput(0.2);
 
         // sensor configuration
         gyro = new AHRS(SPI.Port.kMXP); // plugged into the big port thing on the RoboRIO
@@ -89,6 +89,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         distancePID = new PIDController(DriveK.distanceP, DriveK.distanceI, DriveK.distanceD);
         headingPID = new PIDController(DriveK.headingP, DriveK.headingI, DriveK.headingD);
         turnPID = new PIDController(DriveK.turnP, DriveK.turnI, DriveK.turnD);
+        turnPID.enableContinuousInput(-180, 180);
 
         // Shuffleboard initilization
         leftTicks.setDouble(0);
@@ -118,17 +119,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @param turn how much to turn the robot
      */
     public void arcadeDrive(double speed, double turn) {
-        drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, false);
-    }
-
-    /**
-     * Arcade drives the robot. Does not square the inputs.
-     * @param speed the speed of the robot
-     * @param turn how much to turn the robot
-     * @param maxOutput the max output of the drivtrain
-     */
-    public void arcadeDrive(double speed, double turn, double maxOutput) {
-        drivetrain.setMaxOutput(maxOutput);
         drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, false);
     }
     

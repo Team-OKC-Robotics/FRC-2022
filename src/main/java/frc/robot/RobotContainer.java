@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.autos.*;
+import frc.robot.commands.drivetrain.TeleOpDriveCommand;
 import frc.robot.commands.intake.SetIntakeCommand;
 import frc.robot.commands.shooter.SetShooterCommand;
 import frc.robot.commands.vision.VisionAlignCommand;
@@ -38,8 +39,8 @@ public class RobotContainer {
   private JoystickButton yButton = new JoystickButton(gamepad1, 4);
   private JoystickButton leftBumper = new JoystickButton(gamepad1, 5);
   private JoystickButton rightBumper = new JoystickButton(gamepad1, 6);
-  private JoystickButton startButton = new JoystickButton(gamepad1, 7);
-  private JoystickButton backButton = new JoystickButton(gamepad1, 8);
+  private JoystickButton backButton = new JoystickButton(gamepad1, 7);
+  private JoystickButton startButton = new JoystickButton(gamepad1, 8);
 
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
@@ -57,6 +58,7 @@ public class RobotContainer {
   private final GyroTestAuto gyroTestAuto = new GyroTestAuto(drivetrain);
 
   // commands
+  private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
   private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
   //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)), drivetrain);
 
@@ -90,7 +92,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      backButton.whenPressed(teleopDrive);
+      backButton.whenPressed(teleOpDrive);
 
       leftBumper.whenPressed(intakeIn);
       leftBumper.whenReleased(stopIntake);
@@ -103,6 +105,7 @@ public class RobotContainer {
   }
 
   public Command getDriveCommand() {
-    return teleopDrive;
+    //return teleopDrive;
+    return teleOpDrive;
   }
 }
