@@ -28,22 +28,22 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("shooter");
-    private NetworkTableEntry writeMode = tab.addPersistent("Write Mode", false).getEntry();
+    private NetworkTableEntry writeMode = tab.add("Write Mode", false).getEntry();
     
     // sensors
-    private NetworkTableEntry ticks = tab.addPersistent("shooter ticks", 0).getEntry();
-    private NetworkTableEntry shooterRPM = tab.addPersistent("shooter RPM", 0).getEntry();
-    private NetworkTableEntry velocityError = tab.addPersistent("velocity error", 0).getEntry();
+    private NetworkTableEntry ticks = tab.add("shooter ticks", 0).getEntry();
+    private NetworkTableEntry shooterRPM = tab.add("shooter RPM", 0).getEntry();
+    private NetworkTableEntry velocityError = tab.add("velocity error", 0).getEntry();
 
     // PID
-    private NetworkTableEntry shootP = tab.addPersistent("Shooter kP", ShootK.shootP).getEntry();
-    private NetworkTableEntry shootI = tab.addPersistent("Shooter kI", ShootK.shootI).getEntry();
-    private NetworkTableEntry shootD = tab.addPersistent("Shooter kD", ShootK.shootD).getEntry();
-    private NetworkTableEntry shootF = tab.addPersistent("Shooter kF", ShootK.shootF).getEntry();
+    private NetworkTableEntry shootP = tab.add("Shooter kP", ShootK.shootP).getEntry();
+    private NetworkTableEntry shootI = tab.add("Shooter kI", ShootK.shootI).getEntry();
+    private NetworkTableEntry shootD = tab.add("Shooter kD", ShootK.shootD).getEntry();
+    private NetworkTableEntry shootF = tab.add("Shooter kF", ShootK.shootF).getEntry();
 
     // presets
-    private NetworkTableEntry preset1 = tab.addPersistent("close launchpad preset", ShootK.preset1).getEntry();
-    private NetworkTableEntry preset2 = tab.addPersistent("far launchpad preset", ShootK.preset2).getEntry();
+    private NetworkTableEntry preset1 = tab.add("close launchpad preset", ShootK.preset1).getEntry();
+    private NetworkTableEntry preset2 = tab.add("far launchpad preset", ShootK.preset2).getEntry();
 
 
     public ShooterSubsystem() {

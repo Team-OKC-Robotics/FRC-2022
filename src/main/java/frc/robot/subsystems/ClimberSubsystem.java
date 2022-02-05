@@ -29,33 +29,33 @@ public class ClimberSubsystem extends SubsystemBase {
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("climber");
-    private NetworkTableEntry writeMode = tab.addPersistent("Write Mode", false).getEntry();
+    private NetworkTableEntry writeMode = tab.add("Write Mode", false).getEntry();
 
     // sensor
-    private NetworkTableEntry leftTiltPos = tab.addPersistent("Left Tilt Position", 0).getEntry();
-    private NetworkTableEntry leftExtendPos = tab.addPersistent("Left Extend Position", 0).getEntry();
+    private NetworkTableEntry leftTiltPos = tab.add("Left Tilt Position", 0).getEntry();
+    private NetworkTableEntry leftExtendPos = tab.add("Left Extend Position", 0).getEntry();
 
-    private NetworkTableEntry rightTiltPos = tab.addPersistent("Right Tilt Position", 0).getEntry();
-    private NetworkTableEntry rightExtendPos = tab.addPersistent("Right Extend Position", 0).getEntry();
+    private NetworkTableEntry rightTiltPos = tab.add("Right Tilt Position", 0).getEntry();
+    private NetworkTableEntry rightExtendPos = tab.add("Right Extend Position", 0).getEntry();
 
     // PIDs (boi there's a lot)
-    private NetworkTableEntry leftExtendP = tab.addPersistent("Left Extend kP", ClimbK.leftExtendP).getEntry();
-    private NetworkTableEntry leftExtendI = tab.addPersistent("Left Extend kI", ClimbK.leftExtendI).getEntry();
-    private NetworkTableEntry leftExtendD = tab.addPersistent("Left Extend kD", ClimbK.leftExtendD).getEntry();
-    private NetworkTableEntry leftExtendF = tab.addPersistent("Left Extend kF", ClimbK.leftExtendF).getEntry();
+    private NetworkTableEntry leftExtendP = tab.add("Left Extend kP", ClimbK.leftExtendP).getEntry();
+    private NetworkTableEntry leftExtendI = tab.add("Left Extend kI", ClimbK.leftExtendI).getEntry();
+    private NetworkTableEntry leftExtendD = tab.add("Left Extend kD", ClimbK.leftExtendD).getEntry();
+    private NetworkTableEntry leftExtendF = tab.add("Left Extend kF", ClimbK.leftExtendF).getEntry();
 
-    private NetworkTableEntry leftTiltP = tab.addPersistent("Left Tilt kP", ClimbK.leftTiltP).getEntry();
-    private NetworkTableEntry leftTiltI = tab.addPersistent("Left Tilt kI", ClimbK.leftTiltI).getEntry();
-    private NetworkTableEntry leftTiltD = tab.addPersistent("Left Tilt kD", ClimbK.leftTiltD).getEntry();
+    private NetworkTableEntry leftTiltP = tab.add("Left Tilt kP", ClimbK.leftTiltP).getEntry();
+    private NetworkTableEntry leftTiltI = tab.add("Left Tilt kI", ClimbK.leftTiltI).getEntry();
+    private NetworkTableEntry leftTiltD = tab.add("Left Tilt kD", ClimbK.leftTiltD).getEntry();
     
-    private NetworkTableEntry rightExtendP = tab.addPersistent("Right Extend kP", ClimbK.rightExtendP).getEntry();
-    private NetworkTableEntry rightExtendI = tab.addPersistent("Right Extend kI", ClimbK.rightExtendI).getEntry();
-    private NetworkTableEntry rightExtendD = tab.addPersistent("Right Extend kD", ClimbK.rightExtendD).getEntry();
-    private NetworkTableEntry rightExtendF = tab.addPersistent("Right Extend kF", ClimbK.rightExtendF).getEntry();
+    private NetworkTableEntry rightExtendP = tab.add("Right Extend kP", ClimbK.rightExtendP).getEntry();
+    private NetworkTableEntry rightExtendI = tab.add("Right Extend kI", ClimbK.rightExtendI).getEntry();
+    private NetworkTableEntry rightExtendD = tab.add("Right Extend kD", ClimbK.rightExtendD).getEntry();
+    private NetworkTableEntry rightExtendF = tab.add("Right Extend kF", ClimbK.rightExtendF).getEntry();
 
-    private NetworkTableEntry rightTiltP = tab.addPersistent("Right Tilt kP", ClimbK.rightTiltP).getEntry();
-    private NetworkTableEntry rightTiltI = tab.addPersistent("Right Tilt kI", ClimbK.rightTiltI).getEntry();
-    private NetworkTableEntry rightTiltD = tab.addPersistent("Right Tilt kD", ClimbK.rightTiltD).getEntry();
+    private NetworkTableEntry rightTiltP = tab.add("Right Tilt kP", ClimbK.rightTiltP).getEntry();
+    private NetworkTableEntry rightTiltI = tab.add("Right Tilt kI", ClimbK.rightTiltI).getEntry();
+    private NetworkTableEntry rightTiltD = tab.add("Right Tilt kD", ClimbK.rightTiltD).getEntry();
     
     public ClimberSubsystem() {
         //TODO change port numbers

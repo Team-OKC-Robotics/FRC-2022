@@ -42,25 +42,26 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private NetworkTableEntry writeMode = tab.add("Write Mode", false).getEntry();
     
     // distance
-    private NetworkTableEntry leftTicks = tab.addPersistent("left ticks", 0).getEntry();
-    private NetworkTableEntry rightTicks = tab.addPersistent("right ticks", 0).getEntry();
-    private NetworkTableEntry totalTicks = tab.addPersistent("total ticks", 0).getEntry();
+    private NetworkTableEntry leftTicks = tab.add("left ticks", 0).getEntry();
+    private NetworkTableEntry rightTicks = tab.add("right ticks", 0).getEntry();
+    private NetworkTableEntry totalTicks = tab.add("total ticks", 0).getEntry();
+    private NetworkTableEntry distanceError = tab.add("distance error", 0).getEntry();
     
-    private NetworkTableEntry distanceP = tab.addPersistent("Distance kP", DriveK.distanceP).getEntry();
-    private NetworkTableEntry distanceI = tab.addPersistent("Distance kI", DriveK.distanceI).getEntry();
-    private NetworkTableEntry distanceD = tab.addPersistent("Distance kD", DriveK.distanceD).getEntry();
+    private NetworkTableEntry distanceP = tab.add("Distance kP", DriveK.distanceP).getEntry();
+    private NetworkTableEntry distanceI = tab.add("Distance kI", DriveK.distanceI).getEntry();
+    private NetworkTableEntry distanceD = tab.add("Distance kD", DriveK.distanceD).getEntry();
 
     // angle
-    private NetworkTableEntry heading = tab.addPersistent("heading", 0).getEntry();
-    private NetworkTableEntry headingP = tab.addPersistent("Heading kP", DriveK.headingP).getEntry();
-    private NetworkTableEntry headingI = tab.addPersistent("Heading kI", DriveK.headingI).getEntry();
-    private NetworkTableEntry headingD = tab.addPersistent("Heading kD", DriveK.headingD).getEntry();
+    private NetworkTableEntry heading = tab.add("heading", 0).getEntry();
+    private NetworkTableEntry headingP = tab.add("Heading kP", DriveK.headingP).getEntry();
+    private NetworkTableEntry headingI = tab.add("Heading kI", DriveK.headingI).getEntry();
+    private NetworkTableEntry headingD = tab.add("Heading kD", DriveK.headingD).getEntry();
 
-    private NetworkTableEntry turnP = tab.addPersistent("Turn kP", DriveK.turnP).getEntry();
-    private NetworkTableEntry turnI = tab.addPersistent("Turn kI", DriveK.turnI).getEntry();
-    private NetworkTableEntry turnD = tab.addPersistent("Turn kD", DriveK.turnD).getEntry();
+    private NetworkTableEntry turnP = tab.add("Turn kP", DriveK.turnP).getEntry();
+    private NetworkTableEntry turnI = tab.add("Turn kI", DriveK.turnI).getEntry();
+    private NetworkTableEntry turnD = tab.add("Turn kD", DriveK.turnD).getEntry();
 
-    private NetworkTableEntry resetGyro = tab.addPersistent("reset gyro", false).getEntry();
+    private NetworkTableEntry resetGyro = tab.add("reset gyro", false).getEntry();
 
 
     public DrivetrainSubsystem() {
@@ -84,12 +85,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         // sensor configuration
         gyro = new AHRS(SPI.Port.kMXP); // plugged into the big port thing on the RoboRIO
+        gyro.calibrate();
 
         // PID configuration
         distancePID = new PIDController(DriveK.distanceP, DriveK.distanceI, DriveK.distanceD);
         headingPID = new PIDController(DriveK.headingP, DriveK.headingI, DriveK.headingD);
         turnPID = new PIDController(DriveK.turnP, DriveK.turnI, DriveK.turnD);
-        turnPID.enableContinuousInput(-180, 180);
+        //turnPID.enableContinuousInput(-180, 180);
 
         // Shuffleboard initilization
         leftTicks.setDouble(0);
@@ -102,6 +104,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         resetDistancePID();
         resetHeadingPID();
         resetTurnPID();
+        resetGyro();
     }
 
     /**
@@ -129,7 +132,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void driveDistance(double distance) {
         distancePID.setSetpoint(distance);
 
-        arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), -headingPID.calculate(getHeading()));
+        arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), headingPID.calculate(getHeading()));
     }
 
     /**
@@ -246,7 +249,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the heading of the gyro
      */
     public double getHeading() {
-        return gyro.getYaw();
+        return gyro.getAngle();
+        //return gyro.getQuaternionZ();
+        //return gyro.getYaw();
         //return gyro.getAngle();
         //return gyro.getRotation2d().getDegrees(); // I think this is the right method but I'm not sure
     }
@@ -266,6 +271,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rightTicks.setDouble(getRightEncoderAverage());
         totalTicks.setDouble(getEncoderAverage());
         heading.setDouble(getHeading());
+        distanceError.setDouble(distancePID.getPositionError());
 
         // Shuffleboard on-the-fly tuning
         if (writeMode.getBoolean(false)) {
