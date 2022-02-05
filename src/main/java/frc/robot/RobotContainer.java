@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.autos.*;
 import frc.robot.commands.intake.SetIntakeCommand;
 import frc.robot.commands.shooter.SetShooterCommand;
+import frc.robot.commands.vision.VisionAlignCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -45,7 +46,7 @@ public class RobotContainer {
   private final IntakeSubsystem intake = new IntakeSubsystem();
   //private final ShooterSubsystem shooter = new ShooterSubsystem();
   //private final ClimberSubsystem climber = new ClimberSubsystem();
-  //private final VisionSubsystem vision = new VisionSubsystem();
+  private final VisionSubsystem vision = new VisionSubsystem();
 
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
@@ -62,6 +63,9 @@ public class RobotContainer {
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
+
+  // vision
+  private final VisionAlignCommand visionAlign = new VisionAlignCommand(vision, drivetrain);
 
   // shooter
   //private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
@@ -90,6 +94,8 @@ public class RobotContainer {
 
       leftBumper.whenPressed(intakeIn);
       leftBumper.whenReleased(stopIntake);
+
+      yButton.whenPressed(visionAlign);
 
       //bButton.whenPressed(slowShooter);
       //xButton.whenPressed(fastShooter);
