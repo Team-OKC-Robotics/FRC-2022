@@ -5,12 +5,20 @@ import org.photonvision.targeting.PhotonPipelineResult;
 //import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionK;
 
 public class VisionSubsystem extends SubsystemBase {
     private PhotonCamera camera;
     private PIDController visionPID;
+
+    //Shuffleboard
+    private ShuffleboardTab tab = Shuffleboard.getTab("vision");
+    private NetworkTableEntry toggleMode = tab.add("toggle camera", false).getEntry();
+    
 
     public VisionSubsystem() {
         camera = new PhotonCamera("mmal_service_16.1");
@@ -40,5 +48,13 @@ public class VisionSubsystem extends SubsystemBase {
 
     public boolean atVisionSetpoint() {
         return visionPID.atSetpoint();
+    }
+
+    @Override
+    public void periodic() {
+        if (toggleMode.getBoolean(false)) {
+            camera.setDriverMode(!camera.getDriverMode());
+            toggleMode.setBoolean(false);
+        }
     }
 }
