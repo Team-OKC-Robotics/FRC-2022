@@ -5,6 +5,9 @@ import org.photonvision.targeting.PhotonPipelineResult;
 //import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionK;
 
@@ -12,14 +15,18 @@ public class VisionSubsystem extends SubsystemBase {
     private PhotonCamera camera;
     private PIDController visionPID;
 
+    //Shuffleboard
+    private ShuffleboardTab tab = Shuffleboard.getTab("vision");
+    private NetworkTableEntry toggleMode = tab.add("toggle camera", false).getEntry();
+    
     /**
      * Makes a new VisionSubsystem
      * this subsystem houses the PhotonVision raspi + pi camera module
      * and is used to track the vision targets for automatic aiming
      */
     public VisionSubsystem() {
-        camera = new PhotonCamera("photonvision");
-        camera.setPipelineIndex(0);
+        camera = new PhotonCamera("mmal_service_16.1");
+        camera.setPipelineIndex(1);
         camera.setDriverMode(false);
 
         visionPID = new PIDController(VisionK.kP, VisionK.kI, VisionK.kD);
@@ -36,7 +43,7 @@ public class VisionSubsystem extends SubsystemBase {
             PhotonPipelineResult result = camera.getLatestResult();
     
             if (result.hasTargets()) {
-                return result.getBestTarget().getYaw();
+                return -result.getBestTarget().getYaw();
             }
         }
         return 0;
@@ -65,5 +72,13 @@ public class VisionSubsystem extends SubsystemBase {
      */
     public boolean atVisionSetpoint() {
         return visionPID.atSetpoint();
+    }
+
+    @Override
+    public void periodic() {
+        if (toggleMode.getBoolean(false)) {
+            camera.setDriverMode(!camera.getDriverMode());
+            toggleMode.setBoolean(false);
+        }
     }
 }

@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.autos.*;
+import frc.robot.commands.drivetrain.TeleOpDriveCommand;
 import frc.robot.commands.intake.SetIntakeCommand;
 import frc.robot.commands.shooter.SetShooterCommand;
+import frc.robot.commands.vision.VisionAlignCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -37,15 +39,15 @@ public class RobotContainer {
   private JoystickButton yButton = new JoystickButton(gamepad1, 4);
   private JoystickButton leftBumper = new JoystickButton(gamepad1, 5);
   private JoystickButton rightBumper = new JoystickButton(gamepad1, 6);
-  private JoystickButton startButton = new JoystickButton(gamepad1, 7);
-  private JoystickButton backButton = new JoystickButton(gamepad1, 8);
+  private JoystickButton backButton = new JoystickButton(gamepad1, 7);
+  private JoystickButton startButton = new JoystickButton(gamepad1, 8);
 
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
   //private final ShooterSubsystem shooter = new ShooterSubsystem();
   //private final ClimberSubsystem climber = new ClimberSubsystem();
-  //private final VisionSubsystem vision = new VisionSubsystem();
+  private final VisionSubsystem vision = new VisionSubsystem();
 
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
@@ -56,12 +58,16 @@ public class RobotContainer {
   private final GyroTestAuto gyroTestAuto = new GyroTestAuto(drivetrain);
 
   // commands
-  //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(4), gamepad1.getRawAxis(1)), drivetrain);
-  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)), drivetrain);
+  private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
+  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
+  //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)), drivetrain);
 
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
+
+  // vision
+  private final VisionAlignCommand visionAlign = new VisionAlignCommand(vision, drivetrain);
 
   // shooter
   //private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
@@ -86,10 +92,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      backButton.whenPressed(teleopDrive);
+      backButton.whenPressed(teleOpDrive);
 
       leftBumper.whenPressed(intakeIn);
       leftBumper.whenReleased(stopIntake);
+
+      yButton.whenPressed(visionAlign);
 
       //bButton.whenPressed(slowShooter);
       //xButton.whenPressed(fastShooter);
@@ -97,6 +105,7 @@ public class RobotContainer {
   }
 
   public Command getDriveCommand() {
-    return teleopDrive;
+    //return teleopDrive;
+    return teleOpDrive;
   }
 }

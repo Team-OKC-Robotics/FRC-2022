@@ -24,6 +24,11 @@ public class VisionAlignCommand extends CommandBase {
     public void execute() {
         drivetrain.arcadeDrive(0, vision.getOutput());
     }
+
+    @Override
+    public void end(boolean interrupted) {
+        drivetrain.arcadeDrive(0, 0);
+    }
     
     @Override
     public boolean isFinished() {

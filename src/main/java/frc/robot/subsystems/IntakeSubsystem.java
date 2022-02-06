@@ -26,13 +26,13 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry writeMode = tab.add("write mode", false).getEntry();
     
     // sensors
-    private NetworkTableEntry ticks = tab.addPersistent("intake ticks", 0).getEntry();
-    private NetworkTableEntry velocity = tab.addPersistent("intake velocity", 0).getEntry();
+    private NetworkTableEntry ticks = tab.add("intake ticks", 0).getEntry();
+    private NetworkTableEntry velocity = tab.add("intake velocity", 0).getEntry();
     
     // PID
-    private NetworkTableEntry intakeP = tab.addPersistent("Intake kP", IntakeK.deployP).getEntry();
-    private NetworkTableEntry intakeI = tab.addPersistent("Intake kI", IntakeK.deployI).getEntry();
-    private NetworkTableEntry intakeD = tab.addPersistent("Intake kD", IntakeK.deployD).getEntry();
+    private NetworkTableEntry intakeP = tab.add("Intake kP", IntakeK.deployP).getEntry();
+    private NetworkTableEntry intakeI = tab.add("Intake kI", IntakeK.deployI).getEntry();
+    private NetworkTableEntry intakeD = tab.add("Intake kD", IntakeK.deployD).getEntry();
     
     /**
      * makes a new IntakeSubsystem
