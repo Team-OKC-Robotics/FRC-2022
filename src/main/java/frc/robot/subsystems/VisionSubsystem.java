@@ -29,6 +29,11 @@ public class VisionSubsystem extends SubsystemBase {
         visionPID.setSetpoint(0);
     }
 
+    /**
+     * Returns the difference along the x axis between the center of the camera and the center of the target,
+     * aka the yaw
+     * @return the yaw of the best target
+     */
     public double getXDifference() {
         PhotonPipelineResult result = camera.getLatestResult();
 
@@ -39,14 +44,26 @@ public class VisionSubsystem extends SubsystemBase {
         return 0;
     }
 
+    /**
+     * Resets the vision PID
+     */
     public void resetVisionPID() {
         visionPID.reset();
     }
 
+    /**
+     * Gets the PID calculated output based on the yaw of the target
+     * this would then be fed to the drivetrain
+     * @return the output of the vision PID 
+     */
     public double getOutput() {
         return visionPID.calculate(getXDifference());
     }
 
+    /**
+     * Gets if the vision PID is at its setpoint, ie we're aligned with the vision target
+     * @return true if the camera is vision aligned 
+     */
     public boolean atVisionSetpoint() {
         return visionPID.atSetpoint();
     }
