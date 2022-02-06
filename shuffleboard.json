@@ -1,6 +1,142 @@
 {
   "tabPane": [
     {
+      "title": "main",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": false,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 1,
+        "tiles": {
+          "8,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/autoChooser/Auto",
+              "_title": "Selected Auto"
+            }
+          },
+          "7,1": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/autoChooser/Auto Description",
+              "_title": "Auto Description"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/autoChooser/Auto Points",
+              "_title": "Auto Points"
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///Shuffleboard/drivetrain/Write Mode",
+              "_title": "Write Mode"
+            }
+          },
+          "5,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Gyro",
+              "_source0": "network_table:///LiveWindow/Ungrouped/navX-Sensor[4]",
+              "_title": "NavX",
+              "Visuals/Major tick spacing": 45.0,
+              "Visuals/Starting angle": 180.0,
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": false
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///Shuffleboard/drivetrain/reset gyro",
+              "_title": "Reset Gyro"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///Shuffleboard/autoChooser/increase auto index",
+              "_title": "Shuffleboard/autoChooser/increase auto index"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///Shuffleboard/autoChooser/decrease auto index",
+              "_title": "Shuffleboard/autoChooser/decrease auto index"
+            }
+          },
+          "1,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://mmal_service_16.1-output",
+              "_title": "mmal_service_16.1-output",
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": 30.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
+            }
+          },
+          "0,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///Shuffleboard/vision/toggle camera",
+              "_title": "toggle pipeline mode"
+            }
+          }
+        }
+      }
+    },
+    {
       "title": "drivetrain",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
@@ -9,45 +145,39 @@
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
+        "titleType": 0,
         "tiles": {
-          "0,2": {
+          "3,1": {
             "size": [
               1,
               1
             ],
             "content": {
-              "_type": "3-Axis Accelerometer",
-              "_source0": "network_table:///LiveWindow/Ungrouped/BuiltInAccel[0]",
-              "_title": "LiveWindow/Ungrouped/BuiltInAccel[0]",
-              "Accelerometer/Range": "k16G",
-              "Visuals/Show value": true,
-              "Visuals/Precision": 2,
-              "Visuals/Show tick marks": false
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/Distance kD",
+              "_title": "Distance kD"
             }
           },
-          "0,0": {
+          "2,1": {
             "size": [
-              3,
-              2
+              1,
+              1
             ],
             "content": {
-              "_type": "Differential Drivebase",
-              "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]",
-              "_title": "LiveWindow/Ungrouped/DifferentialDrive[1]",
-              "Wheels/Number of wheels": 4,
-              "Wheels/Wheel diameter": 80.0,
-              "Visuals/Show velocity vectors": true
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/Distance kI",
+              "_title": "Distance kI"
             }
           },
-          "3,0": {
+          "1,1": {
             "size": [
-              2,
-              2
+              1,
+              1
             ],
             "content": {
-              "_type": "Network Table Tree",
-              "_source0": "network_table:///Shuffleboard/drivetrain",
-              "_title": "Shuffleboard/drivetrain"
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/Distance kP",
+              "_title": "Distance kP"
             }
           },
           "3,2": {
@@ -57,8 +187,435 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///Shuffleboard/drivetrain/Distance kP",
-              "_title": "/Shuffleboard/drivetrain/Distance kP"
+              "_source0": "network_table:///Shuffleboard/drivetrain/Heading kD",
+              "_title": "Heading kD"
+            }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/Heading kI",
+              "_title": "Heading kI"
+            }
+          },
+          "1,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/Heading kP",
+              "_title": "Heading kP"
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///Shuffleboard/drivetrain/Write Mode",
+              "_title": "write mode"
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/left ticks",
+              "_title": "left ticks"
+            }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/right ticks",
+              "_title": "right ticks"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/total ticks",
+              "_title": "total ticks"
+            }
+          },
+          "7,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Differential Drivebase",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]",
+              "_title": "differential drive",
+              "Wheels/Number of wheels": 6,
+              "Wheels/Wheel diameter": 58.0,
+              "Visuals/Show velocity vectors": true
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/Turn kP",
+              "_title": "turn kP"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/Turn kI",
+              "_title": "turn kI"
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/Turn kD",
+              "_title": "turn kD"
+            }
+          },
+          "7,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Gyro",
+              "_source0": "network_table:///LiveWindow/Ungrouped/navX-Sensor[4]",
+              "_title": "NavX",
+              "Visuals/Major tick spacing": 45.0,
+              "Visuals/Starting angle": 180.0,
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": false
+            }
+          },
+          "9,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/heading",
+              "_title": "heading"
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///Shuffleboard/drivetrain/reset gyro",
+              "_title": "reset gyro"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "intake",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": false,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/intake/Intake kD",
+              "_title": "Intake kD"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/intake/Intake kI",
+              "_title": "Intake kI"
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/intake/Intake kP",
+              "_title": "Intake kP"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/intake/intake ticks",
+              "_title": "ticks"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/intake/intake velocity",
+              "_title": "velocity"
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///Shuffleboard/intake/write mode",
+              "_title": "write mode"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "shooter",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": false,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/Shooter kD",
+              "_title": "Shooter kD"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/Shooter kF",
+              "_title": "Shooter kFF"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/Shooter kI",
+              "_title": "Shooter kI"
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/Shooter kP",
+              "_title": "Shooter kP"
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///Shuffleboard/shooter/Write Mode",
+              "_title": "write mode"
+            }
+          },
+          "1,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/close launchpad preset",
+              "_title": "close launchpad preset"
+            }
+          },
+          "1,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/far launchpad preset",
+              "_title": "far launchpad preset"
+            }
+          },
+          "6,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/shooter RPM",
+              "_title": "shooter RPM"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/shooter ticks",
+              "_title": "shooter ticks"
+            }
+          },
+          "7,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/velocity error",
+              "_title": "velocity error"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "vision",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///photonvision/mmal_service_16.1/hasTarget",
+              "_title": "hasTarget",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///photonvision/mmal_service_16.1/driverMode",
+              "_title": "driverMode",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///photonvision/mmal_service_16.1/latencyMillis",
+              "_title": "latencyMillis"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///photonvision/mmal_service_16.1/pipelineIndex",
+              "_title": "pipelineIndex"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///photonvision/mmal_service_16.1/targetYaw",
+              "_title": "targetYaw"
             }
           },
           "4,2": {
@@ -68,8 +625,30 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///Shuffleboard/drivetrain/Distance kD",
-              "_title": "/Shuffleboard/drivetrain/Distance kD"
+              "_source0": "network_table:///photonvision/mmal_service_16.1/targetPixelsY",
+              "_title": "targetPixelsY"
+            }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///photonvision/mmal_service_16.1/targetPixelsX",
+              "_title": "targetPixelsX"
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///photonvision/mmal_service_16.1/targetArea",
+              "_title": "targetArea"
             }
           }
         }
@@ -77,9 +656,9 @@
     }
   ],
   "windowGeometry": {
-    "x": 0.0,
-    "y": 0.0,
-    "width": 1536.0,
-    "height": 824.0
+    "x": -7.199999809265137,
+    "y": -7.199999809265137,
+    "width": 1550.4000244140625,
+    "height": 838.4000244140625
   }
 }

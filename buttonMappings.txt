@@ -1,0 +1,11 @@
+On the logitech F310 controllers (at least according to Windows),
+A Button => 1
+B Button => 2
+X Button => 3
+Y Button => 4
+Left Bumper => 5
+Right Bumper => 6
+Start Button => 7
+Back Button => 8
+Left Stick Button => 9
+Right Stick Button => 10
