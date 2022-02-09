@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -49,7 +50,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem() {
         //TODO change port numbers these are temporary
         shooterMotor1 = new TalonFX(21);
-        triggerMotor = new CANSparkMax(22, MotorType.kBrushless); //TODO configure this motor
+        triggerMotor = new CANSparkMax(22, MotorType.kBrushless);
 
         shooterMotor1.configFactoryDefault();
         shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, 200);
@@ -57,6 +58,8 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotor1.config_kI(0, ShootK.shootI, 200);
         shooterMotor1.config_kD(0, ShootK.shootD, 200);
         shooterMotor1.config_kF(0, ShootK.shootF, 200);
+
+        triggerMotor.setIdleMode(IdleMode.kBrake);
     }
 
     public void setShooter(double RPM) {

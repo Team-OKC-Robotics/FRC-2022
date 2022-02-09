@@ -92,6 +92,25 @@ public class ClimberSubsystem extends SubsystemBase {
         rightPID.setReference(angle, ControlType.kPosition);
     }
 
+    public boolean atLeftExtendSetpoint() {
+        return Math.abs(leftExtendMotor.getClosedLoopError()) < 0.5; //TODO change the tolerance
+    }
+
+    public boolean atRightExtendSetpoint() {
+        return Math.abs(rightExtendMotor.getClosedLoopError()) < 0.5; //TODO change the tolerance
+    }
+
+    public boolean atLeftTiltSetpoint() {
+        //BUG FIXME
+        
+        return false; // I am at a loss as to how you know if the integrated closed-loop control is anywhere near its target or not
+        //return leftPID.atSetpoint(); //TODO change the tolerance
+    }
+
+    public boolean atRightTiltSetpoint() {
+        return false; //FIXME
+    }
+
     @Override
     public void periodic() {
         leftTiltPos.setDouble(leftTiltEncoder.getPosition());

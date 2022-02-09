@@ -22,7 +22,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     public VisionSubsystem() {
         camera = new PhotonCamera("mmal_service_16.1");
-        camera.setPipelineIndex(1);
+        camera.setPipelineIndex(0);
         camera.setDriverMode(false);
 
         visionPID = new PIDController(VisionK.kP, VisionK.kI, VisionK.kD);
@@ -36,7 +36,6 @@ public class VisionSubsystem extends SubsystemBase {
      */
     public double getXDifference() {
         PhotonPipelineResult result = camera.getLatestResult();
-
 
         if (result.hasTargets()) {
             return -result.getBestTarget().getYaw();
@@ -73,6 +72,7 @@ public class VisionSubsystem extends SubsystemBase {
         if (toggleMode.getBoolean(false)) {
             camera.setDriverMode(!camera.getDriverMode());
             toggleMode.setBoolean(false);
+           // camera.setPipelineIndex(0);
         }
     }
 }

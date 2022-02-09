@@ -19,9 +19,9 @@ public class ExtendClimberCommand extends CommandBase {
     @Override
     public void initialize() {
         if (leftSide) {
-            climber.setLeftExtend(angle);
+            climber.setLeftExtend(distance);
         } else {
-            climber.setRightExtend(angle);
+            climber.setRightExtend(distance);
         }
     }
 
