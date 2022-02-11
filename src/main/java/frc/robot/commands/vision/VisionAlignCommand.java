@@ -18,6 +18,7 @@ public class VisionAlignCommand extends CommandBase {
     @Override
     public void initialize() {
         vision.resetVisionPID();
+        vision.setLeds(true);
     }
 
     @Override
@@ -28,6 +29,7 @@ public class VisionAlignCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         drivetrain.arcadeDrive(0, 0);
+        vision.setLeds(false);
     }
     
     @Override

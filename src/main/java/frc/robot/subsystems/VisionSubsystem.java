@@ -6,6 +6,9 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Relay.Direction;
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +16,7 @@ import frc.robot.Constants.VisionK;
 
 public class VisionSubsystem extends SubsystemBase {
     private PhotonCamera camera;
+    private Relay leds;
     private PIDController visionPID;
 
     //Shuffleboard
@@ -27,6 +31,8 @@ public class VisionSubsystem extends SubsystemBase {
 
         visionPID = new PIDController(VisionK.kP, VisionK.kI, VisionK.kD);
         visionPID.setSetpoint(0);
+
+        leds = new Relay(2, Direction.kBoth);
     }
 
     /**
@@ -65,6 +71,18 @@ public class VisionSubsystem extends SubsystemBase {
      */
     public boolean atVisionSetpoint() {
         return visionPID.atSetpoint();
+    }
+
+    /**
+     * Sets the LED ring that goes around the camera to light up the retroreflective vision target for vision tracking
+     * @param on true to turn the LEDs on, false to turn off
+     */
+    public void setLeds(boolean on) {
+        if (on) {
+            leds.set(Value.kForward);
+        } else {
+            leds.set(Value.kOff);
+        }
     }
 
     @Override
