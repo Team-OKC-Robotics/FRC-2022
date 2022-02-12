@@ -26,12 +26,16 @@ public class VisionSubsystem extends SubsystemBase {
 
     public VisionSubsystem() {
         camera = new PhotonCamera("mmal_service_16.1");
-        camera.setPipelineIndex(0);
+        camera.setPipelineIndex(1);
         camera.setDriverMode(false);
 
         visionPID = new PIDController(VisionK.kP, VisionK.kI, VisionK.kD);
         visionPID.setSetpoint(0);
+        visionPID.setTolerance(0.5);
 
+        leds = new Relay(0, Direction.kBoth);
+        leds = new Relay(1, Direction.kBoth);
+        leds = new Relay(3, Direction.kBoth);
         leds = new Relay(2, Direction.kBoth);
     }
 
@@ -70,6 +74,10 @@ public class VisionSubsystem extends SubsystemBase {
      * @return true if the camera is vision aligned 
      */
     public boolean atVisionSetpoint() {
+        if (getOutput() == 0) {
+            return false;
+        }
+        //return false;
         return visionPID.atSetpoint();
     }
 
@@ -81,7 +89,7 @@ public class VisionSubsystem extends SubsystemBase {
         if (on) {
             leds.set(Value.kForward);
         } else {
-            leds.set(Value.kOff);
+            leds.set(Value.kOn);
         }
     }
 

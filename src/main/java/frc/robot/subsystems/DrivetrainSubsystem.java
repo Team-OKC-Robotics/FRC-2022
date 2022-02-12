@@ -81,7 +81,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         drivetrain = new DifferentialDrive(leftSide, rightSide);
        
         //TEMP FIXME
-        drivetrain.setMaxOutput(0.2);
+        //drivetrain.setMaxOutput(0.2);
 
         // sensor configuration
         gyro = new AHRS(SPI.Port.kMXP); // plugged into the big port thing on the RoboRIO
@@ -122,7 +122,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @param turn how much to turn the robot
      */
     public void arcadeDrive(double speed, double turn) {
-        drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, false);
+        drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, true);
     }
     
     /**

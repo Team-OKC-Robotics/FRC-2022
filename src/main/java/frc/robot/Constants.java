@@ -81,8 +81,11 @@ public final class Constants {
 
     public final class VisionK {
         //TODO test and tune
-        public static final double kP = 0.1;
+        public static final double kP = 0.03;
         public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kD = 0.001;
+        public static final double heightOfGoal = 0; //TODO change this to be the actual value
+        public static final double heightOfCamera = 0; //TODO change this to be the actual value
+        public static final double cameraAngle = 0; //TODO change this to be the actual value
     }
 }

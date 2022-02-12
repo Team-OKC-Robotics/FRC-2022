@@ -11,6 +11,7 @@ import frc.robot.autos.*;
 import frc.robot.commands.drivetrain.TeleOpDriveCommand;
 import frc.robot.commands.intake.SetIntakeCommand;
 import frc.robot.commands.shooter.SetShooterCommand;
+import frc.robot.commands.vision.SetLEDsCommand;
 import frc.robot.commands.vision.VisionAlignCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -59,7 +60,8 @@ public class RobotContainer {
 
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
-  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
+  
+  //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
   //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)), drivetrain);
 
   // intake
@@ -68,6 +70,8 @@ public class RobotContainer {
 
   // vision
   private final VisionAlignCommand visionAlign = new VisionAlignCommand(vision, drivetrain);
+  private final SetLEDsCommand ledsOn = new SetLEDsCommand(vision, true);
+  private final SetLEDsCommand ledsOff = new SetLEDsCommand(vision, false);
 
   // shooter
   //private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
@@ -92,12 +96,17 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+      //backButton.whenPressed(new Runnable() {@Override public void run() {visionAlign.end(true);}});
       backButton.whenPressed(teleOpDrive);
+
 
       leftBumper.whenPressed(intakeIn);
       leftBumper.whenReleased(stopIntake);
 
-      yButton.whenPressed(visionAlign);
+      yButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
+
+      aButton.whenPressed(ledsOn);
+      bButton.whenPressed(ledsOff);
 
       //bButton.whenPressed(slowShooter);
       //xButton.whenPressed(fastShooter);

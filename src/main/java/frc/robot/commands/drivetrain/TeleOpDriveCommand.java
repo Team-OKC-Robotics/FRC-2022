@@ -17,7 +17,8 @@ public class TeleOpDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrain.arcadeDrive(-gamepad.getRawAxis(1), gamepad.getRawAxis(4));
+        //drivetrain.arcadeDrive(-gamepad.getRawAxis(1), gamepad.getRawAxis(4));
+        drivetrain.arcadeDrive(-gamepad.getRawAxis(1), gamepad.getRawAxis(2));
     }
 
     @Override
