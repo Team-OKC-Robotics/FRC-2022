@@ -1,6 +1,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class SetShooterCommand extends CommandBase {
@@ -12,6 +13,9 @@ public class SetShooterCommand extends CommandBase {
         this.RPM = RPM;
 
         addRequirements(shooter);
+    }
+
+    public SetShooterCommand(ClimberSubsystem climber, double rPM2) {
     }
 
     @Override
