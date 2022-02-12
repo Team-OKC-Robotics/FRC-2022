@@ -85,6 +85,28 @@ public class VisionSubsystem extends SubsystemBase {
         }
     }
 
+    /**
+     * Gets the pitch of the vision target relative to the center of the camera
+     * @return the pitch of the vision target
+     */
+    public double getPitch() {
+        PhotonPipelineResult result = camera.getLatestResult();
+    
+        if (result.hasTargets()) {
+            return result.getBestTarget().getPitch();
+        }
+        return 0;
+    }
+
+    /**
+     * Gets the distance to the vision target, for use by the Shooter to warm up to the right RPM
+     * so we can arc into the goal
+     * @return the distance to the vision target
+     */
+    public double getDistance() {
+        return (VisionK.heightOfGoal - VisionK.heightOfCamera) / Math.tan(VisionK.cameraAngle + getPitch());
+    }
+
     @Override
     public void periodic() {
         if (toggleMode.getBoolean(false)) {
