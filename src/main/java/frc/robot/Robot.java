@@ -6,6 +6,7 @@ package frc.robot;
 
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -57,7 +58,7 @@ public class Robot extends TimedRobot {
           CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
 
           // Mats are very memory expensive. Lets reuse this Mat.
-          org.opencv.core.Mat mat;
+          org.opencv.core.Mat mat = org.opencv.core.Mat.eye(new Size(640, 480), 0);
 
           // This cannot be 'true'. The program will never exit if it is. This
           // lets the robot stop this thread when restarting robot code or
