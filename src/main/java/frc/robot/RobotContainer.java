@@ -51,8 +51,8 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
   private JoystickButton rightBumper = new JoystickButton(gamepad1, 6);
   private JoystickButton backButton = new JoystickButton(gamepad1, 7);
   private JoystickButton startButton = new JoystickButton(gamepad1, 8);
-  // private JoystickButton rightStickButton = new JoystickButton(gamepad1, 10);
-  // private JoystickButton LeftStickButton = new JoystickButton(gamepad1, 9);
+  private JoystickButton rightStickButton = new JoystickButton(gamepad1, 10);
+  private JoystickButton leftStickButton = new JoystickButton(gamepad1, 9);
 
   private JoystickButton aButton2 = new JoystickButton(gamepad2, 1);
   private JoystickButton bButton2 = new JoystickButton(gamepad2, 2);
@@ -63,7 +63,7 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
   private JoystickButton backButton2 = new JoystickButton(gamepad2, 7);
   private JoystickButton startButton2 = new JoystickButton(gamepad2, 8);
   private JoystickButton rightStickButton2 = new JoystickButton(gamepad2, 10);
-  private JoystickButton LeftStickButton2 = new JoystickButton(gamepad2, 9);
+  private JoystickButton leftStickButton2 = new JoystickButton(gamepad2, 9);
 
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
@@ -94,13 +94,16 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
   // drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)),
   // drivetrain);
   // climber
-  // private final ExtendClimberCommand Climber = new ExtendClimberCommand(climber, 20, true);
-  // private final ExtendClimberCommand Climber2 = new ExtendClimberCommand(climber, 20, false);
-  // private final ExtendClimberCommand Climber01 = new ExtendClimberCommand(climber, -20, true);
-  // private final ExtendClimberCommand Climber02 = new ExtendClimberCommand(climber, -20, false);
+  // private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, 20, true);
+  // private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
+  // private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, -20, true);
+  // private final ExtendClimberCommand retractRightClimber = new ExtendClimberCommand(climber, -20, false);
 
-  // private final RotateClimberCommand Climber001 = new RotateClimberCommand(climber, 45, true);
-  // private final RotateClimberCommand Climber002 = new RotateClimberCommand(climber, 45, false);
+  // private final RotateClimberCommand rotateLeftClimber = new RotateClimberCommand(climber, 45, true);
+  // private final RotateClimberCommand rotateRightClimber = new RotateClimberCommand(climber, 45, false);
+  // private final RotateClimberCommand rotateLeftClimberBack = new RotateClimberCommand(climber, -45, true);
+  // private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, -45, false);
+
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
@@ -125,8 +128,6 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
 
     // Configure the button bindings
     configureButtonBindings();
-    // drivetrain.setDefaultCommand(teleopDrive); // this may work better than other
-    // scheduling hacks but might mess up auto idk
   }
 
   /**
@@ -163,16 +164,17 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
 
     // backButton2.whenPressed(teleOpDrive);
 
-    // leftBumper2.whenPressed(Climber);
-    // leftBumper2.whenReleased(Climber01);
-    // rightBumper2.whenPressed(Climber2);
-    // rightBumper2.whenReleased(Climber02);
+    // second driver
+    // leftBumper2.whenPressed(extendLeftClimber);
+    // leftBumper2.whenReleased(retractLeftClimber);
+    // rightBumper2.whenPressed(extendRightClimber);
+    // rightBumper2.whenReleased(retractRightClimber);
 
-    // LeftStickButton2.whenPressed(Climber001);
-    // // LeftStickButton2.whenReleased(Climber001);
+    // leftStickButton2.whenPressed(rotateLeftClimber);
+    // leftStickButton2.whenReleased(rotateLeftClimberBack);
 
-    // rightStickButton2.whenPressed(Climber002);
-
+    // rightStickButton2.whenPressed(rotateRightClimber);
+    // rightStickButton2.whenReleased(rotateRightClimberBack);
   }
 
   public Command getDriveCommand() {
