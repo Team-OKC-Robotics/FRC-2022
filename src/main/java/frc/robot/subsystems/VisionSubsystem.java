@@ -22,7 +22,7 @@ public class VisionSubsystem extends SubsystemBase {
     //Shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("vision");
     private NetworkTableEntry toggleMode = tab.add("toggle camera", false).getEntry();
-    
+    private NetworkTableEntry ledMode = tab.add("toggle leds", false).getEntry();
 
     public VisionSubsystem() {
         camera = new PhotonCamera("mmal_service_16.1");
@@ -33,10 +33,13 @@ public class VisionSubsystem extends SubsystemBase {
         visionPID.setSetpoint(0);
         visionPID.setTolerance(0.5);
 
+        // instatiate all the relays because for some reason this is the only way to one of them work
         leds = new Relay(0, Direction.kBoth);
         leds = new Relay(1, Direction.kBoth);
         leds = new Relay(3, Direction.kBoth);
         leds = new Relay(2, Direction.kBoth);
+
+        leds.set(Value.kOn); // turn the leds off (yes I know it says kOn)
     }
 
     /**
@@ -88,8 +91,10 @@ public class VisionSubsystem extends SubsystemBase {
     public void setLeds(boolean on) {
         if (on) {
             leds.set(Value.kForward);
+            ledMode.setBoolean(true);
         } else {
             leds.set(Value.kOn);
+            ledMode.setBoolean(false);
         }
     }
 
@@ -117,6 +122,9 @@ public class VisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        leds.set(ledMode.getBoolean(false) ? Value.kForward : Value.kOn); // I think that's how you use ternary
+        // idk I use Python man
+
         if (toggleMode.getBoolean(false)) {
             camera.setDriverMode(!camera.getDriverMode());
             toggleMode.setBoolean(false);
