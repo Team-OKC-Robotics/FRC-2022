@@ -24,6 +24,12 @@ public class VisionSubsystem extends SubsystemBase {
     private NetworkTableEntry toggleMode = tab.add("toggle camera", false).getEntry();
     private NetworkTableEntry ledMode = tab.add("toggle leds", false).getEntry();
 
+    
+    /**
+     * Makes a new VisionSubsystem
+     * this subsystem houses the PhotonVision raspi + pi camera module
+     * and is used to track the vision targets for automatic aiming
+     */
     public VisionSubsystem() {
         camera = new PhotonCamera("mmal_service_16.1");
         camera.setPipelineIndex(1);
@@ -43,38 +49,41 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     /**
-     * Returns the difference along the x axis between the center of the camera and the center of the target,
-     * aka the yaw
-     * @return the yaw of the best target
+     * returns the distance along the x-axis between the center of the camera and the center of the vision target
+     * may need to be offset by a value later depending on where the camera is positioned
+     * @return the error along the x-axis of the vision target and crosshair
      */
     public double getXDifference() {
-        PhotonPipelineResult result = camera.getLatestResult();
-
-        if (result.hasTargets()) {
-            return -result.getBestTarget().getYaw();
+        if (camera != null) {
+            PhotonPipelineResult result = camera.getLatestResult();
+    
+            if (result.hasTargets()) {
+                return -result.getBestTarget().getYaw();
+            }
         }
         return 0;
     }
 
     /**
-     * Resets the vision PID
+     * resets the vision PID controller
      */
     public void resetVisionPID() {
         visionPID.reset();
     }
 
     /**
-     * Gets the PID calculated output based on the yaw of the target
-     * this would then be fed to the drivetrain
-     * @return the output of the vision PID 
+     * gets the output calculated by the PID controller based on the x difference
+     * the drivetrain should make use of this number to align with the vision target
+     * @return the output of the vision PID controller
      */
     public double getOutput() {
         return visionPID.calculate(getXDifference());
     }
 
     /**
-     * Gets if the vision PID is at its setpoint, ie we're aligned with the vision target
-     * @return true if the camera is vision aligned 
+     * returns if the vision PID controller is at its setpoint or not
+     * essentially, if we are aligned with the vision target or not
+     * @return true if the robot is aligned with the vision target
      */
     public boolean atVisionSetpoint() {
         if (getOutput() == 0) {
