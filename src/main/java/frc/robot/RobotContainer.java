@@ -7,25 +7,22 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.autos.*;
-import frc.robot.commands.climber.ExtendClimberCommand;
-import frc.robot.commands.climber.RotateClimberCommand;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.autos.DoNothingAuto;
+import frc.robot.autos.DriveOffLineAuto;
+import frc.robot.autos.GyroTestAuto;
 import frc.robot.commands.drivetrain.TeleOpDriveCommand;
 import frc.robot.commands.intake.SetIndexerCommand;
 import frc.robot.commands.intake.SetIntakeCommand;
 import frc.robot.commands.intake.SetIntakePositionCommand;
-import frc.robot.commands.shooter.SetShooterCommand;
 import frc.robot.commands.vision.SetLEDsCommand;
 import frc.robot.commands.vision.VisionAlignCommand;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.AutoChooser;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -70,41 +67,15 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
-  private final ShooterSubsystem shooter = new ShooterSubsystem();
-  private final ClimberSubsystem climber = new ClimberSubsystem();
   private final VisionSubsystem vision = new VisionSubsystem();
 
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
   private final DriveOffLineAuto driveOffLine = new DriveOffLineAuto(drivetrain); // drives the robot forwards
-  // private final ShootThenDriveAuto shootThenDrive = new
-  // ShootThenDriveAuto(drivetrain, shooter); // drives the robot backwards
-  // private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter,
-  // intake); // drives the robot backwards
-  // private final ThreeBallAuto threeBallAuto = new ThreeBallAuto(drivetrain,
-  // shooter, intake); // drives the robot backwards
   private final GyroTestAuto gyroTestAuto = new GyroTestAuto(drivetrain);
 
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
-  
-  //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
-  //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)), drivetrain);
-  private final RunCommand teleopDrive = new RunCommand(
-      () -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
-  // private final RunCommand teleopDrive = new RunCommand(() ->
-  // drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)),
-  // drivetrain);
-  // climber
-  // private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, 20, true);
-  // private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
-  // private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, -20, true);
-  // private final ExtendClimberCommand retractRightClimber = new ExtendClimberCommand(climber, -20, false);
-
-  // private final RotateClimberCommand rotateLeftClimber = new RotateClimberCommand(climber, 45, true);
-  // private final RotateClimberCommand rotateRightClimber = new RotateClimberCommand(climber, 45, false);
-  // private final RotateClimberCommand rotateLeftClimberBack = new RotateClimberCommand(climber, -45, true);
-  // private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, -45, false);
 
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
@@ -118,12 +89,8 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
   private final VisionAlignCommand visionAlign = new VisionAlignCommand(vision, drivetrain);
   private final SetLEDsCommand ledsOn = new SetLEDsCommand(vision, true);
   private final SetLEDsCommand ledsOff = new SetLEDsCommand(vision, false);
-
-  // shooter
-  private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
-  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 3000);
-  private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
-
+  
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -157,23 +124,6 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
       // probably don't need these
       // aButton.whenPressed(ledsOn);
       // bButton.whenPressed(ledsOff);
-
-      // shooter commands
-      // aButton.whenPressed(fastShooter);
-      // bButton.whenPressed(slowShooter);
-      // xButton.whenPressed(maxShooter);
-      
-      // === second driver ===
-      // leftBumper2.whenPressed(extendLeftClimber);
-      // leftBumper2.whenReleased(retractLeftClimber);
-      // rightBumper2.whenPressed(extendRightClimber);
-      // rightBumper2.whenReleased(retractRightClimber);
-
-      // leftStickButton2.whenPressed(rotateLeftClimber);
-      // leftStickButton2.whenReleased(rotateLeftClimberBack);
-
-      // rightStickButton2.whenPressed(rotateRightClimber);
-      // rightStickButton2.whenReleased(rotateRightClimberBack);
   }
 
   public Command getDriveCommand() {
