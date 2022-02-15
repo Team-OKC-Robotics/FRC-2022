@@ -11,7 +11,9 @@ import frc.robot.autos.*;
 import frc.robot.commands.climber.ExtendClimberCommand;
 import frc.robot.commands.climber.RotateClimberCommand;
 import frc.robot.commands.drivetrain.TeleOpDriveCommand;
+import frc.robot.commands.intake.SetIndexerCommand;
 import frc.robot.commands.intake.SetIntakeCommand;
+import frc.robot.commands.intake.SetIntakePositionCommand;
 import frc.robot.commands.shooter.SetShooterCommand;
 import frc.robot.commands.vision.SetLEDsCommand;
 import frc.robot.commands.vision.VisionAlignCommand;
@@ -107,6 +109,10 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
+  private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
+  private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
+  private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 1);
+  private final SetIndexerCommand stopIndexer = new SetIndexerCommand(intake, 0);
 
   // vision
   private final VisionAlignCommand visionAlign = new VisionAlignCommand(vision, drivetrain);
@@ -139,42 +145,35 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      //backButton.whenPressed(new Runnable() {@Override public void run() {visionAlign.end(true);}});
+      // drivetrain commands
       backButton.whenPressed(teleOpDrive);
+      aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
 
-
-      leftBumper.whenPressed(intakeIn);
+      // intake commands
+      leftBumper.whenPressed(intakeIn).whenPressed(deployIntake);
+      leftBumper.whenPressed(indexerIn).whenReleased(stopIndexer);
       leftBumper.whenReleased(stopIntake);
 
-      yButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
+      // probably don't need these
+      // aButton.whenPressed(ledsOn);
+      // bButton.whenPressed(ledsOff);
 
-      aButton.whenPressed(ledsOn);
-      bButton.whenPressed(ledsOff);
-    // backButton.whenPressed(teleOpDrive);
+      // shooter commands
+      // aButton.whenPressed(fastShooter);
+      // bButton.whenPressed(slowShooter);
+      // xButton.whenPressed(maxShooter);
+      
+      // === second driver ===
+      // leftBumper2.whenPressed(extendLeftClimber);
+      // leftBumper2.whenReleased(retractLeftClimber);
+      // rightBumper2.whenPressed(extendRightClimber);
+      // rightBumper2.whenReleased(retractRightClimber);
 
-    // leftBumper.whenPressed(intakeIn);
-    // leftBumper.whenReleased(stopIntake);
+      // leftStickButton2.whenPressed(rotateLeftClimber);
+      // leftStickButton2.whenReleased(rotateLeftClimberBack);
 
-    // yButton.whenPressed(visionAlign);
-
-    // aButton.whenPressed(fastShooter);
-    // bButton.whenPressed(slowShooter);
-    // xButton.whenPressed(maxShooter);
-    // startButton.whenPressed((Command) climber);
-
-    // backButton2.whenPressed(teleOpDrive);
-
-    // second driver
-    // leftBumper2.whenPressed(extendLeftClimber);
-    // leftBumper2.whenReleased(retractLeftClimber);
-    // rightBumper2.whenPressed(extendRightClimber);
-    // rightBumper2.whenReleased(retractRightClimber);
-
-    // leftStickButton2.whenPressed(rotateLeftClimber);
-    // leftStickButton2.whenReleased(rotateLeftClimberBack);
-
-    // rightStickButton2.whenPressed(rotateRightClimber);
-    // rightStickButton2.whenReleased(rotateRightClimberBack);
+      // rightStickButton2.whenPressed(rotateRightClimber);
+      // rightStickButton2.whenReleased(rotateRightClimberBack);
   }
 
   public Command getDriveCommand() {

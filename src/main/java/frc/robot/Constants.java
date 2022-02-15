@@ -13,6 +13,9 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final double neo550TicksPerRev = 42;
+    public static final double neoTicksPerRev = 42;
+
     public final class DriveK {
         public static final double ticksPerRev = 2048;
         public static final double gearRatio = 1;
@@ -29,10 +32,6 @@ public final class Constants {
         public static final double turnP = 0.1;
         public static final double turnI = 0;
         public static final double turnD = 0;
-    }
-
-    public final class ArmK {
-
     }
 
     public final class ShootK {
@@ -55,7 +54,9 @@ public final class Constants {
 
         //TODO test and tune this
         public static final double RAISED = 0; // ticks for intake at raised position (actually this would be 0)
-        public static final double EXTENDED = 1000; // ticks for intake being extended
+        public static final double EXTENDED = neo550TicksPerRev * 0.5; // ticks for intake being extended
+
+        public static final float maxDeploy = 0.4f;
     }
 
     public final class ClimbK {

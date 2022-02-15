@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -35,20 +36,23 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry intakeI = tab.add("Intake kI", IntakeK.deployI).getEntry();
     private NetworkTableEntry intakeD = tab.add("Intake kD", IntakeK.deployD).getEntry();
     
-
+    private NetworkTableEntry deployedPreset = tab.add("Deployed preset", IntakeK.EXTENDED).getEntry();
+    
     // I don't think there needs to be any shuffleboard stuff here
     // we could do some weird stuff with like hasBall() but that's not important right now
     
     public IntakeSubsystem() {
         //TODO change id numbers
-        //deployMotor = new CANSparkMax(10, MotorType.kBrushless);
-        //indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
+        deployMotor = new CANSparkMax(10, MotorType.kBrushless);
+        indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
         intakeMotor = new PWMSparkMax(1); // temporary prototype stuff
 
         if (deployMotor != null) {
             extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
             deployEncoder = deployMotor.getEncoder();
+            deployMotor.setSoftLimit(SoftLimitDirection.kForward, IntakeK.maxDeploy);
         }
+        
     }
 
     public void setIntake(double power) {
@@ -67,7 +71,7 @@ public class IntakeSubsystem extends SubsystemBase {
         if (this.extended != extended) {
             if (extendPID != null) {
                 if (extended) {
-                    extendPID.setReference(IntakeK.EXTENDED, ControlType.kPosition);
+                    extendPID.setReference(deployedPreset.getDouble(IntakeK.EXTENDED), ControlType.kPosition);
                 } else {
                     extendPID.setReference(IntakeK.RAISED, ControlType.kPosition);
                 }
