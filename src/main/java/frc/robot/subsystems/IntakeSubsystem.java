@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -56,6 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
             extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
             deployEncoder = deployMotor.getEncoder();
             deployMotor.setSoftLimit(SoftLimitDirection.kForward, IntakeK.maxDeploy);
+            deployMotor.setIdleMode(IdleMode.kBrake);
         }
         
     }
@@ -102,7 +104,9 @@ public class IntakeSubsystem extends SubsystemBase {
      * @return true if the intake is extended
      */
     public boolean isExtended() {
-        return extended;
+        // this actually might not be the greatest because it could actually be in a half-extended/half-retracted position
+        // but I don't think it's all that important
+        return deployEncoder.getPosition() == IntakeK.EXTENDED;
     }
 
     @Override
