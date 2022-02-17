@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.io.IOException;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -7,10 +9,13 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.IntakeK;
+import frc.robot.util.Logger;
 
 public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax deployMotor;
@@ -53,7 +58,12 @@ public class IntakeSubsystem extends SubsystemBase {
             deployEncoder = deployMotor.getEncoder();
         }
 
-        logger = new Logger("intake", 0); //TODO figure out a way to do match numbers
+        try {
+            logger = new Logger("intake", 0); //TODO figure out a way to do match numbers
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         logger.headers("ticks, velocity");
 
         timer = new Timer(); //TODO configure
@@ -119,7 +129,7 @@ public class IntakeSubsystem extends SubsystemBase {
             }
         }
 
-        if (timer) { //TODO
+        if (timer.get() > Constants.logTime) { //TODO
             logger.newline();
             logger.log("intake ticks", deployEncoder.getPosition());
             logger.log("intake velocity", deployEncoder.getVelocity());

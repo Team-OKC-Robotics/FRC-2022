@@ -33,15 +33,30 @@ public class Logger {
     }
 
     public void headers(String headers) {
-        writer.write(headers);
+        try {
+            writer.write(headers);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void newline() {
-        writer.write("\n" + RobotController.getFPGATime());
+        try {
+            writer.write("\n" + RobotController.getFPGATime() + ",");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void log(String name, double data) {
-        writer.write(data + ",");
+        try {
+            writer.write(data + ",");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     // public void log(String data, Subsystem subsystem) throws IOException {

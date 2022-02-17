@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.io.IOException;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -9,12 +11,15 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveK;
+import frc.robot.util.Logger;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     // actuators
@@ -77,7 +82,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private NetworkTableEntry resetGyro = tab.addPersistent("reset gyro", false).getEntry();
 
     private Timer timer;
-
+    private Logger logger;
 
     public DrivetrainSubsystem() {
         // motor configuration
@@ -127,7 +132,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
         heading.setDouble(0);
 
         // logging initilization
-        logger = new Logger("drivetrain", 0); //TODO figure out how to do line numbers and whatnot
+        try {
+            logger = new Logger("drivetrain", 0);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         logger.headers("left ticks, right ticks, heading");
 
         // reset the subsystem
@@ -336,11 +346,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
             resetGyro.setBoolean(false);
         }
 
-        if (timer.periodElapsed()) {
+        if (timer.get() > Constants.logTime) {
             logger.newline();
-            logger.log("left ticks", getLeftEncoderAverage())
-            logger.log("right ticks", getRightEncoderAverage())
-            logger.log("heading", getHeading())
+            logger.log("left ticks", getLeftEncoderAverage());
+            logger.log("right ticks", getRightEncoderAverage());
+            logger.log("heading", getHeading());
         }
     }
 }
