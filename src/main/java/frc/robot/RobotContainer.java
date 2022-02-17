@@ -77,34 +77,28 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
   private final DriveOffLineAuto driveOffLine = new DriveOffLineAuto(drivetrain); // drives the robot forwards
-  // private final ShootThenDriveAuto shootThenDrive = new
-  // ShootThenDriveAuto(drivetrain, shooter); // drives the robot backwards
-  // private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter,
-  // intake); // drives the robot backwards
-  // private final ThreeBallAuto threeBallAuto = new ThreeBallAuto(drivetrain,
-  // shooter, intake); // drives the robot backwards
+  private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter); // drives the robot backwards
+  private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
+  private final ThreeBallAuto threeBallAuto = new ThreeBallAuto(drivetrain, shooter, intake); // drives the robot backwards
   private final GyroTestAuto gyroTestAuto = new GyroTestAuto(drivetrain);
 
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
   
-  //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
-  //private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)), drivetrain);
+  // private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
+  // private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)), drivetrain);
   private final RunCommand teleopDrive = new RunCommand(
       () -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
-  // private final RunCommand teleopDrive = new RunCommand(() ->
-  // drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)),
-  // drivetrain);
-  // climber
-  // private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, 20, true);
-  // private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
-  // private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, -20, true);
-  // private final ExtendClimberCommand retractRightClimber = new ExtendClimberCommand(climber, -20, false);
+  
+  private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, 20, true);
+  private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
+  private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, -20, true);
+  private final ExtendClimberCommand retractRightClimber = new ExtendClimberCommand(climber, -20, false);
 
-  // private final RotateClimberCommand rotateLeftClimber = new RotateClimberCommand(climber, 45, true);
-  // private final RotateClimberCommand rotateRightClimber = new RotateClimberCommand(climber, 45, false);
-  // private final RotateClimberCommand rotateLeftClimberBack = new RotateClimberCommand(climber, -45, true);
-  // private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, -45, false);
+  private final RotateClimberCommand rotateLeftClimber = new RotateClimberCommand(climber, 45, true);
+  private final RotateClimberCommand rotateRightClimber = new RotateClimberCommand(climber, 45, false);
+  private final RotateClimberCommand rotateLeftClimberBack = new RotateClimberCommand(climber, -45, true);
+  private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, -45, false);
 
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
