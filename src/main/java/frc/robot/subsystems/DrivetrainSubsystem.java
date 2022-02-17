@@ -139,6 +139,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             e.printStackTrace();
         }
         logger.headers("left ticks, right ticks, heading");
+        timer = new Timer();
 
         // reset the subsystem
         resetEncoders();

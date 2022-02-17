@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.io.IOException;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -7,10 +9,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ShootK;
+import frc.robot.util.Logger;
 
 public class ShooterSubsystem extends SubsystemBase {
     /**
@@ -48,6 +53,9 @@ public class ShooterSubsystem extends SubsystemBase {
     private NetworkTableEntry preset1 = tab.addPersistent("close launchpad preset", ShootK.preset1).getEntry();
     private NetworkTableEntry preset2 = tab.addPersistent("far launchpad preset", ShootK.preset2).getEntry();
 
+    private Logger logger;
+    private Timer timer;
+
     /**
      * Makes a new ShooterSubsystem
      * the shooter controls the shooter motor(s?) and the "trigger motor"
@@ -65,6 +73,15 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterMotor1.config_kD(0, ShootK.shootD, 200);
             shooterMotor1.config_kF(0, ShootK.shootF, 200);
         }
+
+         // logging initilization
+        try {
+            logger = new Logger("shooter", 0);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        logger.headers("ticks, rpm");
     }
 
     /**
@@ -127,6 +144,13 @@ public class ShooterSubsystem extends SubsystemBase {
                 shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
                 shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
                 shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
+            }
+        }
+
+        if (timer.get() > Constants.logTime) {
+            if (shooterMotor1 != null) {
+                logger.log("ticks", shooterMotor1.getSelectedSensorPosition());
+                logger.log("rpm", shooterMotor1.getSelectedSensorVelocity());
             }
         }
     }
