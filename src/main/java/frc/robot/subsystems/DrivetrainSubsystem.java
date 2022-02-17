@@ -1,13 +1,14 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -17,8 +18,21 @@ import frc.robot.Constants.DriveK;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     // actuators
-    private WPI_TalonFX left1Motor;
-    private WPI_TalonFX right1Motor;
+    private CANSparkMax left1Motor;
+    private CANSparkMax left2Motor;
+    private CANSparkMax left3Motor;
+
+    private CANSparkMax right1Motor;
+    private CANSparkMax right2Motor;
+    private CANSparkMax right3Motor;
+
+    private RelativeEncoder left1Encoder;
+    private RelativeEncoder left2Encoder;
+    private RelativeEncoder left3Encoder;
+
+    private RelativeEncoder right1Encoder;
+    private RelativeEncoder right2Encoder;
+    private RelativeEncoder right3Encoder;
     
     private MotorControllerGroup leftSide;
     private MotorControllerGroup rightSide;
@@ -66,22 +80,36 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public DrivetrainSubsystem() {
         // motor configuration
-        left1Motor = new WPI_TalonFX(1);
+        left1Motor = new CANSparkMax(1, MotorType.kBrushless);
+        left2Motor = new CANSparkMax(2, MotorType.kBrushless);
+        left3Motor = new CANSparkMax(3, MotorType.kBrushless);
         leftSide = new MotorControllerGroup(left1Motor);
 
-        right1Motor = new WPI_TalonFX(2);
+        right1Motor = new CANSparkMax(4, MotorType.kBrushless);
+        right2Motor = new CANSparkMax(5, MotorType.kBrushless);
+        right3Motor = new CANSparkMax(6, MotorType.kBrushless);
         rightSide = new MotorControllerGroup(right1Motor);
 
-        left1Motor.setNeutralMode(NeutralMode.Brake);
-        right1Motor.setNeutralMode(NeutralMode.Brake);
-        left1Motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());
-        right1Motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());
+        left1Motor.setIdleMode(IdleMode.kBrake);
+        left2Motor.setIdleMode(IdleMode.kBrake);
+        left3Motor.setIdleMode(IdleMode.kBrake);
+        right1Motor.setIdleMode(IdleMode.kBrake);
+        right2Motor.setIdleMode(IdleMode.kBrake);
+        right3Motor.setIdleMode(IdleMode.kBrake);
 
-        rightSide.setInverted(true);
+        rightSide.setInverted(true); //TODO figure out if this is the right way to do this
         drivetrain = new DifferentialDrive(leftSide, rightSide);
        
         //TEMP FIXME
         //drivetrain.setMaxOutput(0.2);
+
+        left1Encoder = left1Motor.getEncoder();
+        left2Encoder = left2Motor.getEncoder();
+        left3Encoder = left3Motor.getEncoder();
+    
+        right1Encoder = right1Motor.getEncoder();
+        right2Encoder = right2Motor.getEncoder();
+        right3Encoder = right3Motor.getEncoder();
 
         // sensor configuration
         gyro = new AHRS(SPI.Port.kMXP); // plugged into the big port thing on the RoboRIO
@@ -168,7 +196,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the left side of the drivetrain, in inches
      */
     public double getLeftEncoderAverage() {
-        return left1Motor.getSelectedSensorPosition();
+        return (left1Encoder.getPosition() + left2Encoder.getPosition() + left3Encoder.getPosition()) / 3;
     }
 
     /**
@@ -176,15 +204,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the right side of the drivetrain, in inches
      */
     public double getRightEncoderAverage() {
-        return -right1Motor.getSelectedSensorPosition();
+        return (right1Encoder.getPosition() + right2Encoder.getPosition() + right3Encoder.getPosition()) / 3;
     }
 
     /**
      * Resets the encoders and the corresponding Shuffleboard entries
      */
     public void resetEncoders() {
-        left1Motor.setSelectedSensorPosition(0);
-        right1Motor.setSelectedSensorPosition(0);
+        left1Encoder.setPosition(0);
+        left2Encoder.setPosition(0);
+        left3Encoder.setPosition(0);
+        right1Encoder.setPosition(0);
+        right2Encoder.setPosition(0);
+        right3Encoder.setPosition(0);
+
         totalTicks.setDouble(0);
         leftTicks.setDouble(0);
         rightTicks.setDouble(0);

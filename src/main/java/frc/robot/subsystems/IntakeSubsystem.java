@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -16,8 +17,8 @@ import frc.robot.Constants.IntakeK;
 
 public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax deployMotor;
-    private CANSparkMax indexerMotor;
     private PWMSparkMax intakeMotor;
+    private CANSparkMax indexerMotor;
 
     private boolean extended = false;
     private RelativeEncoder deployEncoder;
@@ -40,33 +41,51 @@ public class IntakeSubsystem extends SubsystemBase {
     
     // I don't think there needs to be any shuffleboard stuff here
     // we could do some weird stuff with like hasBall() but that's not important right now
-    
+        
+    /**
+     * makes a new IntakeSubsystem
+     * the intake consists of the intake itself, which goes up and down, and the powered wheels to suck balls in
+     * there's also a 'pass-through' or 'indexer' motor to move the balls along to the shooter
+     */
     public IntakeSubsystem() {
         //TODO change id numbers
         deployMotor = new CANSparkMax(10, MotorType.kBrushless);
         indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
         intakeMotor = new PWMSparkMax(1); // temporary prototype stuff
-
+    
         if (deployMotor != null) {
             extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
             deployEncoder = deployMotor.getEncoder();
             deployMotor.setSoftLimit(SoftLimitDirection.kForward, IntakeK.maxDeploy);
+            deployMotor.setIdleMode(IdleMode.kBrake);
         }
         
     }
 
+    /**
+     * Sets the intake powered wheels to the given power
+     * @param power the power to set the intake to
+     */
     public void setIntake(double power) {
         if (intakeMotor != null) {
             intakeMotor.set(power);
         }
     }
 
+    /**
+     * sets the indexer motor to the given power 
+     * @param power the power to set the indexer to
+     */
     public void setIndexer(double power) {
         if (indexerMotor != null) {
             indexerMotor.set(power);
         }
     }
 
+    /**
+     * set the intake to be extended/deployed
+     * @param extended if the intake should be extended/deployed or not
+     */
     public void setExtended(boolean extended) {
         if (this.extended != extended) {
             if (extendPID != null) {
@@ -80,8 +99,14 @@ public class IntakeSubsystem extends SubsystemBase {
         this.extended = extended;
     }
 
+    /**
+     * returns if the intake is extended/deployed
+     * @return true if the intake is extended
+     */
     public boolean isExtended() {
-        return extended;
+        // this actually might not be the greatest because it could actually be in a half-extended/half-retracted position
+        // but I don't think it's all that important
+        return deployEncoder.getPosition() == IntakeK.EXTENDED;
     }
 
     @Override
@@ -92,9 +117,11 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         if (writeMode.getBoolean(false)) {
-            extendPID.setP(intakeP.getDouble(IntakeK.deployP));
-            extendPID.setI(intakeI.getDouble(IntakeK.deployI));
-            extendPID.setD(intakeD.getDouble(IntakeK.deployD));
+            if (extendPID != null) {
+                extendPID.setP(intakeP.getDouble(IntakeK.deployP));
+                extendPID.setI(intakeI.getDouble(IntakeK.deployI));
+                extendPID.setD(intakeD.getDouble(IntakeK.deployD));
+            }
         }
     }
 }
