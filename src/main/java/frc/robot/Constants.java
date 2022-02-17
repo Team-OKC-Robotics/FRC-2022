@@ -89,4 +89,6 @@ public final class Constants {
         public static final double heightOfCamera = 0; //TODO change this to be the actual value
         public static final double cameraAngle = 0; //TODO change this to be the actual value
     }
+
+    public static final double logTime = 0.1; // 100 milliseconds
 }
