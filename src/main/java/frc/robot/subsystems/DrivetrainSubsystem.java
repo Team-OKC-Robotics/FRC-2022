@@ -135,13 +135,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
         heading.setDouble(0);
 
         // logging initilization
-        try {
-            logger = new Logger("drivetrain", 0);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        logger.headers("left ticks, right ticks, heading");
+        // try {
+        //     logger = new Logger("drivetrain", 0);
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
+        // logger.headers("left ticks, right ticks, heading");
         timer = new Timer();
 
         // reset the subsystem
@@ -344,10 +344,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         }
 
         if (timer.get() > Constants.logTime) {
-            logger.newline();
-            logger.log("left ticks", getLeftEncoderAverage());
-            logger.log("right ticks", getRightEncoderAverage());
-            logger.log("heading", getHeading());
+            // logger.newline();
+            // logger.log("left ticks", getLeftEncoderAverage());
+            // logger.log("right ticks", getRightEncoderAverage());
+            // logger.log("heading", getHeading());
         }
     }
 }

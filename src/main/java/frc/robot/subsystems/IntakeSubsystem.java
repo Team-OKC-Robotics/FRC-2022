@@ -11,7 +11,6 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -22,7 +21,7 @@ import frc.robot.util.Logger;
 
 public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax deployMotor;
-    private PWMSparkMax intakeMotor;
+    private CANSparkMax intakeMotor;
     private CANSparkMax indexerMotor;
 
     private boolean extended = false;
@@ -59,23 +58,24 @@ public class IntakeSubsystem extends SubsystemBase {
         //TODO change id numbers
         deployMotor = new CANSparkMax(10, MotorType.kBrushless);
         indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
-        intakeMotor = new PWMSparkMax(1); // temporary prototype stuff
+        intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
     
         if (deployMotor != null) {
             extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
             deployEncoder = deployMotor.getEncoder();
             deployMotor.setSoftLimit(SoftLimitDirection.kForward, IntakeK.maxDeploy);
             deployMotor.setIdleMode(IdleMode.kBrake);
+            deployEncoder.setPosition(0);
         }
         
 
-        try {
-            logger = new Logger("intake", 0); //TODO figure out a way to do match numbers
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        logger.headers("ticks, velocity");
+        // try {
+        //     logger = new Logger("intake", 0); //TODO figure out a way to do match numbers
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
+        // logger.headers("ticks, velocity");
 
         timer = new Timer(); //TODO configure
     }
@@ -143,9 +143,9 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         if (timer.get() > Constants.logTime) { //TODO
-            logger.newline();
-            logger.log("intake ticks", deployEncoder.getPosition());
-            logger.log("intake velocity", deployEncoder.getVelocity());
+            // logger.newline();
+            // logger.log("intake ticks", deployEncoder.getPosition());
+            // logger.log("intake velocity", deployEncoder.getVelocity());
         }
     }
 }

@@ -78,14 +78,15 @@ public class ShooterSubsystem extends SubsystemBase {
         if (triggerMotor != null) {
             triggerMotor.setIdleMode(IdleMode.kBrake);
         }
-         // logging initilization
-        try {
-            logger = new Logger("shooter", 0);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        logger.headers("ticks, rpm");
+        //  // logging initilization
+        // try {
+        //     logger = new Logger("shooter", 0);
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
+        // logger.headers("ticks, rpm");
+        timer = new Timer();
     }
 
     /**
@@ -153,8 +154,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
         if (timer.get() > Constants.logTime) {
             if (shooterMotor1 != null) {
-                logger.log("ticks", shooterMotor1.getSelectedSensorPosition());
-                logger.log("rpm", shooterMotor1.getSelectedSensorVelocity());
+                // logger.log("ticks", shooterMotor1.getSelectedSensorPosition());
+                // logger.log("rpm", shooterMotor1.getSelectedSensorVelocity());
             }
         }
     }
