@@ -420,6 +420,17 @@
               "_source0": "network_table:///Shuffleboard/intake/write mode",
               "_title": "write mode"
             }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/intake/Deployed preset",
+              "_title": "Deployed preset"
+            }
           }
         }
       }

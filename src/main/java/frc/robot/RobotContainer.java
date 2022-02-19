@@ -35,11 +35,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  * periodic methods (other than the scheduler calls). Instead, the structure of
  * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
- * 
- * @param <setClimberCommand>
- * @param <SetClimbCommand>
  */
-public class RobotContainer<setClimberCommand, SetClimbCommand> {
+public class RobotContainer {
   // gamepads
   private final Joystick gamepad1 = new Joystick(0);
   private final Joystick gamepad2 = new Joystick(1);

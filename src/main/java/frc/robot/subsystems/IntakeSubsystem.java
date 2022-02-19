@@ -57,8 +57,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem() {
         //TODO change id numbers
         deployMotor = new CANSparkMax(10, MotorType.kBrushless);
-        indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
-        intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
+        // indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
+        // intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
     
         if (deployMotor != null) {
             extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
@@ -66,6 +66,10 @@ public class IntakeSubsystem extends SubsystemBase {
             deployMotor.setSoftLimit(SoftLimitDirection.kForward, IntakeK.maxDeploy);
             deployMotor.setIdleMode(IdleMode.kBrake);
             deployEncoder.setPosition(0);
+
+            extendPID.setP(IntakeK.deployP);
+            extendPID.setI(IntakeK.deployI);
+            extendPID.setD(IntakeK.deployD);
         }
         
 
@@ -105,16 +109,14 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param extended if the intake should be extended/deployed or not
      */
     public void setExtended(boolean extended) {
-        if (this.extended != extended) {
-            if (extendPID != null) {
-                if (extended) {
-                    extendPID.setReference(deployedPreset.getDouble(IntakeK.EXTENDED), ControlType.kPosition);
-                } else {
-                    extendPID.setReference(IntakeK.RAISED, ControlType.kPosition);
-                }
+        if (extendPID != null) {
+            if (extended) {
+                extendPID.setReference(deployedPreset.getDouble(IntakeK.EXTENDED), ControlType.kPosition);
+            } else {
+                extendPID.setReference(IntakeK.RAISED, ControlType.kPosition);
             }
+            this.extended = extended;
         }
-        this.extended = extended;
     }
 
     /**
@@ -142,7 +144,7 @@ public class IntakeSubsystem extends SubsystemBase {
             }
         }
 
-        if (timer.get() > Constants.logTime) { //TODO
+        if (timer.get() > Constants.logTime) {
             // logger.newline();
             // logger.log("intake ticks", deployEncoder.getPosition());
             // logger.log("intake velocity", deployEncoder.getVelocity());
