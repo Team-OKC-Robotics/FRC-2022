@@ -64,8 +64,8 @@ public class ClimberSubsystem extends SubsystemBase {
      */
     public ClimberSubsystem() {
         //TODO change port numbers
-        rightExtendMotor = new WPI_TalonFX(14);
-        rightTiltMotor = new CANSparkMax(15, MotorType.kBrushless);
+        rightExtendMotor = new WPI_TalonFX(13);
+        rightTiltMotor = new CANSparkMax(14, MotorType.kBrushless);
 
         // set up the right side
         if (rightExtendMotor != null) {
@@ -77,8 +77,8 @@ public class ClimberSubsystem extends SubsystemBase {
         }
         
         // set up the left side
-        leftExtendMotor = new WPI_TalonFX(16);
-        leftTiltMotor = new CANSparkMax(17, MotorType.kBrushless);
+        leftExtendMotor = new WPI_TalonFX(15);
+        leftTiltMotor = new CANSparkMax(16, MotorType.kBrushless);
         
         if (leftExtendMotor != null) {
             leftExtendMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());

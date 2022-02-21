@@ -62,9 +62,8 @@ public class ShooterSubsystem extends SubsystemBase {
      * the shooter controls the shooter motor(s?) and the "trigger motor"
      */
     public ShooterSubsystem() {
-        //TODO change port numbers these are temporary
-        shooterMotor1 = new TalonFX(21);
-        triggerMotor = new CANSparkMax(22, MotorType.kBrushless);
+        shooterMotor1 = new TalonFX(8);
+        triggerMotor = new CANSparkMax(9, MotorType.kBrushless);
 
         if (shooterMotor1 != null) {
             shooterMotor1.configFactoryDefault();

@@ -57,8 +57,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem() {
         //TODO change id numbers
         deployMotor = new CANSparkMax(10, MotorType.kBrushless);
-        // indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
-        // intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
+        indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
+        intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
     
         if (deployMotor != null) {
             extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
