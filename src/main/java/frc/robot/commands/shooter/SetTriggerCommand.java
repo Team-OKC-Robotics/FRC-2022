@@ -1,22 +1,22 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class SetTriggerCommand extends CommandBase {
-    private final ShooterSubsystem shooter;
+    private final IntakeSubsystem intake;
     private double power;
 
-    public SetTriggerCommand(ShooterSubsystem shooter, double power) {
-        this.shooter = shooter;
+    public SetTriggerCommand(IntakeSubsystem intake, double power) {
+        this.intake = intake;
         this.power = power;
         
-        addRequirements(shooter);
+        addRequirements(intake);
     }
 
     @Override
     public void execute() {
-        shooter.setTrigger(power);
+        intake.setIndexer(power);
     }
 
     @Override

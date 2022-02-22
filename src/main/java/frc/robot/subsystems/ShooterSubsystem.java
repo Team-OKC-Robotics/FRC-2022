@@ -33,7 +33,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // actuators
     private TalonFX shooterMotor1;
-    private CANSparkMax triggerMotor;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("shooter");
@@ -63,7 +62,6 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public ShooterSubsystem() {
         shooterMotor1 = new TalonFX(8);
-        triggerMotor = new CANSparkMax(9, MotorType.kBrushless);
 
         if (shooterMotor1 != null) {
             shooterMotor1.configFactoryDefault();
@@ -74,9 +72,6 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterMotor1.config_kF(0, ShootK.shootF, 200);
         }
 
-        if (triggerMotor != null) {
-            triggerMotor.setIdleMode(IdleMode.kBrake);
-        }
         //  // logging initilization
         // try {
         //     logger = new Logger("shooter", 0);
@@ -107,16 +102,6 @@ public class ShooterSubsystem extends SubsystemBase {
             setShooter(preset1.getDouble(ShootK.preset1));
         } else if (preset == ShooterPresets.FAR_LAUNCHPAD) {
             setShooter(preset2.getDouble(ShootK.preset2));
-        }
-    }
-
-    /**
-     * sets the trigger to the given power
-     * @param power the power to set the trigger motor to
-     */
-    public void setTrigger(double power) {
-        if (triggerMotor != null) {
-            triggerMotor.set(power);
         }
     }
 
