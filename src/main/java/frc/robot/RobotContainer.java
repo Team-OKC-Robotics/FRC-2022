@@ -8,21 +8,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.autos.*;
-import frc.robot.commands.climber.ExtendClimberCommand;
-import frc.robot.commands.climber.RotateClimberCommand;
-import frc.robot.commands.drivetrain.TeleOpDriveCommand;
-import frc.robot.commands.intake.SetIndexerCommand;
-import frc.robot.commands.intake.SetIntakeCommand;
-import frc.robot.commands.intake.SetIntakePositionCommand;
-import frc.robot.commands.shooter.SetShooterCommand;
-import frc.robot.commands.shooter.StopShooterCommand;
-import frc.robot.commands.vision.SetLEDsCommand;
-import frc.robot.commands.vision.VisionAlignCommand;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.commands.climber.*;
+import frc.robot.commands.drivetrain.*;
+import frc.robot.commands.intake.*;
+import frc.robot.commands.shooter.*;
+import frc.robot.commands.vision.*;
+import frc.robot.subsystems.*;
 import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -122,7 +113,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // add the autos to the chooser
-    AutoChooser.addAutos(doNothingAuto, driveOffLine, /* shootThenDrive, twoBallAuto, threeBallAuto, */ gyroTestAuto);
+    AutoChooser.addAutos(doNothingAuto, driveOffLine, shootThenDrive, twoBallAuto, threeBallAuto, gyroTestAuto);
     AutoChooser.addGamepad(gamepad1);
 
     // Configure the button bindings
