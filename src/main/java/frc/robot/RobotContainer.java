@@ -15,6 +15,7 @@ import frc.robot.commands.intake.SetIndexerCommand;
 import frc.robot.commands.intake.SetIntakeCommand;
 import frc.robot.commands.intake.SetIntakePositionCommand;
 import frc.robot.commands.shooter.SetShooterCommand;
+import frc.robot.commands.shooter.StopShooterCommand;
 import frc.robot.commands.vision.SetLEDsCommand;
 import frc.robot.commands.vision.VisionAlignCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -82,10 +83,10 @@ public class RobotContainer {
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
   
-  // private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
+  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
   // private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)), drivetrain);
-  private final RunCommand teleopDrive = new RunCommand(
-      () -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
+  // private final RunCommand teleopDrive = new RunCommand(
+      // () -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
   
   private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, 20, true);
   private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
@@ -111,6 +112,7 @@ public class RobotContainer {
   private final SetLEDsCommand ledsOff = new SetLEDsCommand(vision, false);
 
   // shooter
+  private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
   private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
   private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 3000);
   private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
@@ -138,25 +140,28 @@ public class RobotContainer {
   private void configureButtonBindings() {
       // drivetrain commands
       backButton.whenPressed(teleOpDrive);
-      aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
+      // aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
 
       // intake commands
-      leftBumper.whenPressed(intakeIn).whenPressed(deployIntake);
-      leftBumper.whenPressed(indexerIn).whenReleased(stopIndexer);
-      leftBumper.whenReleased(stopIntake);
+      leftBumper.whenPressed(intakeIn);
+      // leftBumper.whenPressed(deployIntake);
 
-      // probably don't need these
-      // aButton.whenPressed(ledsOn);
-      // bButton.whenPressed(ledsOff);
+      leftBumper.whenPressed(indexerIn).whenReleased(stopIndexer);
+      leftBumper.whenReleased(stopIndexer);
+      bButton.whenPressed(stopIndexer);
+
+      leftBumper.whenReleased(stopIntake);
+      yButton.whenPressed(retractIntake);
 
       // shooter commands
       // aButton.whenPressed(fastShooter);
       // bButton.whenPressed(slowShooter);
-      // xButton.whenPressed(maxShooter);
+      xButton.whenPressed(fastShooter);
+      xButton.whenReleased(stopShooter);
       
       // === second driver ===
-      // leftBumper2.whenPressed(extendLeftClimber);
-      // leftBumper2.whenReleased(retractLeftClimber);
+      rightBumper.whenPressed(extendLeftClimber);
+      rightBumper.whenReleased(retractLeftClimber);
       // rightBumper2.whenPressed(extendRightClimber);
       // rightBumper2.whenReleased(retractRightClimber);
 

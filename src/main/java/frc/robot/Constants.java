@@ -15,6 +15,7 @@ package frc.robot;
 public final class Constants {
     public static final double neo550TicksPerRev = 42;
     public static final double neoTicksPerRev = 42;
+    public static final double falconTicksPerRev = 2048;
 
     public final class DriveK {
         public static final double ticksPerRev = 2048;
@@ -65,9 +66,9 @@ public final class Constants {
         public static final double leftTiltD = 0;
         public static final double leftTiltI = 0;
         
-        public static final double leftExtendP = 0;
+        public static final double leftExtendP = 0.5;
         public static final double leftExtendI = 0;
-        public static final double leftExtendD = 0;
+        public static final double leftExtendD = 0.01;
         public static final double leftExtendF = 0;
         
         public static final double rightTiltP = 0;
@@ -78,6 +79,11 @@ public final class Constants {
         public static final double rightExtendI = 0;
         public static final double rightExtendD = 0;
         public static final double rightExtendF = 0;
+
+
+        public static final double gearRatio = 1/625;
+        public static final double pulleyDiameter = 3; // inches
+        public static final double extendLength = 30 * falconTicksPerRev * pulleyDiameter * Math.PI * gearRatio;
     }
 
     public final class VisionK {
