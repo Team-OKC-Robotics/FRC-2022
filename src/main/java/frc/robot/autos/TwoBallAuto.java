@@ -22,7 +22,7 @@ public class TwoBallAuto extends Auto {
                 new DriveCommand(drivetrain, 30),
                 new TurnCommand(drivetrain, 180),
                 new SetShooterCommand(shooter, ShootK.tarmacPreset),
-                new SetTriggerCommand(shooter, 1),
+                new SetTriggerCommand(intake, 1),
                 new WaitCommand(10)
             );
     }

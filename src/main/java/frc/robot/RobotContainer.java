@@ -66,7 +66,7 @@ public class RobotContainer {
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
   private final DriveOffLineAuto driveOffLine = new DriveOffLineAuto(drivetrain); // drives the robot forwards
-  private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter); // drives the robot backwards
+  private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter, intake); // drives the robot backwards
   private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
   private final ThreeBallAuto threeBallAuto = new ThreeBallAuto(drivetrain, shooter, intake); // drives the robot backwards
   private final GyroTestAuto gyroTestAuto = new GyroTestAuto(drivetrain);
