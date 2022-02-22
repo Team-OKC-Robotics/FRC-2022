@@ -664,6 +664,86 @@
           }
         }
       }
+    },
+    {
+      "title": "climber",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/climber/Left Extend Position",
+              "_title": "Shuffleboard/climber/Left Extend Position"
+            }
+          },
+          "1,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/climber/Left Extend kP",
+              "_title": "Shuffleboard/climber/Left Extend kP"
+            }
+          },
+          "2,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/climber/Left Extend kI",
+              "_title": "Shuffleboard/climber/Left Extend kI"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/climber/Left Extend kF",
+              "_title": "Shuffleboard/climber/Left Extend kF"
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/climber/Left Extend kD",
+              "_title": "Shuffleboard/climber/Left Extend kD"
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///Shuffleboard/climber/Write Mode",
+              "_title": "Shuffleboard/climber/Write Mode"
+            }
+          }
+        }
+      }
     }
   ],
   "windowGeometry": {

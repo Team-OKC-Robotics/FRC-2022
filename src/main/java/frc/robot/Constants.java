@@ -83,7 +83,7 @@ public final class Constants {
 
         public static final double gearRatio = 1/625;
         public static final double pulleyDiameter = 3; // inches
-        public static final double extendLength = 30 * falconTicksPerRev * pulleyDiameter * Math.PI * gearRatio;
+        public static final double extendLength = 30 * falconTicksPerRev  /  Math.PI * pulleyDiameter;
     }
 
     public final class VisionK {

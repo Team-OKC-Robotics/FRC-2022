@@ -82,6 +82,7 @@ public class ClimberSubsystem extends SubsystemBase {
         
         if (leftExtendMotor != null) {
             leftExtendMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());
+            leftExtendMotor.setSelectedSensorPosition(0);
         }
 
         if (leftTiltEncoder != null) {
@@ -98,16 +99,16 @@ public class ClimberSubsystem extends SubsystemBase {
 
         //TODO configure the falcon 500s and their PIDs and stuff
         //TODO also set the encoder conversion factor or whatever so using inches actually works
+        //TODO make reset methods for everything? at least reset everything in the constructor
     }
 
     /**
      * sets the left winch? motor to the specified distance
      * @param inches the distance to set the left winch motor to
+     * physce it's actually not in inches it's just in ticks
      */
     public void setLeftExtend(double inches) {
-        if (leftExtendMotor != null) {
             leftExtendMotor.set(TalonFXControlMode.Position, inches);
-        }
     }
 
     /**

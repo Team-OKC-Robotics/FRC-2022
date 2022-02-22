@@ -65,6 +65,8 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterMotor1.config_kI(0, ShootK.shootI, 200);
             shooterMotor1.config_kD(0, ShootK.shootD, 200);
             shooterMotor1.config_kF(0, ShootK.shootF, 200);
+
+            shooterMotor1.setSelectedSensorPosition(0);
         }
 
         //  // logging initilization

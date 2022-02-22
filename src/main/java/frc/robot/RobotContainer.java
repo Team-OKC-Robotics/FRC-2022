@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.ClimbK;
 import frc.robot.autos.*;
 import frc.robot.commands.climber.*;
 import frc.robot.commands.drivetrain.*;
@@ -79,9 +80,9 @@ public class RobotContainer {
   // private final RunCommand teleopDrive = new RunCommand(
       // () -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
   
-  private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, 20, true);
+  private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, ClimbK.extendLength, true);
   private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
-  private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, -20, true);
+  private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, 0, true);
   private final ExtendClimberCommand retractRightClimber = new ExtendClimberCommand(climber, -20, false);
 
   private final RotateClimberCommand rotateLeftClimber = new RotateClimberCommand(climber, 45, true);
@@ -152,7 +153,7 @@ public class RobotContainer {
       
       // === second driver ===
       rightBumper.whenPressed(extendLeftClimber);
-      rightBumper.whenReleased(retractLeftClimber);
+      leftBumper.whenPressed(retractLeftClimber);
       // rightBumper2.whenPressed(extendRightClimber);
       // rightBumper2.whenReleased(retractRightClimber);
 
