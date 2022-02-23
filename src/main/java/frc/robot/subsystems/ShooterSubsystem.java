@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -60,6 +62,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         if (shooterMotor1 != null) {
             shooterMotor1.configFactoryDefault();
+            shooterMotor1.setInverted(InvertType.InvertMotorOutput);
             shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, 200);
             shooterMotor1.config_kP(0, ShootK.shootP, 200);
             shooterMotor1.config_kI(0, ShootK.shootI, 200);
@@ -86,8 +89,12 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void setShooter(double RPM) {
         if (shooterMotor1 != null) {
-            shooterMotor1.set(ControlMode.Velocity, RPM * 2048.0 / 600.0); // have to convert to units / 100ms or somethingS
+            shooterMotor1.set(ControlMode.Velocity, RPM/* * 2048.0 / 600.0*/); // have to convert to units / 100ms or something?
         }
+    }
+
+    public void stopShooter() {
+        shooterMotor1.set(TalonFXControlMode.PercentOutput, 0);
     }
 
     /**

@@ -741,6 +741,17 @@
               "_source0": "network_table:///Shuffleboard/climber/Write Mode",
               "_title": "Shuffleboard/climber/Write Mode"
             }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/climber/left extend setpoint",
+              "_title": "Shuffleboard/climber/left extend setpoint"
+            }
           }
         }
       }

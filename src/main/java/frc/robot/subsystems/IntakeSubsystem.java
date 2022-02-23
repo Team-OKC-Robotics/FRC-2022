@@ -57,7 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem() {
         //TODO change id numbers
         deployMotor = new CANSparkMax(10, MotorType.kBrushless);
-        indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
+        indexerMotor = new CANSparkMax(9, MotorType.kBrushless);
         intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
     
         if (deployMotor != null) {
@@ -70,6 +70,10 @@ public class IntakeSubsystem extends SubsystemBase {
             extendPID.setP(IntakeK.deployP);
             extendPID.setI(IntakeK.deployI);
             extendPID.setD(IntakeK.deployD);
+        }
+
+        if (indexerMotor != null) {
+            indexerMotor.setIdleMode(IdleMode.kBrake);
         }
         
 

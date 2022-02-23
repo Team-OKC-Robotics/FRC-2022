@@ -18,6 +18,12 @@ public class ExtendClimberCommand extends CommandBase {
 
     @Override
     public void initialize() {
+        //TODO maybe reset encoders here?
+    }
+
+    @Override
+    public void execute() {
+    // public void initialize() {
         if (leftSide) {
             climber.setLeftExtend(distance);
         } else {

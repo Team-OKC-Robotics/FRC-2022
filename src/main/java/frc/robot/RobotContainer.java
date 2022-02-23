@@ -91,7 +91,7 @@ public class RobotContainer {
   private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, -45, false);
 
   // intake
-  private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
+  private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 1);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
   private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
   private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
@@ -106,7 +106,7 @@ public class RobotContainer {
   // shooter
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
   private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
-  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 3000);
+  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 5000);
   private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
 
   /**
@@ -135,25 +135,27 @@ public class RobotContainer {
       // aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
 
       // intake commands
-      leftBumper.whenPressed(intakeIn);
+      // leftBumper.whenPressed(intakeIn);
       // leftBumper.whenPressed(deployIntake);
 
-      leftBumper.whenPressed(indexerIn).whenReleased(stopIndexer);
+      leftBumper.whenPressed(indexerIn);
       leftBumper.whenReleased(stopIndexer);
       bButton.whenPressed(stopIndexer);
 
-      leftBumper.whenReleased(stopIntake);
-      yButton.whenPressed(retractIntake);
+      // leftBumper.whenReleased(stopIntake);
+      // yButton.whenPressed(retractIntake);
 
       // shooter commands
       // aButton.whenPressed(fastShooter);
       // bButton.whenPressed(slowShooter);
       xButton.whenPressed(fastShooter);
+      // xButton.whenPressed(indexerIn);
       xButton.whenReleased(stopShooter);
+      // xButton.whenReleased(stopIndexer);
       
       // === second driver ===
-      rightBumper.whenPressed(extendLeftClimber);
-      leftBumper.whenPressed(retractLeftClimber);
+      // rightBumper.whenPressed(extendLeftClimber);
+      // leftBumper.whenPressed(retractLeftClimber);
       // rightBumper2.whenPressed(extendRightClimber);
       // rightBumper2.whenReleased(retractRightClimber);
 
