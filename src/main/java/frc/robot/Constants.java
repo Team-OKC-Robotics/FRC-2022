@@ -18,15 +18,15 @@ public final class Constants {
     public static final double falconTicksPerRev = 2048;
 
     public final class DriveK {
-        public static final double ticksPerRev = 2048;
+        public static final double ticksPerRev = neoTicksPerRev;
         public static final double gearRatio = 1;
         public static final double wheelDiameter = 6;
 
-        public static final double distanceP = 1;
-        public static final double distanceI = 0.01;
+        public static final double distanceP = 0.1;
+        public static final double distanceI = 0;
         public static final double distanceD = 0.001;
 
-        public static final double headingP = 0.1;
+        public static final double headingP = 0.03;
         public static final double headingI = 0;
         public static final double headingD = 0;
 

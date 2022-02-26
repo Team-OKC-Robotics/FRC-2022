@@ -10,7 +10,7 @@ public class DriveOffLineAuto extends Auto {
             "Drive Off Line Auto",
             "An auto that drives off the line forwards (away from alliance station), scoring points",
             2,
-            new DriveCommand(drivetrain, 50)
+            new DriveCommand(drivetrain, 5)
         );
     }
 }
