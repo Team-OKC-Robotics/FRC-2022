@@ -3,17 +3,15 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,6 +19,7 @@ import frc.robot.Constants.ClimbK;
 
 public class ClimberSubsystem extends SubsystemBase {
     private WPI_TalonFX rightExtendMotor;
+    private PIDController rightExtendPID;
     private CANSparkMax rightTiltMotor;
     private RelativeEncoder rightTiltEncoder;
 
@@ -71,17 +70,20 @@ public class ClimberSubsystem extends SubsystemBase {
      * but also like idk what's going on
      */
     public ClimberSubsystem() {
-        //TODO change port numbers
         rightExtendMotor = new WPI_TalonFX(13);
         rightTiltMotor = new CANSparkMax(14, MotorType.kBrushless);
 
         // set up the right side
         if (rightExtendMotor != null) {
             rightExtendMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());
+            rightExtendMotor.setSelectedSensorPosition(0);
+            rightExtendMotor.setNeutralMode(NeutralMode.Brake);
+            rightExtendPID = new PIDController(ClimbK.rightExtendP, ClimbK.rightExtendI, ClimbK.rightExtendD);
         }
 
         if (rightTiltEncoder != null) {
             rightTiltEncoder = rightTiltMotor.getEncoder();
+            rightTiltEncoder.setPosition(0);
         }
         
         // set up the left side
@@ -97,6 +99,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
         if (leftTiltEncoder != null) {
             leftTiltEncoder = leftTiltMotor.getEncoder();
+            leftTiltEncoder.setPosition(0);
         }
         
         if (leftTiltMotor != null) {
@@ -107,9 +110,7 @@ public class ClimberSubsystem extends SubsystemBase {
             rightPID = rightTiltMotor.getPIDController();
         }
 
-        //TODO configure the falcon 500s and their PIDs and stuff
         //TODO also set the encoder conversion factor or whatever so using inches actually works
-        //TODO make reset methods for everything? at least reset everything in the constructor
     }
 
     /**
@@ -217,10 +218,13 @@ public class ClimberSubsystem extends SubsystemBase {
             }
 
             if (rightExtendMotor != null) {
-                rightExtendMotor.config_kP(0, rightExtendP.getDouble(ClimbK.rightExtendP));
-                rightExtendMotor.config_kI(0, rightExtendI.getDouble(ClimbK.rightExtendI));
-                rightExtendMotor.config_kD(0, rightExtendD.getDouble(ClimbK.rightExtendD));
-                rightExtendMotor.config_kF(0, rightExtendF.getDouble(ClimbK.rightExtendF));
+                rightExtendPID.setP(rightExtendP.getDouble(ClimbK.rightExtendP));
+                rightExtendPID.setI(rightExtendI.getDouble(ClimbK.rightExtendI));
+                rightExtendPID.setD(rightExtendD.getDouble(ClimbK.rightExtendD));
+                // rightExtendMotor.config_kP(0, rightExtendP.getDouble(ClimbK.rightExtendP));
+                // rightExtendMotor.config_kI(0, rightExtendI.getDouble(ClimbK.rightExtendI));
+                // rightExtendMotor.config_kD(0, rightExtendD.getDouble(ClimbK.rightExtendD));
+                // rightExtendMotor.config_kF(0, rightExtendF.getDouble(ClimbK.rightExtendF));
             }
         }
     }

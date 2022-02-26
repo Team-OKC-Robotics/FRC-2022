@@ -154,8 +154,8 @@ public class RobotContainer {
       // xButton.whenReleased(stopIndexer);
       
       // === second driver ===
-      // rightBumper.whenPressed(extendLeftClimber);
-      // leftBumper.whenPressed(retractLeftClimber);
+      rightBumper.whenPressed(extendLeftClimber);
+      leftBumper.whenPressed(retractLeftClimber);
       // rightBumper2.whenPressed(extendRightClimber);
       // rightBumper2.whenReleased(retractRightClimber);
 

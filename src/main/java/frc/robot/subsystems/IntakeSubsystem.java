@@ -1,30 +1,24 @@
 package frc.robot.subsystems;
 
-import java.io.IOException;
-
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.IntakeK;
-import frc.robot.util.Logger;
 
 public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax deployMotor;
     private CANSparkMax intakeMotor;
     private CANSparkMax indexerMotor;
 
-    private boolean extended = false;
     private RelativeEncoder deployEncoder;
     private SparkMaxPIDController extendPID;
 
@@ -41,9 +35,6 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry intakeI = tab.add("Intake kI", IntakeK.deployI).getEntry();
     private NetworkTableEntry intakeD = tab.add("Intake kD", IntakeK.deployD).getEntry();
 
-    private Logger logger;
-    private Timer timer;
-    
     private NetworkTableEntry deployedPreset = tab.add("Deployed preset", IntakeK.EXTENDED).getEntry();
     
     // I don't think there needs to be any shuffleboard stuff here
@@ -55,7 +46,6 @@ public class IntakeSubsystem extends SubsystemBase {
      * there's also a 'pass-through' or 'indexer' motor to move the balls along to the shooter
      */
     public IntakeSubsystem() {
-        //TODO change id numbers
         deployMotor = new CANSparkMax(10, MotorType.kBrushless);
         indexerMotor = new CANSparkMax(9, MotorType.kBrushless);
         intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
@@ -75,17 +65,6 @@ public class IntakeSubsystem extends SubsystemBase {
         if (indexerMotor != null) {
             indexerMotor.setIdleMode(IdleMode.kBrake);
         }
-        
-
-        // try {
-        //     logger = new Logger("intake", 0); //TODO figure out a way to do match numbers
-        // } catch (IOException e) {
-        //     // TODO Auto-generated catch block
-        //     e.printStackTrace();
-        // }
-        // logger.headers("ticks, velocity");
-
-        timer = new Timer(); //TODO configure
     }
 
     /**
@@ -119,7 +98,6 @@ public class IntakeSubsystem extends SubsystemBase {
             } else {
                 extendPID.setReference(IntakeK.RAISED, ControlType.kPosition);
             }
-            this.extended = extended;
         }
     }
 
@@ -146,12 +124,6 @@ public class IntakeSubsystem extends SubsystemBase {
                 extendPID.setI(intakeI.getDouble(IntakeK.deployI));
                 extendPID.setD(intakeD.getDouble(IntakeK.deployD));
             }
-        }
-
-        if (timer.get() > Constants.logTime) {
-            // logger.newline();
-            // logger.log("intake ticks", deployEncoder.getPosition());
-            // logger.log("intake velocity", deployEncoder.getVelocity());
         }
     }
 }
