@@ -54,7 +54,7 @@ public class IntakeSubsystem extends SubsystemBase {
             extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
             deployEncoder = deployMotor.getEncoder();
             deployMotor.setSoftLimit(SoftLimitDirection.kForward, IntakeK.maxDeploy);
-            deployMotor.setIdleMode(IdleMode.kBrake);
+            deployMotor.setIdleMode(IdleMode.kCoast); //FIXME;
             deployEncoder.setPosition(0);
 
             extendPID.setP(IntakeK.deployP);
@@ -72,9 +72,9 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param power the power to set the intake to
      */
     public void setIntake(double power) {
-        if (intakeMotor != null) {
+        // if (intakeMotor != null) {
             intakeMotor.set(power);
-        }
+        // }
     }
 
     /**

@@ -82,12 +82,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
         left1Motor = new CANSparkMax(1, MotorType.kBrushless);
         left2Motor = new CANSparkMax(2, MotorType.kBrushless);
         left3Motor = new CANSparkMax(3, MotorType.kBrushless);
-        leftSide = new MotorControllerGroup(left1Motor);
+        leftSide = new MotorControllerGroup(left1Motor, left2Motor, left3Motor);
 
         right1Motor = new CANSparkMax(4, MotorType.kBrushless);
         right2Motor = new CANSparkMax(5, MotorType.kBrushless);
         right3Motor = new CANSparkMax(6, MotorType.kBrushless);
-        rightSide = new MotorControllerGroup(right1Motor);
+        rightSide = new MotorControllerGroup(right1Motor, right2Motor, right3Motor);
 
         left1Motor.setIdleMode(IdleMode.kBrake);
         left2Motor.setIdleMode(IdleMode.kBrake);

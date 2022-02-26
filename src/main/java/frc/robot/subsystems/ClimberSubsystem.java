@@ -70,8 +70,8 @@ public class ClimberSubsystem extends SubsystemBase {
      * but also like idk what's going on
      */
     public ClimberSubsystem() {
-        rightExtendMotor = new WPI_TalonFX(13);
-        rightTiltMotor = new CANSparkMax(14, MotorType.kBrushless);
+        // rightExtendMotor = new WPI_TalonFX(13);
+        // rightTiltMotor = new CANSparkMax(14, MotorType.kBrushless);
 
         // set up the right side
         if (rightExtendMotor != null) {
@@ -88,7 +88,7 @@ public class ClimberSubsystem extends SubsystemBase {
         
         // set up the left side
         leftExtendMotor = new WPI_TalonFX(15);
-        leftTiltMotor = new CANSparkMax(16, MotorType.kBrushless);
+        // leftTiltMotor = new CANSparkMax(16, MotorType.kBrushless);
         
         if (leftExtendMotor != null) {
             leftExtendMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());

@@ -75,10 +75,10 @@ public class RobotContainer {
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
   
-  private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
+  // private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
   // private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)), drivetrain);
-  // private final RunCommand teleopDrive = new RunCommand(
-      // () -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
+  private final RunCommand teleopDrive = new RunCommand(
+      () -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
   
   private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, ClimbK.extendLength, true);
   private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
@@ -93,6 +93,7 @@ public class RobotContainer {
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 1);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
+  private final SetIntakeCommand intakeOut = new SetIntakeCommand(intake, -1);
   private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
   private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
   private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 1);
@@ -106,8 +107,9 @@ public class RobotContainer {
   // shooter
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
   private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
-  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 5000);
+  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 11000);
   private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
+  private final FlightStickShooterCommand flightStickShooter = new FlightStickShooterCommand(shooter, gamepad2); // expects gamepad2 to be a Logitech Extreme 3D Pro
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -138,24 +140,36 @@ public class RobotContainer {
       // leftBumper.whenPressed(intakeIn);
       // leftBumper.whenPressed(deployIntake);
 
-      leftBumper.whenPressed(indexerIn);
-      leftBumper.whenReleased(stopIndexer);
+      leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
+      aButton.whenPressed(indexerIn);
+      bButton.whenPressed(stopIntake);
       bButton.whenPressed(stopIndexer);
+      xButton.whenPressed(fastShooter);
+      xButton.whenReleased(stopShooter);
+      // aButton.whenPressed(intakeIn);
+      // bButton.whenPressed(stopIntake);
+      // xButton.whenPressed(intakeIn);
+      // // leftBumper.whenReleased(stopIndexer);
+      // bButton.whenPressed(stopIndexer);
+      // aButton.whenPressed(indexerIn).whenReleased(stopIndexer);
 
       // leftBumper.whenReleased(stopIntake);
-      // yButton.whenPressed(retractIntake);
+      // // yButton.whenPressed(retractIntake);
 
-      // shooter commands
-      // aButton.whenPressed(fastShooter);
-      // bButton.whenPressed(slowShooter);
-      xButton.whenPressed(fastShooter);
-      // xButton.whenPressed(indexerIn);
-      xButton.whenReleased(stopShooter);
+      // // shooter commands
+      // // aButton.whenPressed(fastShooter);
+      // // bButton.whenPressed(slowShooter);
+      // xButton.whenPressed(fastShooter);
+      // // xButton.whenPressed(indexerIn);
+      // xButton.whenReleased(stopShooter);
       // xButton.whenReleased(stopIndexer);
       
       // === second driver ===
-      rightBumper.whenPressed(extendLeftClimber);
-      leftBumper.whenPressed(retractLeftClimber);
+      // yButton.whenPressed(extendLeftClimber);
+      // aButton.whenPressed(retractLeftClimber);
+
+      // bButton2.whenPressed(flightStickShooter); // side button warms up
+      // aButton2.whenPressed(indexerIn); // trigger feeds the balls
       // rightBumper2.whenPressed(extendRightClimber);
       // rightBumper2.whenReleased(retractRightClimber);
 
