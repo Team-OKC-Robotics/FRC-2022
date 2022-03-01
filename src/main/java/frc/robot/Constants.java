@@ -19,7 +19,7 @@ public final class Constants {
 
     public final class DriveK {
         public static final double ticksPerRev = neoTicksPerRev;
-        public static final double gearRatio = 1;
+        public static final double gearRatio = 9.64/1; //probably wrote that correctly
         public static final double wheelDiameter = 6;
 
         public static final double distanceP = 0.1;
