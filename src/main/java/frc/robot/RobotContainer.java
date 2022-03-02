@@ -75,11 +75,6 @@ public class RobotContainer {
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
   
-  // private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
-  // private final RunCommand teleopDrive = new RunCommand(() -> drivetrain.tankDrive(-gamepad1.getRawAxis(1), -gamepad1.getRawAxis(5)), drivetrain);
-  private final RunCommand teleopDrive = new RunCommand(
-      () -> drivetrain.arcadeDrive(-gamepad1.getRawAxis(1), gamepad1.getRawAxis(4)), drivetrain);
-  
   private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, ClimbK.extendLength, true);
   private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
   private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, 0, true);
@@ -107,7 +102,7 @@ public class RobotContainer {
   // shooter
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
   private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
-  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 50000);
+  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 10000);
   private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
   private final FlightStickShooterCommand flightStickShooter = new FlightStickShooterCommand(shooter, gamepad2); // expects gamepad2 to be a Logitech Extreme 3D Pro
 
@@ -134,7 +129,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
       // drivetrain commands
       backButton.whenPressed(teleOpDrive);
-      aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
+      // aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
 
       yButton.whenPressed(ledsOn);
       rightBumper.whenPressed(ledsOff);
