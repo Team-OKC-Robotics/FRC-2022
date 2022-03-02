@@ -99,10 +99,10 @@ public class VisionSubsystem extends SubsystemBase {
      */
     public void setLeds(boolean on) {
         if (on) {
-            leds.set(Value.kForward);
+            leds.set(Value.kOff);
             ledMode.setBoolean(true);
         } else {
-            leds.set(Value.kOn);
+            leds.set(Value.kReverse);
             ledMode.setBoolean(false);
         }
     }
@@ -131,7 +131,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        leds.set(ledMode.getBoolean(false) ? Value.kForward : Value.kOn); // I think that's how you use ternary
+        leds.set(ledMode.getBoolean(false) ? Value.kOff : Value.kReverse); // I think that's how you use ternary
         // idk I use Python man
 
         if (toggleMode.getBoolean(false)) {

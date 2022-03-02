@@ -107,7 +107,7 @@ public class RobotContainer {
   // shooter
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
   private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
-  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 11000);
+  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 50000);
   private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
   private final FlightStickShooterCommand flightStickShooter = new FlightStickShooterCommand(shooter, gamepad2); // expects gamepad2 to be a Logitech Extreme 3D Pro
 
@@ -134,35 +134,20 @@ public class RobotContainer {
   private void configureButtonBindings() {
       // drivetrain commands
       backButton.whenPressed(teleOpDrive);
-      // aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
+      aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
+
+      yButton.whenPressed(ledsOn);
+      rightBumper.whenPressed(ledsOff);
 
       // intake commands
-      // leftBumper.whenPressed(intakeIn);
-      // leftBumper.whenPressed(deployIntake);
-
       leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
       aButton.whenPressed(indexerIn);
       bButton.whenPressed(stopIntake);
       bButton.whenPressed(stopIndexer);
+      
+      // shooter commands
       xButton.whenPressed(fastShooter);
       xButton.whenReleased(stopShooter);
-      // aButton.whenPressed(intakeIn);
-      // bButton.whenPressed(stopIntake);
-      // xButton.whenPressed(intakeIn);
-      // // leftBumper.whenReleased(stopIndexer);
-      // bButton.whenPressed(stopIndexer);
-      // aButton.whenPressed(indexerIn).whenReleased(stopIndexer);
-
-      // leftBumper.whenReleased(stopIntake);
-      // // yButton.whenPressed(retractIntake);
-
-      // // shooter commands
-      // // aButton.whenPressed(fastShooter);
-      // // bButton.whenPressed(slowShooter);
-      // xButton.whenPressed(fastShooter);
-      // // xButton.whenPressed(indexerIn);
-      // xButton.whenReleased(stopShooter);
-      // xButton.whenReleased(stopIndexer);
       
       // === second driver ===
       // yButton.whenPressed(extendLeftClimber);
