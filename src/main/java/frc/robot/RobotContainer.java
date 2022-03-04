@@ -104,6 +104,7 @@ public class RobotContainer {
   private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
   private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 10000);
   private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
+  private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad1);
   private final FlightStickShooterCommand flightStickShooter = new FlightStickShooterCommand(shooter, gamepad2); // expects gamepad2 to be a Logitech Extreme 3D Pro
 
   /**
@@ -141,9 +142,10 @@ public class RobotContainer {
       bButton.whenPressed(stopIndexer);
       
       // shooter commands
-      xButton.whenPressed(fastShooter);
-      xButton.whenReleased(stopShooter);
-      
+      // xButton.whenPressed(fastShooter);
+      // xButton.whenReleased(stopShooter);
+      xButton.whenPressed(shooterPresets);
+
       // === second driver ===
       // yButton.whenPressed(extendLeftClimber);
       // aButton.whenPressed(retractLeftClimber);
