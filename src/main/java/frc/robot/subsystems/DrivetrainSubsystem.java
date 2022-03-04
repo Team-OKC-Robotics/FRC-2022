@@ -99,7 +99,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rightSide.setInverted(true);
         drivetrain = new DifferentialDrive(leftSide, rightSide);
        
-        //drivetrain.setMaxOutput(0.2);
+        drivetrain.setMaxOutput(0.5);
 
         left1Encoder = left1Motor.getEncoder();
         left2Encoder = left2Motor.getEncoder();

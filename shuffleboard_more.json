@@ -168,27 +168,13 @@
           },
           "11,2": {
             "size": [
-              3,
+              2,
               1
             ],
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///Shuffleboard/drivetrain/total ticks",
               "_title": "Shuffleboard/drivetrain/total ticks"
-            }
-          },
-          "10,4": {
-            "size": [
-              6,
-              4
-            ],
-            "content": {
-              "_type": "Differential Drivebase",
-              "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]",
-              "_title": "drivetrain",
-              "Wheels/Number of wheels": 6,
-              "Wheels/Wheel diameter": 58.0,
-              "Visuals/Show velocity vectors": true
             }
           },
           "0,5": {
@@ -213,6 +199,25 @@
               "Game/Game": "A2022_Rapid_React",
               "Visuals/Robot Icon Size": 50.0,
               "Visuals/Show Outside Circles": false
+            }
+          },
+          "10,4": {
+            "size": [
+              6,
+              4
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://USB Camera 0",
+              "_title": "USB Camera 0",
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#00FF00FF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": 30,
+              "imageWidth": 480,
+              "imageHeight": 240
             }
           }
         }
@@ -637,6 +642,28 @@
               "_source0": "network_table:///Shuffleboard/shooter/velocity error",
               "_title": "velocity error"
             }
+          },
+          "3,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/low goal preset",
+              "_title": "Shuffleboard/shooter/low goal preset"
+            }
+          },
+          "3,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/tarmac line preset",
+              "_title": "Shuffleboard/shooter/tarmac line preset"
+            }
           }
         }
       }
@@ -671,11 +698,9 @@
               1
             ],
             "content": {
-              "_type": "Boolean Box",
+              "_type": "Toggle Button",
               "_source0": "network_table:///photonvision/mmal_service_16.1/driverMode",
-              "_title": "driverMode",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
+              "_title": "driverMode"
             }
           },
           "2,2": {
@@ -833,6 +858,31 @@
               "_type": "Text View",
               "_source0": "network_table:///Shuffleboard/climber/left extend setpoint",
               "_title": "Shuffleboard/climber/left extend setpoint"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab 13",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              10,
+              4
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///CameraPublisher/USB Camera 0",
+              "_title": "CameraPublisher/USB Camera 0"
             }
           }
         }

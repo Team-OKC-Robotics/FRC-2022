@@ -67,9 +67,9 @@ public final class Constants {
         public static final double leftTiltD = 0;
         public static final double leftTiltI = 0;
         
-        public static final double leftExtendP = 0.5;
+        public static final double leftExtendP = 0.00001;
         public static final double leftExtendI = 0;
-        public static final double leftExtendD = 0.01;
+        public static final double leftExtendD = 0.00000001;
         public static final double leftExtendF = 0;
         
         public static final double rightTiltP = 0;

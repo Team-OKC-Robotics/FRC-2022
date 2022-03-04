@@ -60,6 +60,7 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterMotor1.configFactoryDefault();
             shooterMotor1.setInverted(InvertType.InvertMotorOutput);
             shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, 200);
+            shooterMotor1.configNeutralDeadband(0);
             shooterMotor1.config_kP(0, ShootK.shootP, 200);
             shooterMotor1.config_kI(0, ShootK.shootI, 200);
             shooterMotor1.config_kD(0, ShootK.shootD, 200);

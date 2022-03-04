@@ -77,7 +77,7 @@ public class RobotContainer {
   
   private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, true);
   private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
-  private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, 0, true);
+  private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, 5, true);
   private final ExtendClimberCommand retractRightClimber = new ExtendClimberCommand(climber, -20, false);
 
   private final RotateClimberCommand rotateLeftClimber = new RotateClimberCommand(climber, 45, true);
@@ -145,6 +145,10 @@ public class RobotContainer {
       // xButton.whenPressed(fastShooter);
       // xButton.whenReleased(stopShooter);
       xButton.whenPressed(shooterPresets);
+      xButton.whenReleased(stopShooter);
+
+      yButton.whenPressed(extendLeftClimber);
+      rightBumper.whenPressed(retractLeftClimber);
 
       // === second driver ===
       // yButton.whenPressed(extendLeftClimber);

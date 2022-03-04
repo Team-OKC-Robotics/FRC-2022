@@ -29,8 +29,9 @@ public class ShooterPresetCommand extends CommandBase {
                 shooter.setShooterPreset(ShooterPresets.CLOSE_LAUNCHPAD);
                 break;
             case 0:
-            default:
                 shooter.setShooterPreset(ShooterPresets.FAR_LAUNCHPAD);
+                break;
+            default:
                 break;
         }
     }

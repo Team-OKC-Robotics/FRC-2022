@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -23,6 +25,7 @@ public class Robot extends TimedRobot {
   
   private RobotContainer m_robotContainer;
   private HttpCamera camera;
+  private UsbCamera driverCamera;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -36,6 +39,8 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true); //FIXME we probably want this when at competition
     camera = new HttpCamera("photoncam", "http://photonvision.local:1182/stream.mjpg", HttpCameraKind.kMJPGStreamer);
+    driverCamera = CameraServer.startAutomaticCapture();
+    //driverCamera.
   }
 
   /**

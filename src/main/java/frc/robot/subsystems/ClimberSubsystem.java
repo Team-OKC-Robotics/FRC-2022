@@ -79,6 +79,7 @@ public class ClimberSubsystem extends SubsystemBase {
         if (rightExtendMotor != null) {
             rightExtendMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());
             rightExtendMotor.setSelectedSensorPosition(0);
+            rightExtendMotor.configNeutralDeadband(0);
             rightExtendMotor.setNeutralMode(NeutralMode.Brake);
             rightExtendPID = new PIDController(ClimbK.rightExtendP, ClimbK.rightExtendI, ClimbK.rightExtendD);
         }
@@ -96,7 +97,10 @@ public class ClimberSubsystem extends SubsystemBase {
             leftExtendMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());
             leftExtendMotor.setSelectedSensorPosition(0);
             leftExtendMotor.setNeutralMode(NeutralMode.Brake);
+            leftExtendMotor.configNeutralDeadband(0);
             leftExtendPID = new PIDController(ClimbK.leftExtendP, ClimbK.leftExtendI, ClimbK.leftExtendD);
+            leftExtendPID.setTolerance(1000);
+            leftExtendMotor.configClosedLoopPeakOutput(0, 20);
         }
 
         if (leftTiltEncoder != null) {
@@ -125,6 +129,11 @@ public class ClimberSubsystem extends SubsystemBase {
         leftExtendPID.setSetpoint(inches);
         setpoint.setDouble(inches);
         leftExtendMotor.set(TalonFXControlMode.PercentOutput, leftExtendPID.calculate(leftExtendMotor.getSelectedSensorPosition()));
+    }
+
+    public void manualClimb(double power) {
+        leftExntedMotor.set(TalonFXControlMode.PercentOutput, power);
+
     }
 
     /**
@@ -163,7 +172,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public boolean atRightExtendSetpoint() {
-        return Math.abs(rightExtendMotor.getClosedLoopError()) < 0.5; //TODO change the tolerance
+        return Math.abs(rightExtendMotor.getClosedLoopError()) < 1000; //TODO change the tolerance
     }
 
     public boolean atLeftTiltSetpoint() {
