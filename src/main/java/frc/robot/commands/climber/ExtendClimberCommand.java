@@ -5,7 +5,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 
 public class ExtendClimberCommand extends CommandBase {
     private final ClimberSubsystem climber;
-    private double distance = 0;
+    private double distance = -1;
     private boolean leftSide = false;
 
     public ExtendClimberCommand(ClimberSubsystem climber, double distance, boolean leftSide) {
@@ -16,6 +16,11 @@ public class ExtendClimberCommand extends CommandBase {
         addRequirements(climber);
     }
 
+    public ExtendClimberCommand(ClimberSubsystem climber, boolean leftSide) {
+        this.climber =  climber;
+        this.leftSide = leftSide;
+    }
+
     @Override
     public void initialize() {
         //TODO maybe reset encoders here?
@@ -23,11 +28,14 @@ public class ExtendClimberCommand extends CommandBase {
 
     @Override
     public void execute() {
-    // public void initialize() {
-        if (leftSide) {
-            climber.setLeftExtend(distance);
+        if (distance == -1) {
+            climber.extend(leftSide);
         } else {
-            climber.setRightExtend(distance);
+            if (leftSide) {
+                climber.setLeftExtend(distance);
+            } else {
+                climber.setRightExtend(distance);
+            }
         }
     }
 

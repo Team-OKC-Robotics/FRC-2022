@@ -39,6 +39,8 @@ public class ClimberSubsystem extends SubsystemBase {
     private NetworkTableEntry leftTiltPos = tab.add("Left Tilt Position", 0).getEntry();
     private NetworkTableEntry leftExtendPos = tab.add("Left Extend Position", 0).getEntry();
 
+    private NetworkTableEntry leftExtendPreset = tab.add("Left Extend Preset", ClimbK.extendLength).getEntry();
+
     private NetworkTableEntry rightTiltPos = tab.add("Right Tilt Position", 0).getEntry();
     private NetworkTableEntry rightExtendPos = tab.add("Right Extend Position", 0).getEntry();
 
@@ -175,6 +177,14 @@ public class ClimberSubsystem extends SubsystemBase {
         return false; //FIXME
     }
 
+    public void extend(boolean leftSide) {
+        if (leftSide) {
+            leftExtendMotor.set(TalonFXControlMode.Position, leftExtendPreset.getDouble(ClimbK.extendLength));
+        } else {
+            rightExtendMotor.set(TalonFXControlMode.Position, leftExtendPreset.getDouble(ClimbK.extendLength)); //TODO make a right one? idk
+        }
+    }
+
     @Override
     public void periodic() {
         if (leftTiltEncoder != null) {
@@ -194,6 +204,8 @@ public class ClimberSubsystem extends SubsystemBase {
 
 
         if (writeMode.getBoolean(false)) {
+            // leftExtendPreset
+
             if (leftPID != null) {
                 leftPID.setP(leftTiltP.getDouble(ClimbK.leftTiltP));
                 leftPID.setI(leftTiltI.getDouble(ClimbK.leftTiltI));

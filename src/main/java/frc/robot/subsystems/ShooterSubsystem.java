@@ -17,7 +17,7 @@ public class ShooterSubsystem extends SubsystemBase {
      * An enum to account for all the different preset values we might want to shoot from
      * this should be eventually (hopefully) rendered obsolete by just using vision and good maths
      */
-    private enum ShooterPresets {
+    public enum ShooterPresets {
         CLOSE_LAUNCHPAD,
         FAR_LAUNCHPAD,
         TARMAC_LINE,
@@ -46,7 +46,9 @@ public class ShooterSubsystem extends SubsystemBase {
     // presets
     private NetworkTableEntry preset1 = tab.add("close launchpad preset", ShootK.preset1).getEntry();
     private NetworkTableEntry preset2 = tab.add("far launchpad preset", ShootK.preset2).getEntry();
-
+    private NetworkTableEntry preset3 = tab.add("tarmac line preset", ShootK.tarmacPreset).getEntry();
+    private NetworkTableEntry preset4 = tab.add("low goal preset", ShootK.lowGoalPreset).getEntry();
+    
     /**
      * Makes a new ShooterSubsystem
      * the shooter controls the shooter motor(s?) and the "trigger motor"
@@ -86,10 +88,14 @@ public class ShooterSubsystem extends SubsystemBase {
      * @param preset the preset to set the shooter to
      */
     public void setShooterPreset(ShooterPresets preset) {
-        if (preset == ShooterPresets.CLOSE_LAUNCHPAD) {
-            setShooter(preset1.getDouble(ShootK.preset1));
-        } else if (preset == ShooterPresets.FAR_LAUNCHPAD) {
+        if (preset == ShooterPresets.LOW_GOAL) {
+            setShooter(preset4.getDouble(ShootK.lowGoalPreset));
+        } else if (preset == ShooterPresets.TARMAC_LINE) {
+            setShooter(preset3.getDouble(ShootK.tarmacPreset));
+        } else if (preset == ShooterPresets.CLOSE_LAUNCHPAD) {
             setShooter(preset2.getDouble(ShootK.preset2));
+        } else if (preset == ShooterPresets.FAR_LAUNCHPAD) {
+            setShooter(preset1.getDouble(ShootK.preset1));
         }
     }
 

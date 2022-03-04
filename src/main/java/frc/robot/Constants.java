@@ -42,9 +42,10 @@ public final class Constants {
         public static final double shootD = 0.01;
         public static final double shootF = 0;
 
-        public static final double preset1 = 1000; // in RPM, close launchpad distance
-        public static final double preset2 = 2000; // in RPM, far launchpad distance
-        public static final double tarmacPreset = 500; //TODO test and tune
+        public static final double preset1 = 9000; // in RPM, close launchpad distance
+        public static final double preset2 = 18000; // in RPM, far launchpad distance
+        public static final double tarmacPreset = 1500; //TODO test and tune
+        public static final double lowGoalPreset = 1000;
     }
 
     public final class IntakeK {

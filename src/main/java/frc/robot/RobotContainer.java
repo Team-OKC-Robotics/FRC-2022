@@ -75,7 +75,7 @@ public class RobotContainer {
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
   
-  private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, ClimbK.extendLength, true);
+  private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, true);
   private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
   private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, 0, true);
   private final ExtendClimberCommand retractRightClimber = new ExtendClimberCommand(climber, -20, false);
