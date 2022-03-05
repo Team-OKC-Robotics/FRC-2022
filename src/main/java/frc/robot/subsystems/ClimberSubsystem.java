@@ -132,8 +132,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void manualClimb(double power) {
-        leftExntedMotor.set(TalonFXControlMode.PercentOutput, power);
-
+        leftExtendMotor.set(TalonFXControlMode.PercentOutput, power);
     }
 
     /**

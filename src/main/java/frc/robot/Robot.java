@@ -38,8 +38,8 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true); //FIXME we probably want this when at competition
-    camera = new HttpCamera("photoncam", "http://photonvision.local:1182/stream.mjpg", HttpCameraKind.kMJPGStreamer);
-    driverCamera = CameraServer.startAutomaticCapture();
+    //camera = new HttpCamera("photoncam", "http://photonvision.local:1182/stream.mjpg", HttpCameraKind.kMJPGStreamer);
+    CameraServer.startAutomaticCapture();
     //driverCamera.
   }
 

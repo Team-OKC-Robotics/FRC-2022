@@ -8,7 +8,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,6 +24,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private RelativeEncoder deployEncoder;
     private SparkMaxPIDController extendPID;
+    private PIDController deployPID;
+
+    private DigitalInput deployedLimitSwitch;
+    private DigitalInput retractedLimitSwitch;
+    private int direction = 0;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("intake");
@@ -29,6 +37,9 @@ public class IntakeSubsystem extends SubsystemBase {
     // sensors
     private NetworkTableEntry ticks = tab.add("intake ticks", 0).getEntry();
     private NetworkTableEntry velocity = tab.add("intake velocity", 0).getEntry();
+    private NetworkTableEntry deployedSwitch = tab.add("deployed switch", false).getEntry();
+    private NetworkTableEntry retractedSwitch = tab.add("retracted switch", false).getEntry();
+    
     
     // PID
     private NetworkTableEntry intakeP = tab.add("Intake kP", IntakeK.deployP).getEntry();
@@ -60,11 +71,16 @@ public class IntakeSubsystem extends SubsystemBase {
             extendPID.setP(IntakeK.deployP);
             extendPID.setI(IntakeK.deployI);
             extendPID.setD(IntakeK.deployD);
+            
         }
 
         if (indexerMotor != null) {
             indexerMotor.setIdleMode(IdleMode.kBrake);
         }
+
+        deployPID = new PIDController(IntakeK.deployP, IntakeK.deployI, IntakeK.deployD);
+        deployedLimitSwitch = new DigitalInput(2);
+        retractedLimitSwitch = new DigitalInput(3);
     }
 
     /**
@@ -92,13 +108,23 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param extended if the intake should be extended/deployed or not
      */
     public void setExtended(boolean extended) {
-        if (extendPID != null) {
+        if (deployMotor != null) {
             if (extended) {
-                extendPID.setReference(deployedPreset.getDouble(IntakeK.EXTENDED), ControlType.kPosition);
+                deployPID.setSetpoint(deployedPreset.getDouble(IntakeK.EXTENDED));
+                direction = 1;
             } else {
-                extendPID.setReference(IntakeK.RAISED, ControlType.kPosition);
+                deployPID.setSetpoint(IntakeK.RAISED);
+                direction = -1;
             }
         }
+
+        // if (extendPID != null) {
+        //     if (extended) {
+        //         extendPID.setReference(deployedPreset.getDouble(IntakeK.EXTENDED), ControlType.kPosition);
+        //     } else {
+        //         extendPID.setReference(IntakeK.RAISED, ControlType.kPosition);
+        //     }
+        // }
     }
 
     /**
@@ -113,6 +139,37 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // if (deployedLimitSwitch.get()) {
+        //     deployedSwitch.setBoolean(true);
+        // } else {
+        //     deployedSwitch.setBoolean(false);
+        // }
+        
+        // if (retractedLimitSwitch.get()) {
+        //     retractedSwitch.setBoolean(true);
+        // } else {
+        //     retractedSwitch.setBoolean(false);
+        // }
+        // retracted limit switch is reversed logic
+        // deployed is reversed aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        
+        
+        if (direction != 0) {
+            if (!deployedLimitSwitch.get() == true && direction == -1) {
+                // deployed.setBoolean(true);
+                deployMotor.set(0);
+            } else if (!retractedLimitSwitch.get() == true && direction == 1) {
+                // deployed.setBoolean(false);
+                deployMotor.set(0);
+            } else {
+                double power = deployPID.calculate(deployEncoder.getPosition());
+                if (Math.abs(power) > 0.4) {
+                    power = Math.copySign(0.4, power);
+                }
+                deployMotor.set(power);
+            }
+        }
+
         if (deployEncoder != null) {
             ticks.setDouble(deployEncoder.getPosition());
             velocity.setDouble(deployEncoder.getVelocity());

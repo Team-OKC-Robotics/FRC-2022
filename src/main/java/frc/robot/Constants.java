@@ -19,10 +19,10 @@ public final class Constants {
 
     public final class DriveK {
         public static final double ticksPerRev = neoTicksPerRev;
-        public static final double gearRatio = 9.64/1; //probably wrote that correctly
+        public static final double gearRatio = 1/9.64; //probably wrote that correctly
         public static final double wheelDiameter = 6;
 
-        public static final double distanceP = 0.1;
+        public static final double distanceP = 0.01;
         public static final double distanceI = 0;
         public static final double distanceD = 0.001;
 
@@ -36,15 +36,14 @@ public final class Constants {
     }
 
     public final class ShootK {
-        //TODO test and tune this
-        public static final double shootP = 0.5;
+        public static final double shootP = 0.00035;
         public static final double shootI = 0;
-        public static final double shootD = 0.01;
-        public static final double shootF = 0;
+        public static final double shootD = 0.000002;
+        public static final double shootF = 0.0;
 
-        public static final double preset1 = 9000; // in RPM, close launchpad distance
+        public static final double preset1 = 9000; // in RPM, close launchpad distance (actually this is the right next to tower goal which is the only shot we can make)
         public static final double preset2 = 18000; // in RPM, far launchpad distance
-        public static final double tarmacPreset = 1500; //TODO test and tune
+        public static final double tarmacPreset = 1500;
         public static final double lowGoalPreset = 1000;
     }
 
@@ -56,7 +55,7 @@ public final class Constants {
 
         //TODO test and tune this
         public static final double RAISED = 0; // ticks for intake at raised position (actually this would be 0)
-        public static final double EXTENDED = neo550TicksPerRev ; // ticks for intake being extended
+        public static final double EXTENDED = -neo550TicksPerRev * 1.4; // ticks for intake being extended
 
         public static final float maxDeploy = 1000000;
     }

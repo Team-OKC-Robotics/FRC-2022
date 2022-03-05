@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.ClimbK;
 import frc.robot.autos.*;
 import frc.robot.commands.climber.*;
 import frc.robot.commands.drivetrain.*;
@@ -17,7 +16,6 @@ import frc.robot.commands.vision.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -75,15 +73,19 @@ public class RobotContainer {
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
   
-  private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, true);
-  private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
-  private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, 5, true);
-  private final ExtendClimberCommand retractRightClimber = new ExtendClimberCommand(climber, -20, false);
+  // private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, true);
+  // private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
+  // private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, 5, true);
+  // private final ExtendClimberCommand retractRightClimber = new ExtendClimberCommand(climber, -20, false);
 
-  private final RotateClimberCommand rotateLeftClimber = new RotateClimberCommand(climber, 45, true);
-  private final RotateClimberCommand rotateRightClimber = new RotateClimberCommand(climber, 45, false);
-  private final RotateClimberCommand rotateLeftClimberBack = new RotateClimberCommand(climber, -45, true);
-  private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, -45, false);
+  // private final RotateClimberCommand rotateLeftClimber = new RotateClimberCommand(climber, 45, true);
+  // private final RotateClimberCommand rotateRightClimber = new RotateClimberCommand(climber, 45, false);
+  // private final RotateClimberCommand rotateLeftClimberBack = new RotateClimberCommand(climber, -45, true);
+  // private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, -45, false);
+
+  private final ManualClimberCommand manualExtend = new ManualClimberCommand(climber, 0.5);
+  private final ManualClimberCommand manualRetract = new ManualClimberCommand(climber, -0.5);
+  private final ManualClimberCommand stopClimber = new ManualClimberCommand(climber, 0);
 
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 1);
@@ -101,9 +103,6 @@ public class RobotContainer {
 
   // shooter
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
-  private final SetShooterCommand slowShooter = new SetShooterCommand(shooter, 1000);
-  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 10000);
-  private final SetShooterCommand maxShooter = new SetShooterCommand(shooter, 5000);
   private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad1);
   private final FlightStickShooterCommand flightStickShooter = new FlightStickShooterCommand(shooter, gamepad2); // expects gamepad2 to be a Logitech Extreme 3D Pro
 
@@ -132,8 +131,8 @@ public class RobotContainer {
       backButton.whenPressed(teleOpDrive);
       // aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
 
-      yButton.whenPressed(ledsOn);
-      rightBumper.whenPressed(ledsOff);
+      aButton2.whenPressed(ledsOn);
+      bButton2.whenPressed(ledsOff);
 
       // intake commands
       leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
@@ -147,8 +146,11 @@ public class RobotContainer {
       xButton.whenPressed(shooterPresets);
       xButton.whenReleased(stopShooter);
 
-      yButton.whenPressed(extendLeftClimber);
-      rightBumper.whenPressed(retractLeftClimber);
+      yButton2.whileHeld(manualExtend).whenReleased(stopClimber);
+      rightBumper2.whileHeld(manualRetract).whenReleased(stopClimber);
+
+      yButton.whenPressed(deployIntake);
+      rightBumper.whenPressed(retractIntake);
 
       // === second driver ===
       // yButton.whenPressed(extendLeftClimber);

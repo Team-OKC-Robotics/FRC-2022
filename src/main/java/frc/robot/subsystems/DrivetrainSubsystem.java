@@ -48,7 +48,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private PIDController turnPID;
     
     // other variables
-    private double speedModifier = 1; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
+    private double speedModifier = 0.75; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
     //private double headingAngle = 0; // the heading of the robot. used to drive straight in auto.
 
     // shuffleboard
@@ -139,7 +139,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @param rightSpeed right speed
      */
     public void tankDrive(double leftSpeed, double rightSpeed) {
-        drivetrain.tankDrive(Math.pow(leftSpeed, 3) * speedModifier, Math.pow(rightSpeed, 3) * speedModifier, false);
+        drivetrain.tankDrive(leftSpeed * speedModifier, rightSpeed * speedModifier, true);
     }
 
     /**
@@ -186,7 +186,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the drivetrain, in inches
      */
     public double getEncoderAverage() {
-        return getInches(getLeftEncoderAverage() + getRightEncoderAverage()) / 2;
+        return (getLeftEncoderAverage() + -getRightEncoderAverage()) / 2;
     }
 
     /**
@@ -194,7 +194,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the left side of the drivetrain, in inches
      */
     public double getLeftEncoderAverage() {
-        return (left1Encoder.getPosition() + left2Encoder.getPosition() + left3Encoder.getPosition()) / 3;
+        return left1Encoder.getPosition();
+        // return (left1Encoder.getPosition() + left2Encoder.getPosition() + left3Encoder.getPosition()) / 3;
     }
 
     /**
@@ -202,7 +203,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the right side of the drivetrain, in inches
      */
     public double getRightEncoderAverage() {
-        return (right1Encoder.getPosition() + right2Encoder.getPosition() + right3Encoder.getPosition()) / 3;
+        return right1Encoder.getPosition();
+        // return (right1Encoder.getPosition() + right2Encoder.getPosition() + right3Encoder.getPosition()) / 3;
     }
 
     /**
@@ -222,12 +224,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     /**
-     * Converts ticks from encoders into inches using the constants in Constants.DriveK
-     * @param encoderTicks the number of ticks to convert
+     * Converts rotations from encoders into inches using the constants in Constants.DriveK
+     * @param rotations the number of rotations to convert
      * @return the number of inches that the ticks is equal to
      */
-    public double getInches(double encoderTicks) {
-        return encoderTicks / DriveK.ticksPerRev * DriveK.gearRatio * Math.PI * DriveK.wheelDiameter;
+    public double getInches(double rotations) {
+        return rotations * DriveK.gearRatio * Math.PI * DriveK.wheelDiameter;
     }
 
     /**

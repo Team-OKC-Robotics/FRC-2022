@@ -2,11 +2,14 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // actuators
     private TalonFX shooterMotor1;
+    private PIDController shooterPID;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("shooter");
@@ -34,7 +38,8 @@ public class ShooterSubsystem extends SubsystemBase {
     
     // sensors
     private NetworkTableEntry ticks = tab.add("shooter ticks", 0).getEntry();
-    private NetworkTableEntry shooterRPM = tab.add("shooter RPM", 0).getEntry();
+    private NetworkTableEntry shooterRPM = tab.add("shooter RPM", 0).withWidget(BuiltInWidgets.kGraph).getEntry();
+    private NetworkTableEntry shooterOutput = tab.add("shooter output", 0).withWidget(BuiltInWidgets.kGraph).getEntry();
     private NetworkTableEntry velocityError = tab.add("velocity error", 0).getEntry();
 
     // PID
@@ -42,6 +47,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private NetworkTableEntry shootI = tab.add("Shooter kI", ShootK.shootI).getEntry();
     private NetworkTableEntry shootD = tab.add("Shooter kD", ShootK.shootD).getEntry();
     private NetworkTableEntry shootF = tab.add("Shooter kF", ShootK.shootF).getEntry();
+    private NetworkTableEntry shooterGood = tab.add("shooter good", false).getEntry();
 
     // presets
     private NetworkTableEntry preset1 = tab.add("close launchpad preset", ShootK.preset1).getEntry();
@@ -61,12 +67,14 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterMotor1.setInverted(InvertType.InvertMotorOutput);
             shooterMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, 200);
             shooterMotor1.configNeutralDeadband(0);
+            shooterMotor1.setNeutralMode(NeutralMode.Coast);
             shooterMotor1.config_kP(0, ShootK.shootP, 200);
             shooterMotor1.config_kI(0, ShootK.shootI, 200);
             shooterMotor1.config_kD(0, ShootK.shootD, 200);
             shooterMotor1.config_kF(0, ShootK.shootF, 200);
 
             shooterMotor1.setSelectedSensorPosition(0);
+            shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
         }
     }
 
@@ -76,7 +84,8 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void setShooter(double RPM) {
         if (shooterMotor1 != null) {
-            shooterMotor1.set(ControlMode.Velocity, RPM/* * 2048.0 / 600.0*/); // have to convert to units / 100ms or something?
+            shooterMotor1.set(ControlMode.PercentOutput, -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity()));
+            //shooterMotor1.set(ControlMode.Velocity, RPM/* * 2048.0 / 600.0*/); // have to convert to units / 100ms or something?
         }
     }
 
@@ -106,8 +115,9 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public boolean atShooterSetpoint() {
         if (shooterMotor1 != null) {
+            return shooterPID.atSetpoint();
             //TODO check and make sure I'm accounting for velocity error correctly
-            return Math.abs(shooterMotor1.getClosedLoopError()) < 100 && shooterMotor1.getErrorDerivative() < 100; //???
+            //return Math.abs(shooterMotor1.getClosedLoopError()) < 100 && shooterMotor1.getErrorDerivative() < 100; //???
         }
         return true;
     }
@@ -118,16 +128,21 @@ public class ShooterSubsystem extends SubsystemBase {
         if (shooterMotor1 != null) {
             ticks.setDouble(shooterMotor1.getSelectedSensorPosition());
             shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
-            velocityError.setDouble(shooterMotor1.getSelectedSensorVelocity());
+            velocityError.setDouble(shooterMotor1.getClosedLoopError());
+            shooterGood.setBoolean(atShooterSetpoint());
+            shooterOutput.setDouble(shooterMotor1.getMotorOutputPercent());
         }
         
         // Shuffleboard on-the-fly tuning
         if (writeMode.getBoolean(false)) {
             if (shooterMotor1 != null) {
-                shooterMotor1.config_kP(0, shootP.getDouble(ShootK.shootP));
-                shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
-                shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
-                shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
+                // shooterMotor1.config_kP(0, shootP.getDouble(ShootK.shootP));
+                // shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
+                // shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
+                // shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
+                shooterPID.setP(shootP.getDouble(ShootK.shootP));
+                shooterPID.setI(shootI.getDouble(ShootK.shootI));
+                shooterPID.setD(shootD.getDouble(ShootK.shootD));
             }
         }
     }
