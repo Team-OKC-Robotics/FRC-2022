@@ -8,20 +8,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.DoNothingAuto;
 import frc.robot.autos.DriveOffLineAuto;
 import frc.robot.autos.GyroTestAuto;
 import frc.robot.commands.drivetrain.TeleOpDriveCommand;
-import frc.robot.commands.intake.SetIndexerCommand;
-import frc.robot.commands.intake.SetIntakeCommand;
-import frc.robot.commands.intake.SetIntakePositionCommand;
-import frc.robot.commands.vision.SetLEDsCommand;
-import frc.robot.commands.vision.VisionAlignCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.AutoChooser;
 
 /**
@@ -66,8 +58,6 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
 
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
-  private final IntakeSubsystem intake = new IntakeSubsystem();
-  private final VisionSubsystem vision = new VisionSubsystem();
 
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
@@ -76,19 +66,6 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
 
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
-
-  // intake
-  private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.3);
-  private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
-  private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
-  private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
-  private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 1);
-  private final SetIndexerCommand stopIndexer = new SetIndexerCommand(intake, 0);
-
-  // vision
-  private final VisionAlignCommand visionAlign = new VisionAlignCommand(vision, drivetrain);
-  private final SetLEDsCommand ledsOn = new SetLEDsCommand(vision, true);
-  private final SetLEDsCommand ledsOff = new SetLEDsCommand(vision, false);
   
   
   /**
@@ -114,12 +91,6 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
   private void configureButtonBindings() {
       // drivetrain commands
       backButton.whenPressed(teleOpDrive);
-      aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
-
-      // intake commands
-      leftBumper.whenPressed(intakeIn).whenPressed(deployIntake);
-      leftBumper.whenPressed(indexerIn).whenReleased(stopIndexer);
-      leftBumper.whenReleased(stopIntake);
 
       // probably don't need these
       // aButton.whenPressed(ledsOn);
