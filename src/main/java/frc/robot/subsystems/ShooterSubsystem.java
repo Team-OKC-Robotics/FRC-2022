@@ -115,7 +115,8 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public boolean atShooterSetpoint() {
         if (shooterMotor1 != null) {
-            return shooterPID.atSetpoint();
+            // return shooterPID.atSetpoint();
+            return Math.abs(shooterMotor1.getSelectedSensorVelocity() - ShootK.tarmacPreset + 1000) < 500; //??? I know that's the only preset we're going for but 
             //TODO check and make sure I'm accounting for velocity error correctly
             //return Math.abs(shooterMotor1.getClosedLoopError()) < 100 && shooterMotor1.getErrorDerivative() < 100; //???
         }
