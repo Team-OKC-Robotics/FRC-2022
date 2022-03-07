@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -38,8 +39,8 @@ public class ShooterSubsystem extends SubsystemBase {
     
     // sensors
     private NetworkTableEntry ticks = tab.add("shooter ticks", 0).getEntry();
-    private NetworkTableEntry shooterRPM = tab.add("shooter RPM", 0).withWidget(BuiltInWidgets.kGraph).getEntry();
-    private NetworkTableEntry shooterOutput = tab.add("shooter output", 0).withWidget(BuiltInWidgets.kGraph).getEntry();
+    private NetworkTableEntry shooterRPM = tab.add("shooter RPM", 0).getEntry();
+    private NetworkTableEntry shooterOutput = tab.add("shooter output", 0).getEntry();
     private NetworkTableEntry velocityError = tab.add("velocity error", 0).getEntry();
 
     // PID
@@ -71,7 +72,7 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterMotor1.config_kP(0, ShootK.shootP, 200);
             shooterMotor1.config_kI(0, ShootK.shootI, 200);
             shooterMotor1.config_kD(0, ShootK.shootD, 200);
-            shooterMotor1.config_kF(0, ShootK.shootF, 200);
+            // shooterMotor1.config_kF(0, ShootK.shootF, 200);
 
             shooterMotor1.setSelectedSensorPosition(0);
             shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
@@ -84,8 +85,8 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void setShooter(double RPM) {
         if (shooterMotor1 != null) {
-            shooterMotor1.set(ControlMode.PercentOutput, -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity()));
-            //shooterMotor1.set(ControlMode.Velocity, RPM/* * 2048.0 / 600.0*/); // have to convert to units / 100ms or something?
+            // shooterMotor1.set(ControlMode.PercentOutput, -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity()));
+            shooterMotor1.set(ControlMode.Velocity, RPM/* * 2048.0 / 600.0*/, DemandType.ArbitraryFeedForward, 0.4); // have to convert to units / 100ms or something?
         }
     }
 
@@ -116,9 +117,9 @@ public class ShooterSubsystem extends SubsystemBase {
     public boolean atShooterSetpoint() {
         if (shooterMotor1 != null) {
             // return shooterPID.atSetpoint();
-            return Math.abs(shooterMotor1.getSelectedSensorVelocity() - ShootK.tarmacPreset + 1000) < 500; //??? I know that's the only preset we're going for but 
+            // return Math.abs(shooterMotor1.getSelectedSensorVelocity() - ShootK.tarmacPreset) < 500 && shooterPID.getVelocityError() < 100; //??? I know that's the only preset we're going for but 
             //TODO check and make sure I'm accounting for velocity error correctly
-            //return Math.abs(shooterMotor1.getClosedLoopError()) < 100 && shooterMotor1.getErrorDerivative() < 100; //???
+            return Math.abs(shooterMotor1.getClosedLoopError()) < 200 && shooterMotor1.getErrorDerivative() < 100; //???
         }
         return true;
     }
@@ -141,9 +142,9 @@ public class ShooterSubsystem extends SubsystemBase {
                 // shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
                 // shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
                 // shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
-                shooterPID.setP(shootP.getDouble(ShootK.shootP));
-                shooterPID.setI(shootI.getDouble(ShootK.shootI));
-                shooterPID.setD(shootD.getDouble(ShootK.shootD));
+                // shooterPID.setP(shootP.getDouble(ShootK.shootP));
+                // shooterPID.setI(shootI.getDouble(ShootK.shootI));
+                // shooterPID.setD(shootD.getDouble(ShootK.shootD));
             }
         }
     }

@@ -16,6 +16,7 @@ public final class Constants {
     public static final double neo550TicksPerRev = 42;
     public static final double neoTicksPerRev = 42;
     public static final double falconTicksPerRev = 2048;
+    public static final boolean competition = false; // if enabled, disables a lot of the automatic shuffleboard values
 
     public final class DriveK {
         public static final double ticksPerRev = neoTicksPerRev;
@@ -36,10 +37,10 @@ public final class Constants {
     }
 
     public final class ShootK {
-        public static final double shootP = 0.00035;
+        public static final double shootP = 0.3;
         public static final double shootI = 0;
-        public static final double shootD = 0.000002;
-        public static final double shootF = 0.0;
+        public static final double shootD = 0.0001;
+        public static final double shootF = 0.4;
 
         public static final double preset1 = 9000; // in RPM, close launchpad distance (actually this is the right next to tower goal which is the only shot we can make)
         public static final double preset2 = 18000; // in RPM, far launchpad distance

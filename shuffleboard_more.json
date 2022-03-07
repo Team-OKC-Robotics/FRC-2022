@@ -103,25 +103,6 @@
               "_title": "Shuffleboard/autoChooser/decrease auto index"
             }
           },
-          "2,0": {
-            "size": [
-              6,
-              4
-            ],
-            "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://mmal_service_16.1-output",
-              "_title": "mmal_service_16.1-output",
-              "Crosshair/Show crosshair": true,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
-              "compression": 30.0,
-              "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
-            }
-          },
           "0,4": {
             "size": [
               2,
@@ -201,7 +182,7 @@
               "Visuals/Show Outside Circles": false
             }
           },
-          "10,4": {
+          "2,0": {
             "size": [
               6,
               4
@@ -215,7 +196,7 @@
               "Controls/Show controls": true,
               "Controls/Rotation": "NONE",
               "compression": -1.0,
-              "fps": 30,
+              "fps": 10,
               "imageWidth": 480,
               "imageHeight": 240
             }

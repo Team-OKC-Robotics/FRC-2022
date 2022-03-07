@@ -20,12 +20,13 @@ public class ShootThenDriveAuto extends Auto {
             "An auto that shoots the preloaded, then drives off the tarmac",
             6,
             new SetShooterCommand(shooter, ShootK.tarmacPreset), // warm up the shooter
-            new ShootAndFeedCommand(shooter, intake, ShootK.tarmacPreset), // once it's there run both the shooter and the indexer
-            new WaitCommand(3), //???
+            new ShootAndFeedCommand(shooter, intake, ShootK.tarmacPreset, 3), // once it's there run both the shooter and the indexer for 3 seconds
             new StopShooterCommand(shooter),
             new SetIndexerCommand(intake, 0),
             new DriveCommand(drivetrain, -30),
-            new SetIntakePositionCommand(intake, false)
+            new SetIntakePositionCommand(intake, false) // deploy the intake to be ready for tele-op
         );
     }
 }
+//Danial, if you read this, run
+//to where? and you spelt my name wrong like what the heck

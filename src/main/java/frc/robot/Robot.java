@@ -7,7 +7,9 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,8 +41,10 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true); //FIXME we probably want this when at competition
     //camera = new HttpCamera("photoncam", "http://photonvision.local:1182/stream.mjpg", HttpCameraKind.kMJPGStreamer);
-    CameraServer.startAutomaticCapture();
-    //driverCamera.
+    driverCamera = CameraServer.startAutomaticCapture();
+    driverCamera.setFPS(20);
+    driverCamera.setResolution(320, 240);
+    driverCamera.setPixelFormat(PixelFormat.kMJPEG);
   }
 
   /**

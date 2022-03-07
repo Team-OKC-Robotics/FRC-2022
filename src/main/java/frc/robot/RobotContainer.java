@@ -93,7 +93,8 @@ public class RobotContainer {
   private final SetIntakeCommand intakeOut = new SetIntakeCommand(intake, -1);
   private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
   private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
-  private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 1);
+  private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 0.2);
+  private final SetIndexerCommand indexerOut = new SetIndexerCommand(intake, -0.2);
   private final SetIndexerCommand stopIndexer = new SetIndexerCommand(intake, 0);
 
   // vision
