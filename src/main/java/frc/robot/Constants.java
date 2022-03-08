@@ -16,16 +16,16 @@ public final class Constants {
     public static final double neo550TicksPerRev = 42;
     public static final double neoTicksPerRev = 42;
     public static final double falconTicksPerRev = 2048;
-    public static final boolean competition = false; // if enabled, disables a lot of the automatic shuffleboard values
+    public static final boolean competition = true; // if enabled, disables a lot of the automatic shuffleboard values
 
     public final class DriveK {
         public static final double ticksPerRev = neoTicksPerRev;
         public static final double gearRatio = 1/9.64; //probably wrote that correctly
         public static final double wheelDiameter = 6;
 
-        public static final double distanceP = 0.01;
+        public static final double distanceP = 0.05;
         public static final double distanceI = 0;
-        public static final double distanceD = 0.001;
+        public static final double distanceD = 0.01;
 
         public static final double headingP = 0.03;
         public static final double headingI = 0;

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.VisionK;
 
 public class VisionSubsystem extends SubsystemBase {
@@ -131,13 +132,15 @@ public class VisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // leds.set(ledMode.getBoolean(false) ? Value.kOff : Value.kReverse); // I think that's how you use ternary
-        // idk I use Python man
-
-        if (toggleMode.getBoolean(false)) {
-            camera.setDriverMode(!camera.getDriverMode());
-            toggleMode.setBoolean(false);
-           // camera.setPipelineIndex(0);
+        if (Constants.competition) {
+            leds.set(ledMode.getBoolean(false) ? Value.kForward : Value.kOff); // I think that's how you use ternary
+            // idk I use Python man
+    
+            if (toggleMode.getBoolean(false)) {
+                camera.setDriverMode(!camera.getDriverMode());
+                toggleMode.setBoolean(false);
+               // camera.setPipelineIndex(0);
+            }
         }
     }
 }

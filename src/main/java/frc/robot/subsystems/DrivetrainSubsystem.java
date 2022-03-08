@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveK;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -99,7 +100,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rightSide.setInverted(true);
         drivetrain = new DifferentialDrive(leftSide, rightSide);
        
-        drivetrain.setMaxOutput(0.5);
+        // drivetrain.setMaxOutput(0.5);
 
         left1Encoder = left1Motor.getEncoder();
         left2Encoder = left2Motor.getEncoder();
@@ -299,31 +300,33 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        // update Shuffelboard values
-        leftTicks.setDouble(getLeftEncoderAverage());
-        rightTicks.setDouble(getRightEncoderAverage());
-        totalTicks.setDouble(getEncoderAverage());
-        heading.setDouble(getHeading());
-        distanceError.setDouble(distancePID.getPositionError());
-
-        // Shuffleboard on-the-fly tuning
-        if (writeMode.getBoolean(false)) {
-            distancePID.setP(distanceP.getDouble(DriveK.distanceP));
-            distancePID.setI(distanceI.getDouble(DriveK.distanceI));
-            distancePID.setD(distanceD.getDouble(DriveK.distanceD));
-
-            headingPID.setP(headingP.getDouble(DriveK.headingP));
-            headingPID.setI(headingI.getDouble(DriveK.headingI));
-            headingPID.setD(headingD.getDouble(DriveK.headingD));
-
-            turnPID.setP(turnP.getDouble(DriveK.turnP));
-            turnPID.setI(turnI.getDouble(DriveK.turnI));
-            turnPID.setD(turnD.getDouble(DriveK.turnD));
-        }
-
-        if (resetGyro.getBoolean(false)) {
-            resetGyro();
-            resetGyro.setBoolean(false);
+        if (Constants.competition) {
+            // update Shuffelboard values
+            leftTicks.setDouble(getLeftEncoderAverage());
+            rightTicks.setDouble(getRightEncoderAverage());
+            totalTicks.setDouble(getEncoderAverage());
+            heading.setDouble(getHeading());
+            distanceError.setDouble(distancePID.getPositionError());
+    
+            // Shuffleboard on-the-fly tuning
+            if (writeMode.getBoolean(false)) {
+                distancePID.setP(distanceP.getDouble(DriveK.distanceP));
+                distancePID.setI(distanceI.getDouble(DriveK.distanceI));
+                distancePID.setD(distanceD.getDouble(DriveK.distanceD));
+    
+                headingPID.setP(headingP.getDouble(DriveK.headingP));
+                headingPID.setI(headingI.getDouble(DriveK.headingI));
+                headingPID.setD(headingD.getDouble(DriveK.headingD));
+    
+                turnPID.setP(turnP.getDouble(DriveK.turnP));
+                turnPID.setI(turnI.getDouble(DriveK.turnI));
+                turnPID.setD(turnD.getDouble(DriveK.turnD));
+            }
+    
+            if (resetGyro.getBoolean(false)) {
+                resetGyro();
+                resetGyro.setBoolean(false);
+            }
         }
     }
 }

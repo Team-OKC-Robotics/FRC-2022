@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ShootK;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -119,32 +120,34 @@ public class ShooterSubsystem extends SubsystemBase {
             // return shooterPID.atSetpoint();
             // return Math.abs(shooterMotor1.getSelectedSensorVelocity() - ShootK.tarmacPreset) < 500 && shooterPID.getVelocityError() < 100; //??? I know that's the only preset we're going for but 
             //TODO check and make sure I'm accounting for velocity error correctly
-            return Math.abs(shooterMotor1.getClosedLoopError()) < 200 && shooterMotor1.getErrorDerivative() < 100; //???
+            return Math.abs(shooterMotor1.getClosedLoopError()) < 100 && shooterMotor1.getErrorDerivative() < 10; //???
         }
         return true;
     }
 
     @Override
     public void periodic() {
-        // update Shuffelboard values
-        if (shooterMotor1 != null) {
-            ticks.setDouble(shooterMotor1.getSelectedSensorPosition());
-            shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
-            velocityError.setDouble(shooterMotor1.getClosedLoopError());
-            shooterGood.setBoolean(atShooterSetpoint());
-            shooterOutput.setDouble(shooterMotor1.getMotorOutputPercent());
-        }
-        
-        // Shuffleboard on-the-fly tuning
-        if (writeMode.getBoolean(false)) {
+        if (Constants.competition) {
+            // update Shuffelboard values
             if (shooterMotor1 != null) {
-                // shooterMotor1.config_kP(0, shootP.getDouble(ShootK.shootP));
-                // shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
-                // shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
-                // shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
-                // shooterPID.setP(shootP.getDouble(ShootK.shootP));
-                // shooterPID.setI(shootI.getDouble(ShootK.shootI));
-                // shooterPID.setD(shootD.getDouble(ShootK.shootD));
+                ticks.setDouble(shooterMotor1.getSelectedSensorPosition());
+                shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
+                velocityError.setDouble(shooterMotor1.getClosedLoopError());
+                shooterGood.setBoolean(atShooterSetpoint());
+                shooterOutput.setDouble(shooterMotor1.getMotorOutputPercent());
+            }
+            
+            // Shuffleboard on-the-fly tuning
+            if (writeMode.getBoolean(false)) {
+                if (shooterMotor1 != null) {
+                    // shooterMotor1.config_kP(0, shootP.getDouble(ShootK.shootP));
+                    // shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
+                    // shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
+                    // shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
+                    // shooterPID.setP(shootP.getDouble(ShootK.shootP));
+                    // shooterPID.setI(shootI.getDouble(ShootK.shootI));
+                    // shooterPID.setD(shootD.getDouble(ShootK.shootD));
+                }
             }
         }
     }

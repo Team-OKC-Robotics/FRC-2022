@@ -1,5 +1,6 @@
 package frc.robot.autos;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ShootK;
 import frc.robot.commands.drivetrain.DriveCommand;
@@ -19,11 +20,11 @@ public class ShootThenDriveAuto extends Auto {
             "Shoot then drive auto",
             "An auto that shoots the preloaded, then drives off the tarmac",
             6,
-            new SetShooterCommand(shooter, ShootK.tarmacPreset), // warm up the shooter
-            new ShootAndFeedCommand(shooter, intake, ShootK.tarmacPreset, 3), // once it's there run both the shooter and the indexer for 3 seconds
+            new ParallelCommandGroup(new SetShooterCommand(shooter, ShootK.preset1), new WaitCommand(2)), // warm up the shooter
+            new ShootAndFeedCommand(shooter, intake, ShootK.preset1, 3), // once it's there run both the shooter and the indexer for 3 seconds
             new StopShooterCommand(shooter),
             new SetIndexerCommand(intake, 0),
-            new DriveCommand(drivetrain, -30),
+            new DriveCommand(drivetrain, -80),
             new SetIntakePositionCommand(intake, false) // deploy the intake to be ready for tele-op
         );
     }

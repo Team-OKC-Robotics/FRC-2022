@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.IntakeK;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -139,47 +140,49 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // if (deployedLimitSwitch.get()) {
-        //     deployedSwitch.setBoolean(true);
-        // } else {
-        //     deployedSwitch.setBoolean(false);
-        // }
-        
-        // if (retractedLimitSwitch.get()) {
-        //     retractedSwitch.setBoolean(true);
-        // } else {
-        //     retractedSwitch.setBoolean(false);
-        // }
-        // retracted limit switch is reversed logic
-        // deployed is reversed aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        
-        
-        if (direction != 0) {
-            if (!deployedLimitSwitch.get() == true && direction == -1) {
-                // deployed.setBoolean(true);
-                deployMotor.set(0);
-            } else if (!retractedLimitSwitch.get() == true && direction == 1) {
-                // deployed.setBoolean(false);
-                deployMotor.set(0);
-            } else {
-                double power = deployPID.calculate(deployEncoder.getPosition());
-                if (Math.abs(power) > 0.4) {
-                    power = Math.copySign(0.4, power);
+        if (Constants.competition) {
+            // if (deployedLimitSwitch.get()) {
+            //     deployedSwitch.setBoolean(true);
+            // } else {
+            //     deployedSwitch.setBoolean(false);
+            // }
+            
+            // if (retractedLimitSwitch.get()) {
+            //     retractedSwitch.setBoolean(true);
+            // } else {
+            //     retractedSwitch.setBoolean(false);
+            // }
+            // retracted limit switch is reversed logic
+            // deployed is reversed aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+            
+            
+            if (direction != 0) {
+                if (!deployedLimitSwitch.get() == true && direction == -1) {
+                    // deployed.setBoolean(true);
+                    deployMotor.set(0);
+                } else if (!retractedLimitSwitch.get() == true && direction == 1) {
+                    // deployed.setBoolean(false);
+                    deployMotor.set(0);
+                } else {
+                    double power = deployPID.calculate(deployEncoder.getPosition());
+                    if (Math.abs(power) > 0.4) {
+                        power = Math.copySign(0.4, power);
+                    }
+                    deployMotor.set(power);
                 }
-                deployMotor.set(power);
             }
-        }
-
-        if (deployEncoder != null) {
-            ticks.setDouble(deployEncoder.getPosition());
-            velocity.setDouble(deployEncoder.getVelocity());
-        }
-
-        if (writeMode.getBoolean(false)) {
-            if (extendPID != null) {
-                extendPID.setP(intakeP.getDouble(IntakeK.deployP));
-                extendPID.setI(intakeI.getDouble(IntakeK.deployI));
-                extendPID.setD(intakeD.getDouble(IntakeK.deployD));
+    
+            if (deployEncoder != null) {
+                ticks.setDouble(deployEncoder.getPosition());
+                velocity.setDouble(deployEncoder.getVelocity());
+            }
+    
+            if (writeMode.getBoolean(false)) {
+                if (extendPID != null) {
+                    extendPID.setP(intakeP.getDouble(IntakeK.deployP));
+                    extendPID.setI(intakeI.getDouble(IntakeK.deployI));
+                    extendPID.setD(intakeD.getDouble(IntakeK.deployD));
+                }
             }
         }
     }

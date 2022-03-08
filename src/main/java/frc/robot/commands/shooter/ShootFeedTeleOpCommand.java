@@ -35,6 +35,6 @@ public class ShootFeedTeleOpCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return shooter.atShooterSetpoint();
+        return false;
     }
 }
