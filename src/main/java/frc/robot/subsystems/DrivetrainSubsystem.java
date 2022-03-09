@@ -90,12 +90,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
         right3Motor = new CANSparkMax(6, MotorType.kBrushless);
         rightSide = new MotorControllerGroup(right1Motor, right2Motor, right3Motor);
 
-        left1Motor.setIdleMode(IdleMode.kBrake);
-        left2Motor.setIdleMode(IdleMode.kBrake);
-        left3Motor.setIdleMode(IdleMode.kBrake);
-        right1Motor.setIdleMode(IdleMode.kBrake);
-        right2Motor.setIdleMode(IdleMode.kBrake);
-        right3Motor.setIdleMode(IdleMode.kBrake);
+        left1Motor.setIdleMode(IdleMode.kCoast);
+        left2Motor.setIdleMode(IdleMode.kCoast);
+        left3Motor.setIdleMode(IdleMode.kCoast);
+        right1Motor.setIdleMode(IdleMode.kCoast);
+        right2Motor.setIdleMode(IdleMode.kCoast);
+        right3Motor.setIdleMode(IdleMode.kCoast);
 
         rightSide.setInverted(true);
         drivetrain = new DifferentialDrive(leftSide, rightSide);

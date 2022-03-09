@@ -31,6 +31,7 @@ public class RobotContainer {
   // gamepads
   private final Joystick gamepad1 = new Joystick(0);
   private final Joystick gamepad2 = new Joystick(1);
+  private final Joystick gamepad3 = new Joystick(2);
 
   // buttons
   private JoystickButton aButton = new JoystickButton(gamepad1, 1);
@@ -54,6 +55,20 @@ public class RobotContainer {
   private JoystickButton startButton2 = new JoystickButton(gamepad2, 8);
   private JoystickButton rightStickButton2 = new JoystickButton(gamepad2, 10);
   private JoystickButton leftStickButton2 = new JoystickButton(gamepad2, 9);
+
+  private JoystickButton triggerButton = new JoystickButton(gamepad3, 1); // 1
+  private JoystickButton sideButton = new JoystickButton(gamepad3, 2); // 2
+  private JoystickButton topLeftButton = new JoystickButton(gamepad3, 5); // 5 
+  private JoystickButton topRightButton = new JoystickButton(gamepad3, 6); // 6
+  private JoystickButton bottomLeftButton = new JoystickButton(gamepad3, 3); // 3
+  private JoystickButton bottomRightButton = new JoystickButton(gamepad3, 4); // 4
+  private JoystickButton sevenButton = new JoystickButton(gamepad3, 7); // as they are named
+  private JoystickButton eightButton = new JoystickButton(gamepad3, 8); // as they are named
+  private JoystickButton nineButton = new JoystickButton(gamepad3, 9); // as they are named
+  private JoystickButton tenButton; // as they are named
+  private JoystickButton elevenButton; // as they are named
+  private JoystickButton twelveButton; // 12
+  
 
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
@@ -84,7 +99,7 @@ public class RobotContainer {
   // private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, -45, false);
 
   private final ManualClimberCommand manualExtend = new ManualClimberCommand(climber, 0.5);
-  private final ManualClimberCommand manualRetract = new ManualClimberCommand(climber, -0.5);
+  private final ManualClimberCommand manualRetract = new ManualClimberCommand(climber, -0.6);
   private final ManualClimberCommand stopClimber = new ManualClimberCommand(climber, 0);
 
   // intake
@@ -149,6 +164,16 @@ public class RobotContainer {
       // climber commands
       yButton2.whileHeld(manualExtend).whenReleased(stopClimber);
       startButton2.whileHeld(manualRetract).whenReleased(stopClimber);
+
+      // fun flight stick controls
+      triggerButton.whenPressed(fastIndexer).whenReleased(stopIndexer);
+      sideButton.whenPressed(fastShooter).whenReleased(stopShooter);
+      topLeftButton.whenPressed(deployIntake);
+      bottomLeftButton.whenPressed(retractIntake);
+      topRightButton.whenPressed(manualExtend).whenReleased(stopClimber);
+      bottomRightButton.whenPressed(manualRetract).whenReleased(stopClimber);
+      sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer);
+      eightButton.whenPressed(indexerIn).whenReleased(stopIndexer);
   }
 
   public Command getDriveCommand() {
