@@ -46,7 +46,7 @@ public class VisionSubsystem extends SubsystemBase {
         leds = new Relay(3, Direction.kBoth);
         leds = new Relay(2, Direction.kBoth);
 
-        leds.set(Value.kOn); // turn the leds off (yes I know it says kOn)
+        leds.set(Value.kOff); // turn the leds off (yes I know it says kOn)
     }
 
     /**
@@ -132,8 +132,8 @@ public class VisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (Constants.competition) {
-            leds.set(ledMode.getBoolean(false) ? Value.kForward : Value.kOff); // I think that's how you use ternary
+        if (!Constants.competition) {
+            // leds.set(ledMode.getBoolean(false) ? Value.kForward : Value.kOff); // I think that's how you use ternary
             // idk I use Python man
     
             if (toggleMode.getBoolean(false)) {

@@ -56,7 +56,7 @@ public final class Constants {
 
         //TODO test and tune this
         public static final double RAISED = 0; // ticks for intake at raised position (actually this would be 0)
-        public static final double EXTENDED = -neo550TicksPerRev * 1.4; // ticks for intake being extended
+        public static final double EXTENDED = neo550TicksPerRev * 1.4; // ticks for intake being extended
 
         public static final float maxDeploy = 1000000;
     }

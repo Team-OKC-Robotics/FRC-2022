@@ -87,6 +87,7 @@ public class RobotContainer {
 
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
+  private final SlowTeleOpDrive slowTeleOpDrive = new SlowTeleOpDrive(drivetrain, gamepad1);
   
   // private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, true);
   // private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
@@ -122,7 +123,8 @@ public class RobotContainer {
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
   private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad1);
   // private final ShootFeedTeleOpCommand fastShooter = new ShootFeedTeleOpCommand(shooter, intake, 9500);
-  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 10000);
+  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 9000);
+  // private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 5000);
   private final FlightStickShooterCommand flightStickShooter = new FlightStickShooterCommand(shooter, gamepad2); // expects gamepad2 to be a Logitech Extreme 3D Pro
 
   /**
@@ -148,6 +150,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
       // drivetrain commands
       backButton.whenPressed(teleOpDrive);
+      aButton.whenPressed(slowTeleOpDrive).whenReleased(teleOpDrive); // for lining up climber and stuff
       // aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
 
       // intake commands
@@ -165,11 +168,11 @@ public class RobotContainer {
       yButton2.whileHeld(manualExtend).whenReleased(stopClimber);
       startButton2.whileHeld(manualRetract).whenReleased(stopClimber);
 
-      // fun flight stick controls
+      // fun flight stick controls (this is really fun can confirm)
       triggerButton.whenPressed(fastIndexer).whenReleased(stopIndexer);
       sideButton.whenPressed(fastShooter).whenReleased(stopShooter);
-      topLeftButton.whenPressed(deployIntake);
-      bottomLeftButton.whenPressed(retractIntake);
+      topLeftButton.whenPressed(retractIntake);
+      bottomLeftButton.whenPressed(deployIntake);
       topRightButton.whenPressed(manualExtend).whenReleased(stopClimber);
       bottomRightButton.whenPressed(manualRetract).whenReleased(stopClimber);
       sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer);

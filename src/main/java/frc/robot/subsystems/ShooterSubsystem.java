@@ -127,7 +127,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (Constants.competition) {
+        if (!Constants.competition) {
             // update Shuffelboard values
             if (shooterMotor1 != null) {
                 ticks.setDouble(shooterMotor1.getSelectedSensorPosition());

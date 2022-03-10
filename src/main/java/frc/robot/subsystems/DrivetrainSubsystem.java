@@ -153,6 +153,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
     
     /**
+     * Arcade drives the robot. Does not square the inputs.
+     * @param speed the speed of the robot
+     * @param turn how much to turn the robot
+     */
+    public void arcadeDrive(double speed, double turn, boolean squareInputs) {
+        drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, squareInputs);
+    }
+
+    /**
      * Drives the drivetrain straight for the given distance
      * @param distance the distance, in inches, to drive forwards
      */
@@ -294,13 +303,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
         gyro.reset();
     }
 
+    public void setMaxOutput(double maxOutput) {
+        drivetrain.setMaxOutput(maxOutput);
+    }
+
     /**
      * Our periodic function, gets called every robot loop iteration
      * Updates shuffleboard values.
      */
     @Override
     public void periodic() {
-        if (Constants.competition) {
+        if (!Constants.competition) {
             // update Shuffelboard values
             leftTicks.setDouble(getLeftEncoderAverage());
             rightTicks.setDouble(getRightEncoderAverage());

@@ -20,12 +20,13 @@ public class ShootThenDriveAuto extends Auto {
             "Shoot then drive auto",
             "An auto that shoots the preloaded, then drives off the tarmac",
             6,
-            new ParallelCommandGroup(new SetShooterCommand(shooter, ShootK.preset1), new WaitCommand(2)), // warm up the shooter
+            new ParallelCommandGroup(new SetShooterCommand(shooter, 8000), new WaitCommand(2)), // warm up the shooter
             new ShootAndFeedCommand(shooter, intake, ShootK.preset1, 3), // once it's there run both the shooter and the indexer for 3 seconds
             new StopShooterCommand(shooter),
             new SetIndexerCommand(intake, 0),
             new DriveCommand(drivetrain, -80),
-            new SetIntakePositionCommand(intake, false) // deploy the intake to be ready for tele-op
+            new SetIntakePositionCommand(intake, true), // deploy the intake to be ready for tele-op
+            new WaitCommand(3) // wait for the intake to get fully deployed
         );
     }
 }

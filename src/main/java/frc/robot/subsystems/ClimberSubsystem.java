@@ -196,7 +196,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (Constants.competition) {            
+        if (!Constants.competition) {            
             if (leftTiltEncoder != null) {
                 leftTiltPos.setDouble(leftTiltEncoder.getPosition());
             }

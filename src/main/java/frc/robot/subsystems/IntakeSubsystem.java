@@ -40,7 +40,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry velocity = tab.add("intake velocity", 0).getEntry();
     private NetworkTableEntry deployedSwitch = tab.add("deployed switch", false).getEntry();
     private NetworkTableEntry retractedSwitch = tab.add("retracted switch", false).getEntry();
-    
+    private NetworkTableEntry extended = tab.add("extended", false).getEntry();
     
     // PID
     private NetworkTableEntry intakeP = tab.add("Intake kP", IntakeK.deployP).getEntry();
@@ -66,13 +66,12 @@ public class IntakeSubsystem extends SubsystemBase {
             extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
             deployEncoder = deployMotor.getEncoder();
             deployMotor.setSoftLimit(SoftLimitDirection.kForward, IntakeK.maxDeploy);
-            deployMotor.setIdleMode(IdleMode.kCoast); //FIXME;
+            deployMotor.setIdleMode(IdleMode.kCoast);
             deployEncoder.setPosition(0);
 
             extendPID.setP(IntakeK.deployP);
             extendPID.setI(IntakeK.deployI);
             extendPID.setD(IntakeK.deployD);
-            
         }
 
         if (indexerMotor != null) {
@@ -133,46 +132,49 @@ public class IntakeSubsystem extends SubsystemBase {
      * @return true if the intake is extended
      */
     public boolean isExtended() {
-        // this actually might not be the greatest because it could actually be in a half-extended/half-retracted position
-        // but I don't think it's all that important
         return deployEncoder.getPosition() == IntakeK.EXTENDED;
     }
 
     @Override
     public void periodic() {
-        if (Constants.competition) {
-            // if (deployedLimitSwitch.get()) {
-            //     deployedSwitch.setBoolean(true);
-            // } else {
-            //     deployedSwitch.setBoolean(false);
-            // }
-            
-            // if (retractedLimitSwitch.get()) {
-            //     retractedSwitch.setBoolean(true);
-            // } else {
-            //     retractedSwitch.setBoolean(false);
-            // }
-            // retracted limit switch is reversed logic
-            // deployed is reversed aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-            
-            
-            if (direction != 0) {
-                if (!deployedLimitSwitch.get() == true && direction == -1) {
-                    // deployed.setBoolean(true);
-                    deployMotor.set(0);
-                } else if (!retractedLimitSwitch.get() == true && direction == 1) {
-                    // deployed.setBoolean(false);
-                    deployMotor.set(0);
-                } else {
-                    double power = deployPID.calculate(deployEncoder.getPosition());
-                    if (Math.abs(power) > 0.4) {
-                        power = Math.copySign(0.4, power);
-                    }
-                    deployMotor.set(power);
-                }
+        if (deployedLimitSwitch.get()) {
+            deployedSwitch.setBoolean(true);
+        } else {
+            deployedSwitch.setBoolean(false);
+        }
+        
+        if (retractedLimitSwitch.get()) {
+            retractedSwitch.setBoolean(true);
+        } else {
+            retractedSwitch.setBoolean(false);
+        }
+
+        if (!deployedLimitSwitch.get()) {
+            deployEncoder.setPosition(IntakeK.EXTENDED);
+        } else if (!retractedLimitSwitch.get()) {
+            deployEncoder.setPosition(0);
+        }
+        // retracted limit switch is reversed logic
+        // deployed is reversed aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+           
+        if (direction != 0) {
+            if (!deployedLimitSwitch.get() && direction == -1) {
+                // deployed.setBoolean(true);
+                deployMotor.set(0);
+            } else if (!retractedLimitSwitch.get() && direction == 1) {
+                // deployed.setBoolean(false);
+                deployMotor.set(0);
             }
-    
+            double power = deployPID.calculate(deployEncoder.getPosition());
+            if (Math.abs(power) > 0.4) {
+                power = Math.copySign(0.4, power);
+            }
+            deployMotor.set(power);
+        }
+        
+        // if (!Constants.competition) {
             if (deployEncoder != null) {
+                extended.setBoolean(isExtended());
                 ticks.setDouble(deployEncoder.getPosition());
                 velocity.setDouble(deployEncoder.getVelocity());
             }
@@ -184,6 +186,6 @@ public class IntakeSubsystem extends SubsystemBase {
                     extendPID.setD(intakeD.getDouble(IntakeK.deployD));
                 }
             }
-        }
+        // }
     }
 }
