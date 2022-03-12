@@ -99,8 +99,8 @@ public class RobotContainer {
   // private final RotateClimberCommand rotateLeftClimberBack = new RotateClimberCommand(climber, -45, true);
   // private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, -45, false);
 
-  private final ManualClimberCommand manualExtend = new ManualClimberCommand(climber, 0.5);
-  private final ManualClimberCommand manualRetract = new ManualClimberCommand(climber, -0.6);
+  private final ManualClimberCommand manualExtend = new ManualClimberCommand(climber, 0.7);
+  private final ManualClimberCommand manualRetract = new ManualClimberCommand(climber, -0.8);
   private final ManualClimberCommand stopClimber = new ManualClimberCommand(climber, 0);
 
   // intake
@@ -155,6 +155,7 @@ public class RobotContainer {
 
       // intake commands
       leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
+      rightBumper.whenPressed(intakeOut).whenReleased(stopIntake);
       aButton2.whenPressed(indexerIn).whenReleased(stopIndexer);
       bButton2.whenPressed(indexerOut).whenReleased(stopIndexer);
       leftBumper2.whenPressed(deployIntake);

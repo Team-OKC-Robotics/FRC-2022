@@ -120,6 +120,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         turnPID = new PIDController(DriveK.turnP, DriveK.turnI, DriveK.turnD);
         //turnPID.enableContinuousInput(-180, 180);
 
+        distancePID.setTolerance(2);
+        headingPID.setTolerance(7, 1);
+        headingPID.enableContinuousInput(-180, 180);
+
         // Shuffleboard initilization
         leftTicks.setDouble(0);
         rightTicks.setDouble(0);
@@ -162,6 +166,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     /**
+     * Arcade drives the robot. Does not square the inputs.
+     * @param speed the speed of the robot
+     * @param turn how much to turn the robot
+     */
+    public void arcadeDriveAuto(double speed, double turn, boolean squareInputs) {
+        drivetrain.arcadeDrive(-speed, turn, squareInputs);
+    }
+
+    /**
      * Drives the drivetrain straight for the given distance
      * @param distance the distance, in inches, to drive forwards
      */
@@ -169,6 +182,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         distancePID.setSetpoint(distance);
 
         arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), headingPID.calculate(getHeading()));
+    }
+
+    public void driveOnHeading(double setSpeed) {
+        arcadeDriveAuto(setSpeed, headingPID.calculate(getHeading()), false);
     }
 
     /**
@@ -313,7 +330,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        if (!Constants.competition) {
+        // if (!Constants.competition) {
             // update Shuffelboard values
             leftTicks.setDouble(getLeftEncoderAverage());
             rightTicks.setDouble(getRightEncoderAverage());
@@ -340,6 +357,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 resetGyro();
                 resetGyro.setBoolean(false);
             }
-        }
+        // }
     }
 }

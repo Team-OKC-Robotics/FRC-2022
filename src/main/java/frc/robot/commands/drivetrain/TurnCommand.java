@@ -6,6 +6,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class TurnCommand extends CommandBase {
     private final DrivetrainSubsystem drivetrain;
     private double angle = 0;
+    private double maxOutput = 1;
 
     /**
      * Turns the drivetrain by the given angle (ie this is a relative turn)
@@ -19,11 +20,20 @@ public class TurnCommand extends CommandBase {
         addRequirements(drivetrain);
     }
 
+    public TurnCommand(DrivetrainSubsystem drivetrain, double angle, double maxOutput) {
+        this.drivetrain = drivetrain;
+        this.angle = angle;
+        this.maxOutput = maxOutput;
+
+        addRequirements(drivetrain);
+    }
+
     @Override
     public void initialize() {
         drivetrain.resetTurnPID();
         drivetrain.resetEncoders();
         drivetrain.resetGyro(); //???
+        drivetrain.setMaxOutput(maxOutput);
     }
 
     @Override

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ShootK;
 import frc.robot.commands.drivetrain.DriveCommand;
+import frc.robot.commands.drivetrain.DriveSetSpeedCommand;
 import frc.robot.commands.drivetrain.TurnCommand;
 import frc.robot.commands.intake.SetIndexerCommand;
 import frc.robot.commands.intake.SetIntakeCommand;
@@ -38,19 +39,21 @@ public class TwoBallAuto extends Auto {
                 // new WaitCommand(10)
                 
                 // first shot
-                new ParallelCommandGroup(new SetShooterCommand(shooter, 8000), new WaitCommand(1)), // warm up the shooter
-                new ShootAndFeedCommand(shooter, intake, ShootK.preset1, 3), // once it's there run both the shooter and the indexer for 3 seconds
+                new SetIntakePositionCommand(intake, false), // keep the intake up through the fast turning
+                new ParallelCommandGroup(new SetShooterCommand(shooter, 8000), new WaitCommand(2)), // warm up the shooter
+                new ShootAndFeedCommand(shooter, intake, ShootK.preset1, 1), // once it's there run both the shooter and the indexer for 3 seconds
                 new StopShooterCommand(shooter), // stop the shooter
                 new SetIndexerCommand(intake, 0), // stop the intake
-                new SetIntakePositionCommand(intake, true), // deploy the intake to be ready for picking up balls
-                new WaitCommand(0.5), // wait for the intake to get fully deployed
-
+                // new WaitCommand(0.5), // wait for the intake to get fully deployed
+                
                 // next shot
+                new DriveCommand(drivetrain, -30),
+                new TurnCommand(drivetrain, 180, 0.7), // turn towards the ball
+                new SetIntakePositionCommand(intake, true), // deploy the intake to be ready for picking up balls
                 new SetIntakeCommand(intake, 1), // intake
-                new TurnCommand(drivetrain, 180), // turn towards the ball
-                new DriveCommand(drivetrain, 70, 0.65), // drive to pick up the balls (slowly so we don't run into anything too hard)
-                new SetIntakePositionCommand(intake, false), // raise the intake back up so if something goes wrong we don't wreck it
-                new TurnCommand(drivetrain, 180), // turn back
+                new DriveSetSpeedCommand(drivetrain, 40, 0.3), // drive to pick up the balls (slowly so we don't run into anything too hard)
+                // new SetIntakePositionCommand(intake, false), // raise the intake back up so if something goes wrong we don't wreck it
+                new TurnCommand(drivetrain, -180), // turn back
                 new DriveCommand(drivetrain, 70), // drive back
                 new ParallelCommandGroup(new SetShooterCommand(shooter, 8000), new WaitCommand(1)), // warm up the shooter
                 new ShootAndFeedCommand(shooter, intake, ShootK.preset1, 3), // once it's there run both the shooter and the indexer for 3 seconds

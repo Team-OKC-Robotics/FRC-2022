@@ -78,6 +78,10 @@ public class IntakeSubsystem extends SubsystemBase {
             indexerMotor.setIdleMode(IdleMode.kBrake);
         }
 
+        if (intakeMotor != null) {
+            intakeMotor.setIdleMode(IdleMode.kCoast);
+        }
+
         deployPID = new PIDController(IntakeK.deployP, IntakeK.deployI, IntakeK.deployD);
         deployedLimitSwitch = new DigitalInput(2);
         retractedLimitSwitch = new DigitalInput(3);
@@ -132,7 +136,8 @@ public class IntakeSubsystem extends SubsystemBase {
      * @return true if the intake is extended
      */
     public boolean isExtended() {
-        return deployEncoder.getPosition() == IntakeK.EXTENDED;
+        // return deployEncoder.getPosition() == IntakeK.EXTENDED;
+        return true;
     }
 
     @Override

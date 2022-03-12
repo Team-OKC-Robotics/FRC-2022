@@ -23,17 +23,17 @@ public final class Constants {
         public static final double gearRatio = 1/9.64; //probably wrote that correctly
         public static final double wheelDiameter = 6;
 
-        public static final double distanceP = 0.05;
-        public static final double distanceI = 0;
-        public static final double distanceD = 0.01;
+        public static final double distanceP = 0.065;
+        public static final double distanceI = 0.002;
+        public static final double distanceD = 0.001;
 
-        public static final double headingP = 0.03;
+        public static final double headingP = 0.1;
         public static final double headingI = 0;
-        public static final double headingD = 0;
+        public static final double headingD = 0.00001;
 
-        public static final double turnP = 0.1;
-        public static final double turnI = 0;
-        public static final double turnD = 0;
+        public static final double turnP = 0.05;
+        public static final double turnI = 0.000;
+        public static final double turnD = 0.009;
     }
 
     public final class ShootK {
