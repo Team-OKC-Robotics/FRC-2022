@@ -65,9 +65,9 @@ public class RobotContainer {
   private JoystickButton sevenButton = new JoystickButton(gamepad3, 7); // as they are named
   private JoystickButton eightButton = new JoystickButton(gamepad3, 8); // as they are named
   private JoystickButton nineButton = new JoystickButton(gamepad3, 9); // as they are named
-  private JoystickButton tenButton; // as they are named
-  private JoystickButton elevenButton; // as they are named
-  private JoystickButton twelveButton; // 12
+  private JoystickButton tenButton = new JoystickButton(gamepad3, 10); // as they are named
+  private JoystickButton elevenButton = new JoystickButton(gamepad3, 11); // as they are named
+  private JoystickButton twelveButton = new JoystickButton(gamepad3, 12); // 12
   
 
   // The robot's subsystems and commands are defined here...
@@ -97,7 +97,8 @@ public class RobotContainer {
   // private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
   private final SetIntakePositionPOVCommand intakePositionPOVCommand = new SetIntakePositionPOVCommand(intake, gamepad3);
   private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 0.2);
-  private final SetIndexerCommand fastIndexer = new SetIndexerCommand(intake, 0.6);
+  private final FeedCommand feed = new FeedCommand(intake, 0.2);
+  private final FeedCommand fastFeed = new FeedCommand(intake, 0.6);
   private final SetIndexerCommand indexerOut = new SetIndexerCommand(intake, -0.2);
   private final SetIndexerCommand stopIndexer = new SetIndexerCommand(intake, 0);
 
@@ -169,10 +170,10 @@ public class RobotContainer {
       twelveButton.whenPressed(rotateRightClimber).whenReleased(stopRightRotate);
       
       // intake
-      triggerButton.whenPressed(indexerIn).whenReleased(stopIndexer);
+      triggerButton.whenPressed(feed).whenReleased(stopIndexer);
       sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer);
-      eightButton.whenPressed(indexerIn).whenReleased(stopIndexer);
-      nineButton.whenPressed(fastIndexer).whenReleased(stopIndexer);
+      eightButton.whileHeld(indexerIn).whenReleased(stopIndexer);
+      nineButton.whenPressed(fastFeed).whenReleased(stopIndexer);
   }
 
   public Command getDriveCommand() {

@@ -27,6 +27,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private DigitalInput deployedLimitSwitch;
     private DigitalInput retractedLimitSwitch;
     private int direction = 0;
+    private DigitalInput ballDetector;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("intake");
@@ -38,6 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry deployedSwitch = tab.add("deployed switch", false).getEntry();
     private NetworkTableEntry retractedSwitch = tab.add("retracted switch", false).getEntry();
     private NetworkTableEntry extended = tab.add("extended", false).getEntry();
+    private NetworkTableEntry hasBall = tab.add("has ball?", false).getEntry();
     
     // PID
     private NetworkTableEntry intakeP = tab.add("Intake kP", IntakeK.deployP).getEntry();
@@ -82,6 +84,7 @@ public class IntakeSubsystem extends SubsystemBase {
         deployPID = new PIDController(IntakeK.deployP, IntakeK.deployI, IntakeK.deployD);
         deployedLimitSwitch = new DigitalInput(2);
         retractedLimitSwitch = new DigitalInput(3);
+        ballDetector = new DigitalInput(9);
     }
 
     /**
@@ -95,10 +98,29 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     /**
-     * sets the indexer motor to the given power 
+     * sets the indexer motor to the given power
+     * but doesn't move if a ball is at the top
      * @param power the power to set the indexer to
      */
     public void setIndexer(double power) {
+        if (indexerMotor != null) {
+            if (!ballDetector.get()) { // ball detector is inverse logic, so if we have ball
+                if (power <= 0) { // don't let the ball move forwards
+                    indexerMotor.set(power);
+                } else {
+                    indexerMotor.set(0);
+                }
+            } else {
+                indexerMotor.set(power); // otherwise run as much as you want
+            }
+        }
+    }
+
+    /**
+     * sets the indexer motor to the given power 
+     * @param power the power to set the indexer to
+     */
+    public void feed(double power) {
         if (indexerMotor != null) {
             indexerMotor.set(power);
         }
@@ -139,6 +161,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        hasBall.setBoolean(ballDetector.get());
         if (deployedLimitSwitch.get()) {
             deployedSwitch.setBoolean(true);
         } else {

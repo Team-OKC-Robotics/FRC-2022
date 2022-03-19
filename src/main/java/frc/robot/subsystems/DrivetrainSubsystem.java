@@ -50,6 +50,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // other variables
     private double speedModifier = 0.75; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
     //private double headingAngle = 0; // the heading of the robot. used to drive straight in auto.
+    private double openLoopRampRate = 0.5;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("drivetrain");
@@ -96,6 +97,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
         right2Motor.setIdleMode(IdleMode.kCoast);
         right3Motor.setIdleMode(IdleMode.kCoast);
 
+        left1Motor.setOpenLoopRampRate(openLoopRampRate);
+        left2Motor.setOpenLoopRampRate(openLoopRampRate);
+        left3Motor.setOpenLoopRampRate(openLoopRampRate);
+        right1Motor.setOpenLoopRampRate(openLoopRampRate);
+        right2Motor.setOpenLoopRampRate(openLoopRampRate);
+        right3Motor.setOpenLoopRampRate(openLoopRampRate);
+
+
         rightSide.setInverted(true);
         drivetrain = new DifferentialDrive(leftSide, rightSide);
        
@@ -135,6 +144,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         resetHeadingPID();
         resetTurnPID();
         resetGyro();
+    }
+
+    public void curvatureDrive(double speed, double turn, boolean turnInPlace) {
+        drivetrain.curvatureDrive(speed, turn, turnInPlace);
     }
 
     /**
