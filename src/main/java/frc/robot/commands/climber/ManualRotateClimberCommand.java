@@ -1,16 +1,17 @@
 package frc.robot.commands.climber;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimberSubsystem;
 
-public class ManualClimberCommand extends CommandBase {
+public class ManualRotateClimberCommand extends CommandBase {
     private final ClimberSubsystem climber;
-    private double power = 0;
+    private Joystick gamepad;
     private boolean leftSide;
 
-    public ManualClimberCommand(ClimberSubsystem climber, double power, boolean leftSide) {
+    public ManualRotateClimberCommand(ClimberSubsystem climber, Joystick gamepad, boolean leftSide) {
         this.climber = climber;
-        this.power = power;
+        this.gamepad = gamepad;
         this.leftSide = leftSide;
 
         addRequirements(climber);
@@ -18,7 +19,7 @@ public class ManualClimberCommand extends CommandBase {
 
     @Override
     public void execute() {
-        climber.manualExtend(power, leftSide);
+        climber.manualTilt(gamepad.getRawAxis(1) * 0.5, leftSide);
     }
 
     @Override

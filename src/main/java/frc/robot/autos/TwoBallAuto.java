@@ -10,7 +10,6 @@ import frc.robot.commands.intake.SetIndexerCommand;
 import frc.robot.commands.intake.SetIntakeCommand;
 import frc.robot.commands.intake.SetIntakePositionCommand;
 import frc.robot.commands.shooter.SetShooterCommand;
-import frc.robot.commands.shooter.SetTriggerCommand;
 import frc.robot.commands.shooter.ShootAndFeedCommand;
 import frc.robot.commands.shooter.StopShooterCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;

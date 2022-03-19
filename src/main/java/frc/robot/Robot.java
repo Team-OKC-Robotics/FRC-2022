@@ -7,8 +7,6 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoMode;
-import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
 import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -32,7 +30,6 @@ public class Robot extends TimedRobot {
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
-   * @param <Mat>
    */
   @Override
   public void robotInit() {
@@ -100,6 +97,7 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.getDriveCommand().schedule();
+    m_robotContainer.getIntakePositionCommand().schedule(); // uses the POV so needs to run all the time in tele-op
   }
 
   /** This function is called periodically during operator control. */

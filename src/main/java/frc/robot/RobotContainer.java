@@ -45,16 +45,16 @@ public class RobotContainer {
   private JoystickButton rightStickButton = new JoystickButton(gamepad1, 10);
   private JoystickButton leftStickButton = new JoystickButton(gamepad1, 9);
 
-  private JoystickButton aButton2 = new JoystickButton(gamepad2, 1);
-  private JoystickButton bButton2 = new JoystickButton(gamepad2, 2);
-  private JoystickButton xButton2 = new JoystickButton(gamepad2, 3);
-  private JoystickButton yButton2 = new JoystickButton(gamepad2, 4);
-  private JoystickButton leftBumper2 = new JoystickButton(gamepad2, 5);
-  private JoystickButton rightBumper2 = new JoystickButton(gamepad2, 6);
-  private JoystickButton backButton2 = new JoystickButton(gamepad2, 7);
-  private JoystickButton startButton2 = new JoystickButton(gamepad2, 8);
-  private JoystickButton rightStickButton2 = new JoystickButton(gamepad2, 10);
-  private JoystickButton leftStickButton2 = new JoystickButton(gamepad2, 9);
+  // private JoystickButton aButton2 = new JoystickButton(gamepad2, 1);
+  // private JoystickButton bButton2 = new JoystickButton(gamepad2, 2);
+  // private JoystickButton xButton2 = new JoystickButton(gamepad2, 3);
+  // private JoystickButton yButton2 = new JoystickButton(gamepad2, 4);
+  // private JoystickButton leftBumper2 = new JoystickButton(gamepad2, 5);
+  // private JoystickButton rightBumper2 = new JoystickButton(gamepad2, 6);
+  // private JoystickButton backButton2 = new JoystickButton(gamepad2, 7);
+  // private JoystickButton startButton2 = new JoystickButton(gamepad2, 8);
+  // private JoystickButton rightStickButton2 = new JoystickButton(gamepad2, 10);
+  // private JoystickButton leftStickButton2 = new JoystickButton(gamepad2, 9);
 
   private JoystickButton triggerButton = new JoystickButton(gamepad3, 1); // 1
   private JoystickButton sideButton = new JoystickButton(gamepad3, 2); // 2
@@ -88,27 +88,14 @@ public class RobotContainer {
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
   private final SlowTeleOpDrive slowTeleOpDrive = new SlowTeleOpDrive(drivetrain, gamepad1);
-  
-  // private final ExtendClimberCommand extendLeftClimber = new ExtendClimberCommand(climber, true);
-  // private final ExtendClimberCommand extendRightClimber = new ExtendClimberCommand(climber, 20, false);
-  // private final ExtendClimberCommand retractLeftClimber = new ExtendClimberCommand(climber, 5, true);
-  // private final ExtendClimberCommand retractRightClimber = new ExtendClimberCommand(climber, -20, false);
-
-  // private final RotateClimberCommand rotateLeftClimber = new RotateClimberCommand(climber, 45, true);
-  // private final RotateClimberCommand rotateRightClimber = new RotateClimberCommand(climber, 45, false);
-  // private final RotateClimberCommand rotateLeftClimberBack = new RotateClimberCommand(climber, -45, true);
-  // private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, -45, false);
-
-  private final ManualClimberCommand manualExtend = new ManualClimberCommand(climber, 0.7);
-  private final ManualClimberCommand manualRetract = new ManualClimberCommand(climber, -0.8);
-  private final ManualClimberCommand stopClimber = new ManualClimberCommand(climber, 0);
 
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 1);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
   private final SetIntakeCommand intakeOut = new SetIntakeCommand(intake, -1);
-  private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
-  private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
+  // private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
+  // private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
+  private final SetIntakePositionPOVCommand intakePositionPOVCommand = new SetIntakePositionPOVCommand(intake, gamepad3);
   private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 0.2);
   private final SetIndexerCommand fastIndexer = new SetIndexerCommand(intake, 0.6);
   private final SetIndexerCommand indexerOut = new SetIndexerCommand(intake, -0.2);
@@ -121,11 +108,23 @@ public class RobotContainer {
 
   // shooter
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
-  private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad1);
   // private final ShootFeedTeleOpCommand fastShooter = new ShootFeedTeleOpCommand(shooter, intake, 9500);
   private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 9000);
   // private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 5000);
   private final FlightStickShooterCommand flightStickShooter = new FlightStickShooterCommand(shooter, gamepad2); // expects gamepad2 to be a Logitech Extreme 3D Pro
+
+  // climber
+  private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.7, true);
+  private final ManualClimberCommand retractLeftClimber = new ManualClimberCommand(climber, -0.7, true);
+  private final ManualClimberCommand stopLeftClimber = new ManualClimberCommand(climber, 0, true);
+  private final ManualClimberCommand extendRightClimber = new ManualClimberCommand(climber, 0.7, false);
+  private final ManualClimberCommand retractRightClimber = new ManualClimberCommand(climber, -0.7, false);
+  private final ManualClimberCommand stopRightClimber = new ManualClimberCommand(climber, 0, false);
+
+  private final ManualRotateClimberCommand rotateLeftClimber = new ManualRotateClimberCommand(climber, gamepad3, true);
+  private final ManualStopRotateClimberCommand stopLeftRotate = new ManualStopRotateClimberCommand(climber, true);
+  private final ManualRotateClimberCommand rotateRightClimber = new ManualRotateClimberCommand(climber, gamepad3, false);
+  private final ManualStopRotateClimberCommand stopRightRotate = new ManualStopRotateClimberCommand(climber, false);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -156,32 +155,32 @@ public class RobotContainer {
       // intake commands
       leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
       rightBumper.whenPressed(intakeOut).whenReleased(stopIntake);
-      aButton2.whenPressed(indexerIn).whenReleased(stopIndexer);
-      bButton2.whenPressed(indexerOut).whenReleased(stopIndexer);
-      leftBumper2.whenPressed(deployIntake);
-      rightBumper2.whenPressed(retractIntake);
-      backButton2.whenPressed(fastIndexer).whenReleased(stopIndexer);
-
-      // shooter commands
-      xButton2.whenPressed(fastShooter).whenReleased(stopShooter);
-      
-      // climber commands
-      yButton2.whileHeld(manualExtend).whenReleased(stopClimber);
-      startButton2.whileHeld(manualRetract).whenReleased(stopClimber);
 
       // fun flight stick controls (this is really fun can confirm)
-      triggerButton.whenPressed(fastIndexer).whenReleased(stopIndexer);
+      // shooter
       sideButton.whenPressed(fastShooter).whenReleased(stopShooter);
-      topLeftButton.whenPressed(retractIntake);
-      bottomLeftButton.whenPressed(deployIntake);
-      topRightButton.whenPressed(manualExtend).whenReleased(stopClimber);
-      bottomRightButton.whenPressed(manualRetract).whenReleased(stopClimber);
+      
+      // climber
+      topLeftButton.whenPressed(extendLeftClimber).whenReleased(stopLeftClimber);
+      bottomLeftButton.whenPressed(retractLeftClimber).whenReleased(stopLeftClimber);
+      topLeftButton.whenPressed(extendRightClimber).whenReleased(stopRightClimber);
+      bottomLeftButton.whenPressed(retractRightClimber).whenReleased(stopRightClimber);
+      twelveButton.whenPressed(rotateLeftClimber).whenReleased(stopLeftRotate);
+      twelveButton.whenPressed(rotateRightClimber).whenReleased(stopRightRotate);
+      
+      // intake
+      triggerButton.whenPressed(indexerIn).whenReleased(stopIndexer);
       sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer);
       eightButton.whenPressed(indexerIn).whenReleased(stopIndexer);
+      nineButton.whenPressed(fastIndexer).whenReleased(stopIndexer);
   }
 
   public Command getDriveCommand() {
     // return teleopDrive;
     return teleOpDrive;
+  }
+
+  public Command getIntakePositionCommand() {
+    return intakePositionPOVCommand;
   }
 }

@@ -3,14 +3,12 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimberSubsystem;
 
-public class ManualClimberCommand extends CommandBase {
+public class ManualStopRotateClimberCommand extends CommandBase {
     private final ClimberSubsystem climber;
-    private double power = 0;
     private boolean leftSide;
 
-    public ManualClimberCommand(ClimberSubsystem climber, double power, boolean leftSide) {
+    public ManualStopRotateClimberCommand(ClimberSubsystem climber, boolean leftSide) {
         this.climber = climber;
-        this.power = power;
         this.leftSide = leftSide;
 
         addRequirements(climber);
@@ -18,7 +16,7 @@ public class ManualClimberCommand extends CommandBase {
 
     @Override
     public void execute() {
-        climber.manualExtend(power, leftSide);
+        climber.manualTilt(0, leftSide);
     }
 
     @Override

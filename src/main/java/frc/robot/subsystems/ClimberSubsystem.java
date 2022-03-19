@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -73,8 +74,8 @@ public class ClimberSubsystem extends SubsystemBase {
      * but also like idk what's going on
      */
     public ClimberSubsystem() {
-        // rightExtendMotor = new WPI_TalonFX(13);
-        // rightTiltMotor = new CANSparkMax(14, MotorType.kBrushless);
+        rightExtendMotor = new WPI_TalonFX(13);
+        rightTiltMotor = new CANSparkMax(14, MotorType.kBrushless);
 
         // set up the right side
         if (rightExtendMotor != null) {
@@ -92,7 +93,7 @@ public class ClimberSubsystem extends SubsystemBase {
         
         // set up the left side
         leftExtendMotor = new WPI_TalonFX(15);
-        // leftTiltMotor = new CANSparkMax(16, MotorType.kBrushless);
+        leftTiltMotor = new CANSparkMax(16, MotorType.kBrushless);
         
         if (leftExtendMotor != null) {
             leftExtendMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice());
@@ -111,13 +112,13 @@ public class ClimberSubsystem extends SubsystemBase {
         
         if (leftTiltMotor != null) {
             leftPID = leftTiltMotor.getPIDController();
+            leftTiltMotor.setIdleMode(IdleMode.kBrake);
         }
 
         if (rightTiltMotor != null) {
             rightPID = rightTiltMotor.getPIDController();
+            rightTiltMotor.setIdleMode(IdleMode.kBrake);
         }
-
-        //TODO also set the encoder conversion factor or whatever so using inches actually works
     }
 
     /**
@@ -132,8 +133,20 @@ public class ClimberSubsystem extends SubsystemBase {
         leftExtendMotor.set(TalonFXControlMode.PercentOutput, leftExtendPID.calculate(leftExtendMotor.getSelectedSensorPosition()));
     }
 
-    public void manualClimb(double power) {
-        leftExtendMotor.set(TalonFXControlMode.PercentOutput, power);
+    public void manualExtend(double power, boolean leftSide) {
+        if (leftSide) {
+            leftExtendMotor.set(power);
+        } else {
+            rightExtendMotor.set(power);
+        }
+    }
+
+    public void manualTilt(double power, boolean leftSide) {
+        if (leftSide) {
+            leftTiltMotor.set(power);
+        } else {
+            rightTiltMotor.set(power);
+        }
     }
 
     /**
