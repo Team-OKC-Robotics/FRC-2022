@@ -41,8 +41,8 @@ public class Robot extends TimedRobot {
     DriverStation.silenceJoystickConnectionWarning(true);
     //camera = new HttpCamera("photoncam", "http://photonvision.local:1182/stream.mjpg", HttpCameraKind.kMJPGStreamer);
     driverCamera = CameraServer.startAutomaticCapture();
-    driverCamera.setFPS(20);
-    driverCamera.setResolution(320, 240);
+    driverCamera.setFPS(40);
+    driverCamera.setResolution(240, 120);
     driverCamera.setPixelFormat(PixelFormat.kMJPEG);
   }
 
