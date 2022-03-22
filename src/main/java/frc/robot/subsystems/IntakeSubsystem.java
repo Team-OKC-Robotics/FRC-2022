@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.IntakeK;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -161,17 +162,19 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        hasBall.setBoolean(ballDetector.get());
-        if (deployedLimitSwitch.get()) {
-            deployedSwitch.setBoolean(true);
-        } else {
-            deployedSwitch.setBoolean(false);
-        }
-        
-        if (retractedLimitSwitch.get()) {
-            retractedSwitch.setBoolean(true);
-        } else {
-            retractedSwitch.setBoolean(false);
+        if (!Constants.competition) {
+            hasBall.setBoolean(ballDetector.get());
+            if (deployedLimitSwitch.get()) {
+                deployedSwitch.setBoolean(true);
+            } else {
+                deployedSwitch.setBoolean(false);
+            }
+            
+            if (retractedLimitSwitch.get()) {
+                retractedSwitch.setBoolean(true);
+            } else {
+                retractedSwitch.setBoolean(false);
+            }
         }
 
         if (!deployedLimitSwitch.get()) {
@@ -197,7 +200,7 @@ public class IntakeSubsystem extends SubsystemBase {
             deployMotor.set(power);
         }
         
-        // if (!Constants.competition) {
+        if (!Constants.competition) {
             if (deployEncoder != null) {
                 extended.setBoolean(isExtended());
                 ticks.setDouble(deployEncoder.getPosition());
@@ -211,6 +214,6 @@ public class IntakeSubsystem extends SubsystemBase {
                     extendPID.setD(intakeD.getDouble(IntakeK.deployD));
                 }
             }
-        // }
+        }
     }
 }

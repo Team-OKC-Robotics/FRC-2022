@@ -115,11 +115,11 @@ public class RobotContainer {
   private final FlightStickShooterCommand flightStickShooter = new FlightStickShooterCommand(shooter, gamepad2); // expects gamepad2 to be a Logitech Extreme 3D Pro
 
   // climber
-  private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.7, true);
-  private final ManualClimberCommand retractLeftClimber = new ManualClimberCommand(climber, -0.7, true);
+  private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.1, true);
+  private final ManualClimberCommand retractLeftClimber = new ManualClimberCommand(climber, -0.1, true);
   private final ManualClimberCommand stopLeftClimber = new ManualClimberCommand(climber, 0, true);
-  private final ManualClimberCommand extendRightClimber = new ManualClimberCommand(climber, 0.7, false);
-  private final ManualClimberCommand retractRightClimber = new ManualClimberCommand(climber, -0.7, false);
+  private final ManualClimberCommand extendRightClimber = new ManualClimberCommand(climber, 0.1, false);
+  private final ManualClimberCommand retractRightClimber = new ManualClimberCommand(climber, -0.1, false);
   private final ManualClimberCommand stopRightClimber = new ManualClimberCommand(climber, 0, false);
 
   private final ManualRotateClimberCommand rotateLeftClimber = new ManualRotateClimberCommand(climber, gamepad3, true);
@@ -164,10 +164,10 @@ public class RobotContainer {
       // climber
       topLeftButton.whenPressed(extendLeftClimber).whenReleased(stopLeftClimber);
       bottomLeftButton.whenPressed(retractLeftClimber).whenReleased(stopLeftClimber);
-      topLeftButton.whenPressed(extendRightClimber).whenReleased(stopRightClimber);
-      bottomLeftButton.whenPressed(retractRightClimber).whenReleased(stopRightClimber);
-      twelveButton.whenPressed(rotateLeftClimber).whenReleased(stopLeftRotate);
-      twelveButton.whenPressed(rotateRightClimber).whenReleased(stopRightRotate);
+      topRightButton.whenPressed(extendRightClimber).whenReleased(stopRightClimber);
+      bottomRightButton.whenPressed(retractRightClimber).whenReleased(stopRightClimber);
+      elevenButton.whileHeld(rotateLeftClimber).whenReleased(stopLeftRotate);
+      twelveButton.whileHeld(rotateRightClimber).whenReleased(stopRightRotate);
       
       // intake
       triggerButton.whenPressed(feed).whenReleased(stopIndexer);

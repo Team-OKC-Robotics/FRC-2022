@@ -143,7 +143,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void manualTilt(double power, boolean leftSide) {
         if (leftSide) {
-            leftTiltMotor.set(power);
+            leftTiltMotor.set(-power); // need to invert because opposite direction
         } else {
             rightTiltMotor.set(power);
         }
