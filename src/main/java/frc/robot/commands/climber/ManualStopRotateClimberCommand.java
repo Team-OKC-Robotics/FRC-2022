@@ -16,7 +16,7 @@ public class ManualStopRotateClimberCommand extends CommandBase {
 
     @Override
     public void execute() {
-        climber.manualTilt(0, leftSide);
+        climber.stopClimber(leftSide);
     }
 
     @Override

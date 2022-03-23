@@ -33,6 +33,12 @@ public class ClimberSubsystem extends SubsystemBase {
     private SparkMaxPIDController leftPID;
     private SparkMaxPIDController rightPID;
 
+    // start out at zero and hold until otherwise told to
+    private double leftSetpoint = 0;
+    private double rightSetpoint = 0;
+    private boolean leftStopped = true;
+    private boolean rightStopped = true;
+
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("climber");
     private NetworkTableEntry writeMode = tab.add("Write Mode", false).getEntry();
@@ -142,10 +148,25 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void manualTilt(double power, boolean leftSide) {
+        if (Math.abs(power) > 0.1) { // only tilt if the change is significant
+            if (leftSide) {
+                leftTiltMotor.set(-power); // need to invert because opposite direction
+                leftStopped = false;
+            } else {
+                rightTiltMotor.set(power);
+                rightStopped = false;
+            }   
+        }
+    }
+
+    // holds the climber in its position
+    public void stopClimber(boolean leftSide) {
         if (leftSide) {
-            leftTiltMotor.set(-power); // need to invert because opposite direction
+            leftSetpoint = leftTiltEncoder.getPosition();
+            leftStopped = true;
         } else {
-            rightTiltMotor.set(power);
+            rightSetpoint = rightTiltEncoder.getPosition();
+            rightStopped = true;
         }
     }
 
@@ -209,6 +230,17 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // auto position hold for the tilting
+        if (leftStopped) {
+            leftTiltMotor.setReference(leftSetpoint);
+        }
+
+        if (rightStopped) {
+            rightTiltMotor.setReference(rightSetpoint);
+        }
+
+
+        // shuffleboard stuff
         if (!Constants.competition) {            
             if (leftTiltEncoder != null) {
                 leftTiltPos.setDouble(leftTiltEncoder.getPosition());
