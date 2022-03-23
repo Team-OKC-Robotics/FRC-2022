@@ -342,7 +342,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        // if (!Constants.competition) {
+        if (!Constants.competition) {
             // update Shuffelboard values
             leftTicks.setDouble(getLeftEncoderAverage());
             rightTicks.setDouble(getRightEncoderAverage());
@@ -364,11 +364,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 turnPID.setI(turnI.getDouble(DriveK.turnI));
                 turnPID.setD(turnD.getDouble(DriveK.turnD));
             }
-    
-            if (resetGyro.getBoolean(false)) {
-                resetGyro();
-                resetGyro.setBoolean(false);
-            }
-        // }
+        }
+        
+        // this needs to be there regardless
+        if (resetGyro.getBoolean(false)) {
+            resetGyro();
+            resetGyro.setBoolean(false);
+        }
     }
 }

@@ -17,6 +17,10 @@ public class SetIntakePositionPOVCommand extends CommandBase {
 
     @Override
     public void execute() {
+
+        // this apparently takes a while so might need to optimize?
+        // maybe getPOV() takes a really long time? do we want to bind this to buttons instead?
+        // but the climber is using all the buttons?
         if (gamepad.getPOV() == 0) {
             intake.setExtended(true);
         } else if (gamepad.getPOV() == 180) {

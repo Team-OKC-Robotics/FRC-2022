@@ -132,7 +132,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // add the autos to the chooser
-    AutoChooser.addAutos(doNothingAuto, driveOffLine, shootThenDrive, twoBallAuto, threeBallAuto, gyroTestAuto);
+    AutoChooser.addAutos(shootThenDrive, twoBallAuto, driveOffLine, doNothingAuto /*, gyroTestAuto*/);
     AutoChooser.addGamepad(gamepad1);
 
     // Configure the button bindings

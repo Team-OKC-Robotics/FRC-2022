@@ -177,6 +177,7 @@ public class IntakeSubsystem extends SubsystemBase {
             }
         }
 
+        // I feel like there's potential for some speedup here by combining these if statements
         if (!deployedLimitSwitch.get()) {
             deployEncoder.setPosition(IntakeK.EXTENDED);
         } else if (!retractedLimitSwitch.get()) {
