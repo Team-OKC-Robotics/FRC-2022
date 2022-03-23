@@ -162,21 +162,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!Constants.competition) {
-            hasBall.setBoolean(ballDetector.get());
-            if (deployedLimitSwitch.get()) {
-                deployedSwitch.setBoolean(true);
-            } else {
-                deployedSwitch.setBoolean(false);
-            }
-            
-            if (retractedLimitSwitch.get()) {
-                retractedSwitch.setBoolean(true);
-            } else {
-                retractedSwitch.setBoolean(false);
-            }
-        }
-
         // I feel like there's potential for some speedup here by combining these if statements
         if (!deployedLimitSwitch.get()) {
             deployEncoder.setPosition(IntakeK.EXTENDED);
@@ -193,12 +178,13 @@ public class IntakeSubsystem extends SubsystemBase {
             } else if (!retractedLimitSwitch.get() && direction == 1) {
                 // deployed.setBoolean(false);
                 deployMotor.set(0);
+            } else {
+                double power = deployPID.calculate(deployEncoder.getPosition());
+                if (Math.abs(power) > 0.4) {
+                    power = Math.copySign(0.4, power);
+                }
+                deployMotor.set(power);
             }
-            double power = deployPID.calculate(deployEncoder.getPosition());
-            if (Math.abs(power) > 0.4) {
-                power = Math.copySign(0.4, power);
-            }
-            deployMotor.set(power);
         }
         
         if (!Constants.competition) {
@@ -214,6 +200,18 @@ public class IntakeSubsystem extends SubsystemBase {
                     extendPID.setI(intakeI.getDouble(IntakeK.deployI));
                     extendPID.setD(intakeD.getDouble(IntakeK.deployD));
                 }
+            }
+            hasBall.setBoolean(ballDetector.get());
+            if (deployedLimitSwitch.get()) {
+                deployedSwitch.setBoolean(true);
+            } else {
+                deployedSwitch.setBoolean(false);
+            }
+            
+            if (retractedLimitSwitch.get()) {
+                retractedSwitch.setBoolean(true);
+            } else {
+                retractedSwitch.setBoolean(false);
             }
         }
     }
