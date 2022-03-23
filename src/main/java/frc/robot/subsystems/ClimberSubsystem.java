@@ -151,10 +151,10 @@ public class ClimberSubsystem extends SubsystemBase {
         if (Math.abs(power) > 0.1) { // only tilt if the change is significant
             if (leftSide) {
                 leftTiltMotor.set(-power); // need to invert because opposite direction
-                leftStopped = false;
+                // leftStopped = false;
             } else {
                 rightTiltMotor.set(power);
-                rightStopped = false;
+                // rightStopped = false;
             }   
         }
     }
@@ -163,10 +163,10 @@ public class ClimberSubsystem extends SubsystemBase {
     public void stopClimber(boolean leftSide) {
         if (leftSide) {
             leftSetpoint = leftTiltEncoder.getPosition();
-            leftStopped = true;
+            rightTiltMotor.setReference(rightSetpoint);
         } else {
             rightSetpoint = rightTiltEncoder.getPosition();
-            rightStopped = true;
+            leftTiltMotor.setReference(leftSetpoint);
         }
     }
 
@@ -231,13 +231,14 @@ public class ClimberSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // auto position hold for the tilting
-        if (leftStopped) {
-            leftTiltMotor.setReference(leftSetpoint);
-        }
+        // maybe don't need this here?
+        // if (leftStopped) {
+            
+        // }
 
-        if (rightStopped) {
-            rightTiltMotor.setReference(rightSetpoint);
-        }
+        // if (rightStopped) {
+        //     rightTiltMotor.setReference(rightSetpoint);
+        // }
 
 
         // shuffleboard stuff
