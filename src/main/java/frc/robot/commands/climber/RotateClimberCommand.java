@@ -27,10 +27,6 @@ public class RotateClimberCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (leftSide) {
-            return climber.atLeftTiltSetpoint();
-        } else {
-            return climber.atRightTiltSetpoint();
-        }
+        return true;
     }
 }

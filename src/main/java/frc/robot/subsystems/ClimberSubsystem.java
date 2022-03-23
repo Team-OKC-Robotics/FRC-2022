@@ -137,7 +137,7 @@ public class ClimberSubsystem extends SubsystemBase {
         if (leftSide) {
             leftExtendMotor.set(power);
         } else {
-            rightExtendMotor.set(power);
+            rightExtendMotor.set(power); // just spooled it opposite direction so this doesn't need to be inverted
         }
     }
 

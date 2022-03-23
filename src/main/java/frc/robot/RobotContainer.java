@@ -112,14 +112,14 @@ public class RobotContainer {
   // private final ShootFeedTeleOpCommand fastShooter = new ShootFeedTeleOpCommand(shooter, intake, 9500);
   private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 9000);
   // private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 5000);
-  private final FlightStickShooterCommand flightStickShooter = new FlightStickShooterCommand(shooter, gamepad2); // expects gamepad2 to be a Logitech Extreme 3D Pro
+  // private final FlightStickShooterCommand flightStickShooter = new FlightStickShooterCommand(shooter, gamepad2); // expects gamepad2 to be a Logitech Extreme 3D Pro
 
   // climber
-  private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.1, true);
-  private final ManualClimberCommand retractLeftClimber = new ManualClimberCommand(climber, -0.1, true);
+  private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.5, true);
+  private final ManualClimberCommand retractLeftClimber = new ManualClimberCommand(climber, -0.5, true);
   private final ManualClimberCommand stopLeftClimber = new ManualClimberCommand(climber, 0, true);
-  private final ManualClimberCommand extendRightClimber = new ManualClimberCommand(climber, 0.1, false);
-  private final ManualClimberCommand retractRightClimber = new ManualClimberCommand(climber, -0.1, false);
+  private final ManualClimberCommand extendRightClimber = new ManualClimberCommand(climber, 0.5, false);
+  private final ManualClimberCommand retractRightClimber = new ManualClimberCommand(climber, -0.5, false);
   private final ManualClimberCommand stopRightClimber = new ManualClimberCommand(climber, 0, false);
 
   private final ManualRotateClimberCommand rotateLeftClimber = new ManualRotateClimberCommand(climber, gamepad3, true);
