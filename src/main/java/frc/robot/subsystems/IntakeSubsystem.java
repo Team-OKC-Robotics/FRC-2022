@@ -206,7 +206,7 @@ public class IntakeSubsystem extends SubsystemBase {
                     extendPID.setD(intakeD.getDouble(IntakeK.deployD));
                 }
             }
-            hasBall.setBoolean(ballDetector.get());
+            
             if (deployedLimitSwitch.get()) {
                 deployedSwitch.setBoolean(true);
             } else {

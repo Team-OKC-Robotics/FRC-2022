@@ -232,11 +232,11 @@ public class ClimberSubsystem extends SubsystemBase {
     public void periodic() {
         // auto position hold for the tilting
         if (leftStopped) {
-            leftTiltMotor.setReference(leftSetpoint);
+            leftPID.setReference(leftSetpoint, ControlType.kPosition);
         }
 
         if (rightStopped) {
-            rightTiltMotor.setReference(rightSetpoint);
+            rightPID.setReference(rightSetpoint, ControlType.kPosition);
         }
 
 
