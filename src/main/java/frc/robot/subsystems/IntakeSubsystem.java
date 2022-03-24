@@ -48,7 +48,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry deployedPreset = tab.add("Deployed preset", IntakeK.EXTENDED).getEntry();
     
     // I don't think there needs to be any shuffleboard stuff here
-    // we could do some weird stuff with like hasBall() but that's not important right now
+    // we could do some weird stuff with like hasBall() but that's not important right now\
         
     /**
      * makes a new IntakeSubsystem
@@ -73,11 +73,13 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         if (indexerMotor != null) {
-            indexerMotor.setIdleMode(IdleMode.kBrake);
+            indexerMotor.setIdleMode(IdleMode.kCoast);
+            indexerMotor.setInverted(true);
         }
 
         if (intakeMotor != null) {
             intakeMotor.setIdleMode(IdleMode.kCoast);
+            intakeMotor.setInverted(true);
         }
 
         deployPID = new PIDController(IntakeK.deployP, IntakeK.deployI, IntakeK.deployD);

@@ -96,8 +96,8 @@ public class RobotContainer {
   // private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
   // private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
   private final SetIntakePositionPOVCommand intakePositionPOVCommand = new SetIntakePositionPOVCommand(intake, gamepad3);
-  private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 0.2);
-  private final SetIndexerCommand indexerOut = new SetIndexerCommand(intake, -0.2);
+  private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 0.5);
+  private final SetIndexerCommand indexerOut = new SetIndexerCommand(intake, -0.5);
   private final SetIndexerCommand stopIndexer = new SetIndexerCommand(intake, 0);
   
   // shooter
