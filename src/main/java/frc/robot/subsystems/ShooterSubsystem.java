@@ -3,13 +3,18 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.MotorCommutation;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -33,6 +38,10 @@ public class ShooterSubsystem extends SubsystemBase {
     // actuators
     private TalonFX shooterMotor1;
     private PIDController shooterPID;
+    private CANSparkMax triggerMotor; // the shooter tower
+
+    // sensors
+    private DigitalInput ballDetector;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("shooter");
@@ -43,6 +52,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private NetworkTableEntry shooterRPM = tab.add("shooter RPM", 0).getEntry();
     private NetworkTableEntry shooterOutput = tab.add("shooter output", 0).getEntry();
     private NetworkTableEntry velocityError = tab.add("velocity error", 0).getEntry();
+    private NetworkTableEntry hasBall = tab.add("has ball?", false).getEntry();
 
     // PID
     private NetworkTableEntry shootP = tab.add("Shooter kP", ShootK.shootP).getEntry();
@@ -78,6 +88,10 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterMotor1.setSelectedSensorPosition(0);
             shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
         }
+
+        triggerMotor = new CANSparkMax(7, MotorType.kBrushless);
+        triggerMotor.setIdleMode(IdleMode.kCoast);
+        ballDetector = new DigitalInput(9);
     }
 
     /**
@@ -125,9 +139,33 @@ public class ShooterSubsystem extends SubsystemBase {
         return true;
     }
 
+    // sets the shooter tower ("trigger") motor with ball detection
+    public void setTrigger(double power) {
+        if (triggerMotor != null) {
+            if (!ballDetector.get()) { // ball detector is inverse logic, so if we have ball
+                if (power <= 0) { // don't let the ball move forwards
+                    triggerMotor.set(power);
+                } else {
+                    triggerMotor.set(0);
+                }
+            } else {
+                triggerMotor.set(power); // otherwise run as much as you want
+            }
+        }
+    }
+
+    // ignores ball detection
+    public void feed(double power) {
+        if (triggerMotor != null) {
+            triggerMotor.set(power);
+        }
+    }
+
     @Override
     public void periodic() {
         if (!Constants.competition) {
+            hasBall.setBoolean(ballDetector.get());
+
             // update Shuffelboard values
             if (shooterMotor1 != null) {
                 ticks.setDouble(shooterMotor1.getSelectedSensorPosition());

@@ -20,10 +20,10 @@ public class ThreeBallAuto extends Auto {
                 "Shoots preloaded, picks up closest two same-alliance balls, then shoots them",
                 8,
                 new SetShooterCommand(shooter, ShootK.tarmacPreset),
-                new SetTriggerCommand(intake, 1),
+                new SetTriggerCommand(shooter, 1),
                 new WaitCommand(4),
                 new StopShooterCommand(shooter),
-                new SetTriggerCommand(intake, 0),
+                new SetTriggerCommand(shooter, 0),
                 new TurnCommand(drivetrain, 180),
                 new SetIntakeCommand(intake, 0.3),
                 new DriveCommand(drivetrain, 30),
@@ -31,7 +31,7 @@ public class ThreeBallAuto extends Auto {
                 new DriveCommand(drivetrain, 60),
                 new TurnCommand(drivetrain, -30),
                 new SetShooterCommand(shooter, ShootK.tarmacPreset),
-                new SetTriggerCommand(intake, 1),
+                new SetTriggerCommand(shooter, 1),
                 new WaitCommand(10)
             );
     }

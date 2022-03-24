@@ -1,22 +1,22 @@
-package frc.robot.commands.intake;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class FeedCommand extends CommandBase {
-    private final IntakeSubsystem intake;
+    private final ShooterSubsystem shooter;
     private double power;
 
-    public FeedCommand(IntakeSubsystem intake, double power) {
-        this.intake = intake;
+    public FeedCommand(ShooterSubsystem shooter, double power) {
+        this.shooter = shooter;
         this.power = power;
 
-        addRequirements(intake);
+        addRequirements(shooter);
     }
 
     @Override
     public void execute() {
-        intake.feed(power);
+        shooter.feed(power);
     }
 
     @Override

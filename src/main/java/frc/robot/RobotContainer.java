@@ -97,22 +97,16 @@ public class RobotContainer {
   // private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
   private final SetIntakePositionPOVCommand intakePositionPOVCommand = new SetIntakePositionPOVCommand(intake, gamepad3);
   private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 0.2);
-  private final FeedCommand feed = new FeedCommand(intake, 0.2);
-  private final FeedCommand fastFeed = new FeedCommand(intake, 0.6);
   private final SetIndexerCommand indexerOut = new SetIndexerCommand(intake, -0.2);
   private final SetIndexerCommand stopIndexer = new SetIndexerCommand(intake, 0);
-
-  // vision
-  private final VisionAlignCommand visionAlign = new VisionAlignCommand(vision, drivetrain);
-  private final SetLEDsCommand ledsOn = new SetLEDsCommand(vision, true);
-  private final SetLEDsCommand ledsOff = new SetLEDsCommand(vision, false);
-
+  
   // shooter
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
-  // private final ShootFeedTeleOpCommand fastShooter = new ShootFeedTeleOpCommand(shooter, intake, 9500);
   private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 9000);
-  // private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 5000);
-  // private final FlightStickShooterCommand flightStickShooter = new FlightStickShooterCommand(shooter, gamepad2); // expects gamepad2 to be a Logitech Extreme 3D Pro
+  private final FeedCommand feed = new FeedCommand(shooter, 0.2);
+  private final SetTriggerCommand triggerIn = new SetTriggerCommand(shooter, 0.2);
+  private final SetTriggerCommand triggerOut = new SetTriggerCommand(shooter, -0.4);
+  private final SetTriggerCommand stopTrigger = new SetTriggerCommand(shooter, 0);
 
   // climber
   private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.5, true);
@@ -151,7 +145,6 @@ public class RobotContainer {
       // drivetrain commands
       backButton.whenPressed(teleOpDrive);
       aButton.whenPressed(slowTeleOpDrive).whenReleased(teleOpDrive); // for lining up climber and stuff
-      // aButton.whenPressed(visionAlign).whenReleased(teleOpDrive);
 
       // intake commands
       leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
@@ -170,10 +163,11 @@ public class RobotContainer {
       twelveButton.whileHeld(rotateRightClimber).whenReleased(stopRightRotate);
       
       // intake
-      triggerButton.whenPressed(feed).whenReleased(stopIndexer);
-      sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer);
-      eightButton.whileHeld(indexerIn).whenReleased(stopIndexer);
-      nineButton.whenPressed(fastFeed).whenReleased(stopIndexer);
+      triggerButton.whenPressed(feed).whenReleased(stopTrigger); // ignore ball detection, for shooting
+      sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer).whenPressed(triggerOut).whenReleased(stopTrigger); // reverse indexer/trigger controls
+      eightButton.whileHeld(indexerIn).whenReleased(stopIndexer).whileHeld(triggerIn).whenReleased(stopTrigger);
+      nineButton.whenPressed(indexerIn).whenReleased(stopIndexer); // separate indexer controls
+      tenButton.whenPressed(indexerOut).whenReleased(stopIndexer); // separate indexer controls
   }
 
   public Command getDriveCommand() {

@@ -40,7 +40,7 @@ public class TwoBallAuto extends Auto {
                 // first shot
                 new SetIntakePositionCommand(intake, false), // keep the intake up through the fast turning
                 new ParallelCommandGroup(new SetShooterCommand(shooter, 8000), new WaitCommand(2)), // warm up the shooter
-                new ShootAndFeedCommand(shooter, intake, ShootK.preset1, 1), // once it's there run both the shooter and the indexer for 3 seconds
+                new ShootAndFeedCommand(shooter, ShootK.preset1, 1), // once it's there run both the shooter and the indexer for 3 seconds
                 new StopShooterCommand(shooter), // stop the shooter
                 new SetIndexerCommand(intake, 0), // stop the intake
                 // new WaitCommand(0.5), // wait for the intake to get fully deployed
@@ -55,7 +55,7 @@ public class TwoBallAuto extends Auto {
                 new TurnCommand(drivetrain, -180), // turn back
                 new DriveCommand(drivetrain, 70), // drive back
                 new ParallelCommandGroup(new SetShooterCommand(shooter, 8000), new WaitCommand(1)), // warm up the shooter
-                new ShootAndFeedCommand(shooter, intake, ShootK.preset1, 3), // once it's there run both the shooter and the indexer for 3 seconds
+                new ShootAndFeedCommand(shooter, ShootK.preset1, 3), // once it's there run both the shooter and the indexer for 3 seconds
                 new StopShooterCommand(shooter), // stop the shooter
                 new SetIndexerCommand(intake, 0), // stop the intake
                 new SetIndexerCommand(intake, 0) // stop the indexer
