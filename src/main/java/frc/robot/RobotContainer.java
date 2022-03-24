@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // gamepads
   private final Joystick gamepad1 = new Joystick(0);
-  private final Joystick gamepad2 = new Joystick(1);
   private final Joystick gamepad3 = new Joystick(2);
 
   // buttons
@@ -44,17 +43,6 @@ public class RobotContainer {
   private JoystickButton startButton = new JoystickButton(gamepad1, 8);
   private JoystickButton rightStickButton = new JoystickButton(gamepad1, 10);
   private JoystickButton leftStickButton = new JoystickButton(gamepad1, 9);
-
-  // private JoystickButton aButton2 = new JoystickButton(gamepad2, 1);
-  // private JoystickButton bButton2 = new JoystickButton(gamepad2, 2);
-  // private JoystickButton xButton2 = new JoystickButton(gamepad2, 3);
-  // private JoystickButton yButton2 = new JoystickButton(gamepad2, 4);
-  // private JoystickButton leftBumper2 = new JoystickButton(gamepad2, 5);
-  // private JoystickButton rightBumper2 = new JoystickButton(gamepad2, 6);
-  // private JoystickButton backButton2 = new JoystickButton(gamepad2, 7);
-  // private JoystickButton startButton2 = new JoystickButton(gamepad2, 8);
-  // private JoystickButton rightStickButton2 = new JoystickButton(gamepad2, 10);
-  // private JoystickButton leftStickButton2 = new JoystickButton(gamepad2, 9);
 
   private JoystickButton triggerButton = new JoystickButton(gamepad3, 1); // 1
   private JoystickButton sideButton = new JoystickButton(gamepad3, 2); // 2
@@ -93,8 +81,8 @@ public class RobotContainer {
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 1);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
   private final SetIntakeCommand intakeOut = new SetIntakeCommand(intake, -1);
-  // private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
-  // private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
+  private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
+  private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
   private final SetIntakePositionPOVCommand intakePositionPOVCommand = new SetIntakePositionPOVCommand(intake, gamepad3);
   private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 0.5);
   private final SetIndexerCommand indexerOut = new SetIndexerCommand(intake, -0.5);
@@ -166,8 +154,10 @@ public class RobotContainer {
       triggerButton.whenPressed(feed).whenReleased(stopTrigger); // ignore ball detection, for shooting
       sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer).whenPressed(triggerOut).whenReleased(stopTrigger); // reverse indexer/trigger controls
       eightButton.whileHeld(indexerIn).whenReleased(stopIndexer).whileHeld(triggerIn).whenReleased(stopTrigger);
-      nineButton.whenPressed(indexerIn).whenReleased(stopIndexer); // separate indexer controls
-      tenButton.whenPressed(indexerOut).whenReleased(stopIndexer); // separate indexer controls
+      // nineButton.whenPressed(indexerIn).whenReleased(stopIndexer); // separate indexer controls
+      // tenButton.whenPressed(indexerOut).whenReleased(stopIndexer); // separate indexer controls
+      nineButton.whenPressed(retractIntake);
+      nineButton.whenReleased(deployIntake);
   }
 
   public Command getDriveCommand() {
