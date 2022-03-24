@@ -74,9 +74,9 @@ public class RobotContainer {
   private final SlowTeleOpDrive slowTeleOpDrive = new SlowTeleOpDrive(drivetrain, gamepad1);
 
   // intake
-  private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 1);
+  private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.8);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
-  private final SetIntakeCommand intakeOut = new SetIntakeCommand(intake, -1);
+  private final SetIntakeCommand intakeOut = new SetIntakeCommand(intake, -0.8);
   private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
   private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
   private final SetIntakePositionPOVCommand intakePositionPOVCommand = new SetIntakePositionPOVCommand(intake, gamepad3);
@@ -87,8 +87,8 @@ public class RobotContainer {
   // shooter
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
   private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 9000);
-  private final FeedCommand feed = new FeedCommand(shooter, 0.2);
-  private final SetTriggerCommand triggerIn = new SetTriggerCommand(shooter, 0.2);
+  private final FeedCommand feed = new FeedCommand(shooter, 0.4);
+  private final SetTriggerCommand triggerIn = new SetTriggerCommand(shooter, 0.4);
   private final SetTriggerCommand triggerOut = new SetTriggerCommand(shooter, -0.4);
   private final SetTriggerCommand stopTrigger = new SetTriggerCommand(shooter, 0);
 
@@ -140,9 +140,9 @@ public class RobotContainer {
       
       // climber
       topLeftButton.whenPressed(extendLeftClimber).whenReleased(stopLeftClimber);
-      bottomLeftButton.whenPressed(retractLeftClimber).whenReleased(stopLeftClimber);
+      bottomLeftButton.whenPressed(retractLeftClimber)/*.whenReleased(stopLeftClimber)*/;
       topRightButton.whenPressed(extendRightClimber).whenReleased(stopRightClimber);
-      bottomRightButton.whenPressed(retractRightClimber).whenReleased(stopRightClimber);
+      bottomRightButton.whenPressed(retractRightClimber)/*.whenReleased(stopRightClimber)*/;
       elevenButton.whileHeld(rotateLeftClimber).whenReleased(stopLeftRotate);
       twelveButton.whileHeld(rotateRightClimber).whenReleased(stopRightRotate);
       

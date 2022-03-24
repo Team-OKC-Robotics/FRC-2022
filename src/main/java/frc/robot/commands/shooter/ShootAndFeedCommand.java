@@ -18,7 +18,7 @@ public class ShootAndFeedCommand extends WaitCommand {
     @Override
     public void execute() {
         shooter.setShooter(RPM);
-        shooter.setTrigger(0.2);
+        shooter.feed(0.2);
     }
 
     @Override // wait do I even need to override this? maybe not...

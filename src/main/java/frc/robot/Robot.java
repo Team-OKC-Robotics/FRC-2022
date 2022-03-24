@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true);
     //camera = new HttpCamera("photoncam", "http://photonvision.local:1182/stream.mjpg", HttpCameraKind.kMJPGStreamer);
-    // driverCamera = CameraServer.startAutomaticCapture();
+    CameraServer.startAutomaticCapture();
 
     // setting this stuff in code kinda messes up setting it in shuffleboard and I'd rather be able to change things as they come
     // driverCamera.setFPS(40);

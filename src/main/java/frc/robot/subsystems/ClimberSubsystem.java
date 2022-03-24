@@ -92,9 +92,11 @@ public class ClimberSubsystem extends SubsystemBase {
             rightExtendPID = new PIDController(ClimbK.rightExtendP, ClimbK.rightExtendI, ClimbK.rightExtendD);
         }
 
-        if (rightTiltEncoder != null) {
+        if (rightTiltMotor != null) {
             rightTiltEncoder = rightTiltMotor.getEncoder();
             rightTiltEncoder.setPosition(0);
+            rightPID = rightTiltMotor.getPIDController();
+            rightTiltMotor.setIdleMode(IdleMode.kBrake);
         }
         
         // set up the left side
@@ -114,12 +116,8 @@ public class ClimberSubsystem extends SubsystemBase {
         if (leftTiltMotor != null) {
             leftTiltEncoder = leftTiltMotor.getEncoder();
             leftTiltEncoder.setPosition(0);
-        }
-        
-
-        if (rightTiltMotor != null) {
-            rightPID = rightTiltMotor.getPIDController();
-            rightTiltMotor.setIdleMode(IdleMode.kBrake);
+            leftPID = leftTiltMotor.getPIDController();
+            leftTiltMotor.setIdleMode(IdleMode.kBrake);
         }
     }
 
