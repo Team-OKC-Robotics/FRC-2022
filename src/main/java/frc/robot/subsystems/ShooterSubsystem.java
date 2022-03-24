@@ -89,7 +89,7 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
         }
 
-        triggerMotor = new CANSparkMax(7, MotorType.kBrushless);
+        triggerMotor = new CANSparkMax(9, MotorType.kBrushless);
         triggerMotor.setIdleMode(IdleMode.kCoast);
         ballDetector = new DigitalInput(9);
     }

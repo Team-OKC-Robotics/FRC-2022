@@ -57,7 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public IntakeSubsystem() {
         deployMotor = new CANSparkMax(10, MotorType.kBrushless);
-        indexerMotor = new CANSparkMax(9, MotorType.kBrushless); // not the shooter tower but the middle indexer
+        indexerMotor = new CANSparkMax(7, MotorType.kBrushless); // not the shooter tower but the middle indexer
         intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
     
         if (deployMotor != null) {
