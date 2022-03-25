@@ -142,13 +142,13 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void manualTilt(double power, boolean leftSide) {
-        if (Math.abs(power) > 0.05) { // only tilt if the change is significant
+        // if (Math.abs(power) > 0.05) { // only tilt if the change is significant
             if (leftSide) {
                 leftTiltMotor.set(-power); // need to invert because opposite direction
             } else {
                 rightTiltMotor.set(power);
             }   
-        }
+        // }
     }
 
     // holds the climber in its position
@@ -222,14 +222,16 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        System.out.println(leftTiltMotor.getFaults());
+        System.out.println(leftTiltMotor.getStickyFaults());
         // auto position hold for the tilting
-        if (leftStopped) {
-            leftPID.setReference(leftSetpoint, ControlType.kPosition);
-        }
+        // if (leftStopped) {
+        //     leftPID.setReference(leftSetpoint, ControlType.kPosition);
+        // }
 
-        if (rightStopped) {
-            rightPID.setReference(rightSetpoint, ControlType.kPosition);
-        }
+        // if (rightStopped) {
+        //     rightPID.setReference(rightSetpoint, ControlType.kPosition);
+        // }
 
 
         // shuffleboard stuff

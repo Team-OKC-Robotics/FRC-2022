@@ -75,6 +75,7 @@ public class IntakeSubsystem extends SubsystemBase {
         if (indexerMotor != null) {
             indexerMotor.setIdleMode(IdleMode.kCoast);
             indexerMotor.setInverted(true);
+            indexerMotor.setSmartCurrentLimit(30); // so as to not kill the baby neo
         }
 
         if (intakeMotor != null) {

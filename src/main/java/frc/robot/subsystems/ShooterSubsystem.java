@@ -89,6 +89,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         triggerMotor = new CANSparkMax(9, MotorType.kBrushless);
         triggerMotor.setIdleMode(IdleMode.kCoast);
+        triggerMotor.setSmartCurrentLimit(30); // so as to not kill the baby neo
         ballDetector = new DigitalInput(9);
     }
 
