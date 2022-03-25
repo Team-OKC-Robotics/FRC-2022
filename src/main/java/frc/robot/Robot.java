@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.getDriveCommand().schedule();
-    m_robotContainer.getIntakePositionCommand().schedule(); // uses the POV so needs to run all the time in tele-op
+    // m_robotContainer.getIntakePositionCommand().schedule(); // uses the POV so needs to run all the time in tele-op
   }
 
   /** This function is called periodically during operator control. */

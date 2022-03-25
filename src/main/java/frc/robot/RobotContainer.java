@@ -65,7 +65,6 @@ public class RobotContainer {
 
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
-  private final DriveOffLineAuto driveOffLine = new DriveOffLineAuto(drivetrain); // drives the robot forwards
   private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter, intake); // drives the robot backwards
   private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
   
@@ -110,7 +109,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // add the autos to the chooser
-    AutoChooser.addAutos(shootThenDrive, twoBallAuto, driveOffLine, doNothingAuto /*, gyroTestAuto*/);
+    AutoChooser.addAutos(shootThenDrive, twoBallAuto, doNothingAuto /*, gyroTestAuto*/);
     AutoChooser.addGamepad(gamepad1);
 
     // Configure the button bindings
