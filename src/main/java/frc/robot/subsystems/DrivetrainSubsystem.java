@@ -98,12 +98,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
         right2Motor.setIdleMode(IdleMode.kCoast);
         right3Motor.setIdleMode(IdleMode.kCoast);
 
-        left1Motor.setOpenLoopRampRate(openLoopRampRate);
-        left2Motor.setOpenLoopRampRate(openLoopRampRate);
-        left3Motor.setOpenLoopRampRate(openLoopRampRate);
-        right1Motor.setOpenLoopRampRate(openLoopRampRate);
-        right2Motor.setOpenLoopRampRate(openLoopRampRate);
-        right3Motor.setOpenLoopRampRate(openLoopRampRate);
+        left1Motor.setOpenLoopRampRate(0);
+        left2Motor.setOpenLoopRampRate(0);
+        left3Motor.setOpenLoopRampRate(0);
+        right1Motor.setOpenLoopRampRate(0);
+        right2Motor.setOpenLoopRampRate(0);
+        right3Motor.setOpenLoopRampRate(0);
 
 
         rightSide.setInverted(true);
@@ -145,6 +145,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
         resetHeadingPID();
         resetTurnPID();
         resetGyro();
+    }
+
+    public void setOpenLoopRampRate() {
+        left1Motor.setOpenLoopRampRate(openLoopRampRate);
+        left2Motor.setOpenLoopRampRate(openLoopRampRate);
+        left3Motor.setOpenLoopRampRate(openLoopRampRate);
+        right1Motor.setOpenLoopRampRate(openLoopRampRate);
+        right2Motor.setOpenLoopRampRate(openLoopRampRate);
+        right3Motor.setOpenLoopRampRate(openLoopRampRate);
     }
 
     public void curvatureDrive(double speed, double turn, boolean turnInPlace) {
@@ -197,8 +206,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
         arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), headingPID.calculate(getHeading()));
     }
 
-    public void driveOnHeading(double setSpeed) {
-        arcadeDriveAuto(setSpeed, headingPID.calculate(getHeading()), false);
+    public void driveOnHeading(double setSpeed, double distance) {
+        distancePID.setSetpoint(distance);
+        arcadeDriveAuto(clamp(-setSpeed, setSpeed, distancePID.calculate(getEncoderAverage())), headingPID.calculate(getHeading()), false);
+    }
+
+    public double clamp(double minOutput, double maxOutput, double input) {
+        if (input < minOutput) {
+            return minOutput;
+        } else if (input > maxOutput) {
+            return maxOutput;
+        } else {
+            return input;
+        }
     }
 
     /**

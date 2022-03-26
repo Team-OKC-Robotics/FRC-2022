@@ -1,11 +1,11 @@
 package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class DriveSetSpeedCommand extends CommandBase {
+public class SetSpeedDrive extends WaitCommand {
     private final DrivetrainSubsystem drivetrain;
-    private double distance = 0;
     private double setSpeed = 1;
 
     /**
@@ -13,30 +13,22 @@ public class DriveSetSpeedCommand extends CommandBase {
      * @param drivetrain the drivetrain subsystem for the command to control
      * @param distance the distance, in inches, to drive the robot
      */
-    public DriveSetSpeedCommand(DrivetrainSubsystem drivetrain, double distance, double setSpeed) {
+    public SetSpeedDrive(DrivetrainSubsystem drivetrain, double setSpeed, double time) {
+        super(time);
         this.drivetrain = drivetrain;
-        this.distance = distance;
         this.setSpeed = setSpeed;
 
         addRequirements(drivetrain);
     }
 
     @Override
-    public void initialize() {
-        drivetrain.resetEncoders();
-        drivetrain.resetDistancePID();
-        drivetrain.resetHeadingPID();
-        drivetrain.setHeading();
-        drivetrain.resetGyro();
-    }
-
-    @Override
     public void execute() {
-        drivetrain.driveOnHeading(setSpeed, distance);
+        // super.execute();
+        drivetrain.arcadeDrive(setSpeed, 0);
     }
 
     @Override
     public boolean isFinished() {
-        return drivetrain.atDistanceSetpoint();
+        return super.isFinished();
     }
 }

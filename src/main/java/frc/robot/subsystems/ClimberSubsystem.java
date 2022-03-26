@@ -222,8 +222,8 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println(leftTiltMotor.getFaults());
-        System.out.println(leftTiltMotor.getStickyFaults());
+        // System.out.println(leftTiltMotor.getFaults());
+        // System.out.println(leftTiltMotor.getStickyFaults());
         // auto position hold for the tilting
         // if (leftStopped) {
         //     leftPID.setReference(leftSetpoint, ControlType.kPosition);

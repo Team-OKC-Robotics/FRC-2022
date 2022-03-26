@@ -27,7 +27,7 @@ public final class Constants {
         public static final double distanceI = 0.002;
         public static final double distanceD = 0.001;
 
-        public static final double headingP = 0.1;
+        public static final double headingP = 0.07;
         public static final double headingI = 0;
         public static final double headingD = 0.00001;
 

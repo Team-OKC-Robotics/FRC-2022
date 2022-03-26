@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -28,6 +31,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private DigitalInput deployedLimitSwitch;
     private DigitalInput retractedLimitSwitch;
     private int direction = 0;
+    private double intakePos = 0;
+    // private SparkMaxLimitSwitch limitSwitch;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("intake");
@@ -81,11 +86,30 @@ public class IntakeSubsystem extends SubsystemBase {
         if (intakeMotor != null) {
             intakeMotor.setIdleMode(IdleMode.kCoast);
             intakeMotor.setInverted(true);
+            intakeMotor.setOpenLoopRampRate(0.1);
         }
 
         deployPID = new PIDController(IntakeK.deployP, IntakeK.deployI, IntakeK.deployD);
         deployedLimitSwitch = new DigitalInput(2);
         retractedLimitSwitch = new DigitalInput(3);
+
+        deployMotor.setOpenLoopRampRate(1);
+
+        // limitSwitch = deployMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    }
+
+    public void resetDeployEncoder() {
+        deployEncoder.setPosition(0);
+    }
+
+    public void incrementIntakePosition() {
+        intakePos += 1;
+        extendPID.setReference(intakePos, ControlType.kPosition);
+    }
+
+    public void decrementIntakePosition() {
+        intakePos -= 1;
+        extendPID.setReference(intakePos, ControlType.kPosition);
     }
 
     /**
@@ -117,6 +141,15 @@ public class IntakeSubsystem extends SubsystemBase {
         if (indexerMotor != null) {
             indexerMotor.set(power);
         }
+    }
+
+    public void manualDeploy(double power) {
+        extendPID.setReference(power, ControlType.kDutyCycle);
+    }
+
+    public void manualStop() {
+        intakePos = deployEncoder.getPosition();
+        extendPID.setReference(intakePos, ControlType.kPosition);
     }
 
     /**
@@ -154,6 +187,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // if (limitSwitch.isPressed()) {
+        //     resetDeployEncoder();
+        // }
+
+
         if (!Constants.competition) {
             if (deployedLimitSwitch.get()) {
                 deployedSwitch.setBoolean(true);

@@ -76,12 +76,16 @@ public class RobotContainer {
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.8);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
   private final SetIntakeCommand intakeOut = new SetIntakeCommand(intake, -0.8);
-  private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
-  private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
-  private final SetIntakePositionPOVCommand intakePositionPOVCommand = new SetIntakePositionPOVCommand(intake, gamepad3);
+  // private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
+  // private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
+  // private final SetIntakePositionPOVCommand intakePositionPOVCommand = new SetIntakePositionPOVCommand(intake, gamepad3);
+  private final ManualIntakePositionCommand deployIntake = new ManualIntakePositionCommand(intake, true);
+  private final ManualIntakePositionCommand retractIntake = new ManualIntakePositionCommand(intake, false);
+  private final ManualStopIntakePositionCommand stopIntakeDeploy = new ManualStopIntakePositionCommand(intake);
   private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 0.5);
   private final SetIndexerCommand indexerOut = new SetIndexerCommand(intake, -0.5);
   private final SetIndexerCommand stopIndexer = new SetIndexerCommand(intake, 0);
+  private final ResetIntakeEncoderCommand resetDeploy = new ResetIntakeEncoderCommand(intake);
   
   // shooter
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
@@ -111,6 +115,7 @@ public class RobotContainer {
     // add the autos to the chooser
     AutoChooser.addAutos(shootThenDrive, twoBallAuto, doNothingAuto /*, gyroTestAuto*/);
     AutoChooser.addGamepad(gamepad1);
+    resetDeploy.schedule();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -146,13 +151,15 @@ public class RobotContainer {
       twelveButton.whileHeld(rotateRightClimber).whenReleased(stopRightRotate);
       
       // intake
-      triggerButton.whenPressed(feed).whenReleased(stopTrigger); // ignore ball detection, for shooting
+      triggerButton.whenPressed(feed).whenReleased(stopTrigger).whenPressed(indexerIn).whenReleased(stopIndexer); // ignore ball detection, for shooting
       sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer).whenPressed(triggerOut).whenReleased(stopTrigger); // reverse indexer/trigger controls
       eightButton.whileHeld(indexerIn).whenReleased(stopIndexer).whileHeld(triggerIn).whenReleased(stopTrigger);
       // nineButton.whenPressed(indexerIn).whenReleased(stopIndexer); // separate indexer controls
       // tenButton.whenPressed(indexerOut).whenReleased(stopIndexer); // separate indexer controls
-      nineButton.whenPressed(retractIntake);
-      nineButton.whenReleased(deployIntake);
+      // nineButton.whenPressed(retractIntake);
+      // tenButton.whenReleased(deployIntake);
+      nineButton.whenPressed(retractIntake).whenReleased(stopIntakeDeploy);
+      tenButton.whenPressed(deployIntake).whenReleased(stopIntakeDeploy);
   }
 
   public Command getDriveCommand() {
@@ -160,7 +167,7 @@ public class RobotContainer {
     return teleOpDrive;
   }
 
-  public Command getIntakePositionCommand() {
-    return intakePositionPOVCommand;
-  }
+  // public Command getIntakePositionCommand() {
+  //   return intakePositionPOVCommand;
+  // }
 }
