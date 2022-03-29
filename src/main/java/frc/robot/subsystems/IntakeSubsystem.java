@@ -29,6 +29,13 @@ public class IntakeSubsystem extends SubsystemBase {
     private int direction = 0;
     private double intakePos = 0;
 
+    private DigitalInput ballDetector;
+    private int cargoCount = 0;
+    private int indexerDirection = 0;
+    private boolean now = false;
+    private boolean lastBallDetector = false;
+    private boolean reverseReverse = false;
+
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("intake");
     private NetworkTableEntry writeMode = tab.add("write mode", false).getEntry();
@@ -86,6 +93,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         deployedLimitSwitch = new DigitalInput(2);
         retractedLimitSwitch = new DigitalInput(3);
+        ballDetector = new DigitalInput(8);
     }
 
     public void resetDeployEncoder() {
@@ -98,7 +106,11 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public void setIntake(double power) {
         if (intakeMotor != null) {
-            intakeMotor.set(power);
+            if (reverseReverse) {
+                intakeMotor.set(-0.8);
+            } else {
+                intakeMotor.set(power);
+            }
         }
     }
 
@@ -109,8 +121,22 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public void setIndexer(double power) {
         if (indexerMotor != null) {
-            indexerMotor.set(power);
+            if (reverseReverse) {
+                indexerMotor.set(-1);
+            } else {
+                indexerMotor.set(power);
+                indexerDirection = sign(power);
+            }
         }
+    }
+
+    public int sign(double number) {
+        if (number < 0) {
+            return -1;
+        } else if (number > 0) {
+            return 1;
+        }
+        return 0;
     }
 
     /**
@@ -157,8 +183,25 @@ public class IntakeSubsystem extends SubsystemBase {
         return true;
     }
 
+    public void decreaseCargoCount() {
+        cargoCount -= 1;
+    }
+
     @Override
     public void periodic() {
+        now = !ballDetector.get(); // make it normal logic
+        if (now && !lastBallDetector && indexerDirection == 1) {
+            cargoCount += 1;
+            if (cargoCount > 2) {
+                reverseReverse = true;
+                setIntake(-0.8);
+                setIndexer(-0.8);
+            } else {
+                reverseReverse = false;
+            }
+        }
+        lastBallDetector = now;
+
         // I feel like there's potential for some speedup here by combining these if statements
         if (!deployedLimitSwitch.get()) { // if limit switch is pressed
             deployEncoder.setPosition(IntakeK.EXTENDED); // set the intake encoder to the correct position

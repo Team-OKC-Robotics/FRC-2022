@@ -38,6 +38,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // sensors
     private DigitalInput ballDetector;
+    private int direction = 0;
+    private boolean now = false;
+    private boolean lastBallDetector = false;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("shooter");
@@ -62,12 +65,14 @@ public class ShooterSubsystem extends SubsystemBase {
     private NetworkTableEntry againstHub = tab.add("against hub preset", ShootK.againstHub).getEntry();
     private NetworkTableEntry lowGoal = tab.add("low goal preset", ShootK.lowGoal).getEntry();
     private NetworkTableEntry farShot = tab.add("far shot preset", ShootK.farShot).getEntry();
+
+    private IntakeSubsystem intake;
     
     /**
      * Makes a new ShooterSubsystem
      * the shooter controls the shooter motor(s?) and the "trigger motor"
      */
-    public ShooterSubsystem() {
+    public ShooterSubsystem(IntakeSubsystem intake) {
         shooterMotor1 = new TalonFX(8);
 
         if (shooterMotor1 != null) {
@@ -88,6 +93,8 @@ public class ShooterSubsystem extends SubsystemBase {
         triggerMotor.setIdleMode(IdleMode.kCoast);
         triggerMotor.setSmartCurrentLimit(30); // so as to not kill the baby neo
         ballDetector = new DigitalInput(9);
+
+        this.intake = intake;
     }
 
     /**
@@ -140,6 +147,7 @@ public class ShooterSubsystem extends SubsystemBase {
             if (!ballDetector.get()) { // ball detector is inverse logic, so if we have ball
                 if (power <= 0) { // let the ball move backwards
                     triggerMotor.set(power);
+                    direction = -1;
                 } else { // don't let the ball move forwards
                     triggerMotor.set(0);
                 }
@@ -153,11 +161,19 @@ public class ShooterSubsystem extends SubsystemBase {
     public void feed(double power) {
         if (triggerMotor != null) {
             triggerMotor.set(power);
+            direction = 1;
         }
     }
 
     @Override
     public void periodic() {
+        now = !ballDetector.get(); // make it to normal logic
+        if (lastBallDetector && !now && direction == 1) {
+            intake.decreaseCargoCount();
+        }
+        lastBallDetector = now;
+
+
         if (!Constants.competition) {
             hasBall.setBoolean(ballDetector.get());
 
