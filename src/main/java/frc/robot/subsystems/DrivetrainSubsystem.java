@@ -156,6 +156,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
         right3Motor.setOpenLoopRampRate(openLoopRampRate);
     }
 
+    public void setOpenLoopRampRate(double rate) {
+        left1Motor.setOpenLoopRampRate(rate);
+        left2Motor.setOpenLoopRampRate(rate);
+        left3Motor.setOpenLoopRampRate(rate);
+        right1Motor.setOpenLoopRampRate(rate);
+        right2Motor.setOpenLoopRampRate(rate);
+        right3Motor.setOpenLoopRampRate(rate);
+    }
+
     public void curvatureDrive(double speed, double turn, boolean turnInPlace) {
         drivetrain.curvatureDrive(speed, turn, turnInPlace);
     }

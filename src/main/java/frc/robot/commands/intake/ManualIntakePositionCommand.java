@@ -24,7 +24,7 @@ public class ManualIntakePositionCommand extends CommandBase {
         if (extended) {
             intake.manualDeploy(-0.5);
         } else {
-            intake.manualDeploy(0.5);
+            intake.manualDeploy(1);
         }
     }
 

@@ -70,6 +70,7 @@ public class RobotContainer {
   
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
+  private final QuickTeleOpDriveCommand quickTeleOpDrive = new QuickTeleOpDriveCommand(drivetrain, gamepad1);
   private final SlowTeleOpDrive slowTeleOpDrive = new SlowTeleOpDrive(drivetrain, gamepad1);
 
   // intake
@@ -133,6 +134,7 @@ public class RobotContainer {
       // drivetrain commands
       backButton.whenPressed(teleOpDrive);
       aButton.whenPressed(slowTeleOpDrive).whenReleased(teleOpDrive); // for lining up climber and stuff
+      bButton.whenPressed(quickTeleOpDrive).whenReleased(teleOpDrive);
 
       // intake commands
       leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
