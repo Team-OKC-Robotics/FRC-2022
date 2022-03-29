@@ -13,6 +13,7 @@ import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.shooter.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.ShooterSubsystem.ShooterPresets;
 import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -95,6 +96,7 @@ public class RobotContainer {
   private final SetTriggerCommand triggerIn = new SetTriggerCommand(shooter, 0.4);
   private final SetTriggerCommand triggerOut = new SetTriggerCommand(shooter, -0.4);
   private final SetTriggerCommand stopTrigger = new SetTriggerCommand(shooter, 0);
+  private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad3);
 
   // climber
   private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.5, true);
@@ -142,7 +144,8 @@ public class RobotContainer {
 
       // fun flight stick controls (this is really fun can confirm)
       // shooter
-      sideButton.whenPressed(fastShooter).whenReleased(stopShooter);
+      // sideButton.whenPressed(fastShooter).whenReleased(stopShooter);
+      sideButton.whenPressed(shooterPresets).whenReleased(stopShooter);
       
       // climber
       topLeftButton.whenPressed(extendLeftClimber).whenReleased(stopLeftClimber);
