@@ -25,7 +25,6 @@ public class Robot extends TimedRobot {
   
   private RobotContainer m_robotContainer;
   private HttpCamera camera;
-  private UsbCamera driverCamera;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -38,12 +37,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true);
     //camera = new HttpCamera("photoncam", "http://photonvision.local:1182/stream.mjpg", HttpCameraKind.kMJPGStreamer);
-    CameraServer.startAutomaticCapture();
-
-    // setting this stuff in code kinda messes up setting it in shuffleboard and I'd rather be able to change things as they come
-    // driverCamera.setFPS(40);
-    // driverCamera.setResolution(240, 120);
-    // driverCamera.setPixelFormat(PixelFormat.kMJPEG);
+    CameraServer.startAutomaticCapture(); // get our USB camera to show up on Shuffleboard
   }
 
   /**
@@ -97,7 +91,6 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.getDriveCommand().schedule();
-    // m_robotContainer.getIntakePositionCommand().schedule(); // uses the POV so needs to run all the time in tele-op
   }
 
   /** This function is called periodically during operator control. */
