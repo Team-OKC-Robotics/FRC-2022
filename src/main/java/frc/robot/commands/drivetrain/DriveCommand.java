@@ -49,10 +49,6 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void end(boolean executed) {
-        // drivetrain.resetDistancePID();
-        // drivetrain.resetEncoders();
-        // drivetrain.resetGyro();
-        // drivetrain.resetHeadingPID();
         drivetrain.setMaxOutput(1);
     }
 
