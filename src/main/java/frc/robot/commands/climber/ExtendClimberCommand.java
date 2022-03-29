@@ -23,16 +23,18 @@ public class ExtendClimberCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        //TODO maybe reset encoders here?
+        // might want to only reset encoders when limit switches are pressed to a known value because 
+        // the encoders are relative so starting position can mess things up
+        climber.resetEncoders();
     }
 
     @Override
     public void execute() {
-        if (distance == -1) {
-            climber.extend(leftSide);
-        } else {
+        if (distance == -1) { // if we're not going to a specific distance
+            climber.extend(leftSide); // just set it
+        } else { // otherwise
             if (leftSide) {
-                climber.setLeftExtend(distance);
+                climber.setLeftExtend(distance); // set it to a specific distance
             } else {
                 climber.setRightExtend(distance);
             }

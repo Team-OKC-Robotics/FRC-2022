@@ -67,6 +67,7 @@ public class RobotContainer {
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
   private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter, intake); // drives the robot backwards
   private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
+  private final DriveOffLineAuto driveOffLineAuto = new DriveOffLineAuto(drivetrain); // just drives the robot backwards
   
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
@@ -79,7 +80,6 @@ public class RobotContainer {
   private final SetIntakeCommand intakeOut = new SetIntakeCommand(intake, -0.8);
   // private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
   // private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
-  // private final SetIntakePositionPOVCommand intakePositionPOVCommand = new SetIntakePositionPOVCommand(intake, gamepad3);
   private final ManualIntakePositionCommand deployIntake = new ManualIntakePositionCommand(intake, true);
   private final ManualIntakePositionCommand retractIntake = new ManualIntakePositionCommand(intake, false);
   private final ManualStopIntakePositionCommand stopIntakeDeploy = new ManualStopIntakePositionCommand(intake);
@@ -114,7 +114,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // add the autos to the chooser
-    AutoChooser.addAutos(shootThenDrive, twoBallAuto, doNothingAuto /*, gyroTestAuto*/);
+    AutoChooser.addAutos(shootThenDrive, twoBallAuto, driveOffLineAuto, doNothingAuto /*, gyroTestAuto*/);
     AutoChooser.addGamepad(gamepad1);
     resetDeploy.schedule();
 
@@ -146,9 +146,9 @@ public class RobotContainer {
       
       // climber
       topLeftButton.whenPressed(extendLeftClimber).whenReleased(stopLeftClimber);
-      bottomLeftButton.whenPressed(retractLeftClimber)/*.whenReleased(stopLeftClimber)*/;
+      bottomLeftButton.whenPressed(retractLeftClimber);
       topRightButton.whenPressed(extendRightClimber).whenReleased(stopRightClimber);
-      bottomRightButton.whenPressed(retractRightClimber)/*.whenReleased(stopRightClimber)*/;
+      bottomRightButton.whenPressed(retractRightClimber);
       elevenButton.whileHeld(rotateLeftClimber).whenReleased(stopLeftRotate);
       twelveButton.whileHeld(rotateRightClimber).whenReleased(stopRightRotate);
       
@@ -156,10 +156,6 @@ public class RobotContainer {
       triggerButton.whenPressed(feed).whenReleased(stopTrigger).whenPressed(indexerIn).whenReleased(stopIndexer); // ignore ball detection, for shooting
       sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer).whenPressed(triggerOut).whenReleased(stopTrigger); // reverse indexer/trigger controls
       eightButton.whileHeld(indexerIn).whenReleased(stopIndexer).whileHeld(triggerIn).whenReleased(stopTrigger);
-      // nineButton.whenPressed(indexerIn).whenReleased(stopIndexer); // separate indexer controls
-      // tenButton.whenPressed(indexerOut).whenReleased(stopIndexer); // separate indexer controls
-      // nineButton.whenPressed(retractIntake);
-      // tenButton.whenReleased(deployIntake);
       nineButton.whenPressed(retractIntake).whenReleased(stopIntakeDeploy);
       tenButton.whenPressed(deployIntake).whenReleased(stopIntakeDeploy);
   }

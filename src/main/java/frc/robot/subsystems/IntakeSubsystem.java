@@ -23,13 +23,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private RelativeEncoder deployEncoder;
     private SparkMaxPIDController extendPID;
-    private PIDController deployPID;
 
     private DigitalInput deployedLimitSwitch;
     private DigitalInput retractedLimitSwitch;
     private int direction = 0;
     private double intakePos = 0;
-    // private SparkMaxLimitSwitch limitSwitch;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("intake");
@@ -48,10 +46,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry intakeD = tab.add("Intake kD", IntakeK.deployD).getEntry();
 
     private NetworkTableEntry deployedPreset = tab.add("Deployed preset", IntakeK.EXTENDED).getEntry();
-    
-    // I don't think there needs to be any shuffleboard stuff here
-    // we could do some weird stuff with like hasBall() but that's not important right now\
-        
+            
     /**
      * makes a new IntakeSubsystem
      * the intake consists of the intake itself, which goes up and down, and the powered wheels to suck balls in
@@ -63,12 +58,14 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
     
         if (deployMotor != null) {
-            extendPID = deployMotor.getPIDController(); //TODO configure this because it's gonna not work right because going down is gonna kill stuff
-            deployEncoder = deployMotor.getEncoder();
-            deployMotor.setSoftLimit(SoftLimitDirection.kForward, IntakeK.maxDeploy);
             deployMotor.setIdleMode(IdleMode.kCoast);
+            deployMotor.setOpenLoopRampRate(1); // oh so _that's_ why it was going to slow dang
+            // this is so the intake doesn't kill something on the way down (or up)
+            
+            deployEncoder = deployMotor.getEncoder();
             deployEncoder.setPosition(0);
 
+            extendPID = deployMotor.getPIDController();
             extendPID.setP(IntakeK.deployP);
             extendPID.setI(IntakeK.deployI);
             extendPID.setD(IntakeK.deployD);
@@ -78,35 +75,21 @@ public class IntakeSubsystem extends SubsystemBase {
             indexerMotor.setIdleMode(IdleMode.kCoast);
             indexerMotor.setInverted(true);
             indexerMotor.setSmartCurrentLimit(30); // so as to not kill the baby neo
+            indxerMotor.setOpenLoopRampRate(0.1) // so as not to kill the baby neo
         }
 
         if (intakeMotor != null) {
             intakeMotor.setIdleMode(IdleMode.kCoast);
             intakeMotor.setInverted(true);
-            intakeMotor.setOpenLoopRampRate(0.1);
+            intakeMotor.setOpenLoopRampRate(0.1); // so as not to destroy the belts
         }
 
-        deployPID = new PIDController(IntakeK.deployP, IntakeK.deployI, IntakeK.deployD);
         deployedLimitSwitch = new DigitalInput(2);
         retractedLimitSwitch = new DigitalInput(3);
-
-        deployMotor.setOpenLoopRampRate(1);
-
-        // limitSwitch = deployMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     }
 
     public void resetDeployEncoder() {
         deployEncoder.setPosition(0);
-    }
-
-    public void incrementIntakePosition() {
-        intakePos += 1;
-        extendPID.setReference(intakePos, ControlType.kPosition);
-    }
-
-    public void decrementIntakePosition() {
-        intakePos -= 1;
-        extendPID.setReference(intakePos, ControlType.kPosition);
     }
 
     /**
@@ -114,9 +97,9 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param power the power to set the intake to
      */
     public void setIntake(double power) {
-        // if (intakeMotor != null) {
+        if (intakeMotor != null) {
             intakeMotor.set(power);
-        // }
+        }
     }
 
     /**
@@ -155,22 +138,14 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public void setExtended(boolean extended) {
         if (deployMotor != null) {
-            if (extended) {
-                deployPID.setSetpoint(deployedPreset.getDouble(IntakeK.EXTENDED));
-                direction = 1;
+            if (extended) { // if we're going to deploy it
+                deployPID.setSetpoint(deployedPreset.getDouble(IntakeK.EXTENDED)); // set the PID to deploy
+                direction = 1; // set the direction we're going in (for limit switch purposes)
             } else {
-                deployPID.setSetpoint(IntakeK.RAISED);
+                deployPID.setSetpoint(IntakeK.RAISED); // same thing
                 direction = -1;
             }
         }
-
-        // if (extendPID != null) {
-        //     if (extended) {
-        //         extendPID.setReference(deployedPreset.getDouble(IntakeK.EXTENDED), ControlType.kPosition);
-        //     } else {
-        //         extendPID.setReference(IntakeK.RAISED, ControlType.kPosition);
-        //     }
-        // }
     }
 
     /**
@@ -184,47 +159,27 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // if (limitSwitch.isPressed()) {
-        //     resetDeployEncoder();
-        // }
-
-
-        if (!Constants.competition) {
-            if (deployedLimitSwitch.get()) {
-                deployedSwitch.setBoolean(true);
-            } else {
-                deployedSwitch.setBoolean(false);
-            }
-            
-            if (retractedLimitSwitch.get()) {
-                retractedSwitch.setBoolean(true);
-            } else {
-                retractedSwitch.setBoolean(false);
-            }
-        }
-
         // I feel like there's potential for some speedup here by combining these if statements
-        if (!deployedLimitSwitch.get()) {
-            deployEncoder.setPosition(IntakeK.EXTENDED);
-        } else if (!retractedLimitSwitch.get()) {
-            deployEncoder.setPosition(0);
+        if (!deployedLimitSwitch.get()) { // if limit switch is pressed
+            deployEncoder.setPosition(IntakeK.EXTENDED); // set the intake encoder to the correct position
+        } else if (!retractedLimitSwitch.get()) { // if the other limit switch is pressed
+            deployEncoder.setPosition(0); // then it's at 0
         }
-        // retracted limit switch is reversed logic
-        // deployed is reversed aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
            
-        if (direction != 0) {
-            if (!deployedLimitSwitch.get() && direction == -1) {
-                // deployed.setBoolean(true);
-                deployMotor.set(0);
-            } else if (!retractedLimitSwitch.get() && direction == 1) {
-                // deployed.setBoolean(false);
-                deployMotor.set(0);
-            } else {
-                double power = deployPID.calculate(deployEncoder.getPosition());
-                if (Math.abs(power) > 0.4) {
+        if (direction != 0) { // don't start moving unless the code has started and the intake has been told to move,
+                              // so it can be moved when powered on but disabled
+            if (!deployedLimitSwitch.get() && direction == -1) { // if the limit switch is pressed
+                deployed.setBoolean(true);
+                deployMotor.set(0); // stop the intake
+            } else if (!retractedLimitSwitch.get() && direction == 1) { // if the retracted limit switch is pressed
+                deployed.setBoolean(false);
+                deployMotor.set(0); // stop the intake
+            } else { // otherwise we're good to keep moving
+                double power = deployPID.calculate(deployEncoder.getPosition()); // calculate the power
+                if (Math.abs(power) > 0.4) { // limit the power to a max of 0.4
                     power = Math.copySign(0.4, power);
                 }
-                deployMotor.set(power);
+                deployMotor.set(power); // move the intake
             }
         }
         
@@ -244,15 +199,15 @@ public class IntakeSubsystem extends SubsystemBase {
             }
             
             if (deployedLimitSwitch.get()) {
-                deployedSwitch.setBoolean(true);
-            } else {
                 deployedSwitch.setBoolean(false);
+            } else {
+                deployedSwitch.setBoolean(true);
             }
             
             if (retractedLimitSwitch.get()) {
-                retractedSwitch.setBoolean(true);
-            } else {
                 retractedSwitch.setBoolean(false);
+            } else {
+                retractedSwitch.setBoolean(true);
             }
         }
     }

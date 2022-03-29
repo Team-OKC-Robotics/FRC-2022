@@ -40,5 +40,3 @@ public class ShootThenDriveAuto extends Auto {
         );
     }
 }
-//Danial, if you read this, run
-//to where? and you spelt my name wrong like what the heck

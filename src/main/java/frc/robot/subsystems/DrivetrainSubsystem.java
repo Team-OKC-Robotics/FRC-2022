@@ -91,6 +91,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         right3Motor = new CANSparkMax(6, MotorType.kBrushless);
         rightSide = new MotorControllerGroup(right1Motor, right2Motor, right3Motor);
 
+        // coast mode so we don't kill the gearbox and motors (also makes driving easier)
         left1Motor.setIdleMode(IdleMode.kCoast);
         left2Motor.setIdleMode(IdleMode.kCoast);
         left3Motor.setIdleMode(IdleMode.kCoast);
@@ -98,19 +99,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
         right2Motor.setIdleMode(IdleMode.kCoast);
         right3Motor.setIdleMode(IdleMode.kCoast);
 
-        left1Motor.setOpenLoopRampRate(0);
-        left2Motor.setOpenLoopRampRate(0);
-        left3Motor.setOpenLoopRampRate(0);
-        right1Motor.setOpenLoopRampRate(0);
-        right2Motor.setOpenLoopRampRate(0);
-        right3Motor.setOpenLoopRampRate(0);
+        // for autonomous start with a fast ramp rate (not too fast otherwise we kind of break the gearboxes)
+        // we had problems with stripping gears and whatnot because we put too much force on the gears so this limits
+        // that. VEX guy said on Chief Delphi not to put too much acceleration on them otherwise they strip
+        left1Motor.setOpenLoopRampRate(0.01);
+        left2Motor.setOpenLoopRampRate(0.01);
+        left3Motor.setOpenLoopRampRate(0.01);
+        right1Motor.setOpenLoopRampRate(0.01);
+        right2Motor.setOpenLoopRampRate(0.01);
+        right3Motor.setOpenLoopRampRate(0.01);
 
-
-        rightSide.setInverted(true);
+        rightSide.setInverted(true); // motors face opposite directions so +1 for left side is opposite +1 for right side, this fixes that
         drivetrain = new DifferentialDrive(leftSide, rightSide);
-       
-        // drivetrain.setMaxOutput(0.5);
 
+        // get the built-in encoders of the NEOs       
         left1Encoder = left1Motor.getEncoder();
         left2Encoder = left2Motor.getEncoder();
         left3Encoder = left3Motor.getEncoder();
@@ -127,13 +129,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
         distancePID = new PIDController(DriveK.distanceP, DriveK.distanceI, DriveK.distanceD);
         headingPID = new PIDController(DriveK.headingP, DriveK.headingI, DriveK.headingD);
         turnPID = new PIDController(DriveK.turnP, DriveK.turnI, DriveK.turnD);
-        //turnPID.enableContinuousInput(-180, 180);
 
+        // set the tolerance of the various PIDs. this ensures we don't wait for them to be super precise before
+        // moving on (which in some cases without a kI term can be literally forever) but still ensures
+        // we've settled down close enough
         distancePID.setTolerance(2);
         headingPID.setTolerance(7, 1);
-        headingPID.enableContinuousInput(-180, 180);
+        turnPID.setTolerance(7, 2);
 
-        // Shuffleboard initilization
+        // Shuffleboard initilization of sensor values
         leftTicks.setDouble(0);
         rightTicks.setDouble(0);
         totalTicks.setDouble(0);
@@ -188,9 +192,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
     
     /**
-     * Arcade drives the robot. Does not square the inputs.
+     * Arcade drives the robot, taking into account speedModifier
      * @param speed the speed of the robot
      * @param turn how much to turn the robot
+     * @param squareInputs whether or not to square the inputs for fine-grain control
      */
     public void arcadeDrive(double speed, double turn, boolean squareInputs) {
         drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, squareInputs);
@@ -264,7 +269,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     public double getLeftEncoderAverage() {
         return left1Encoder.getPosition();
-        // return (left1Encoder.getPosition() + left2Encoder.getPosition() + left3Encoder.getPosition()) / 3;
     }
 
     /**
@@ -273,7 +277,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     public double getRightEncoderAverage() {
         return right1Encoder.getPosition();
-        // return (right1Encoder.getPosition() + right2Encoder.getPosition() + right3Encoder.getPosition()) / 3;
     }
 
     /**
@@ -373,7 +376,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (!Constants.competition) {
-            // update Shuffelboard values
+            // update Shuffelboard sensor values
             leftTicks.setDouble(getLeftEncoderAverage());
             rightTicks.setDouble(getRightEncoderAverage());
             totalTicks.setDouble(getEncoderAverage());
