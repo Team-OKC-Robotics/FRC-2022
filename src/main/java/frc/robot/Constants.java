@@ -13,7 +13,7 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final double neo550TicksPerRev = 42;
+    public static final double neo550TicksPerRev = 42; // although I think getPosition() might return in native units of rotations so this would then be 1
     public static final double neoTicksPerRev = 42;
     public static final double falconTicksPerRev = 2048;
     public static final boolean competition = true; // if enabled, disables a lot of the automatic shuffleboard values
@@ -42,10 +42,10 @@ public final class Constants {
         public static final double shootD = 0.0001;
         public static final double shootF = 0.4;
 
-        public static final double preset1 = 9000; // in RPM, close launchpad distance (actually this is the right next to tower goal which is the only shot we can make)
-        public static final double preset2 = 18000; // in RPM, far launchpad distance
-        public static final double tarmacPreset = 1500;
-        public static final double lowGoalPreset = 1000;
+        public static final double normalShot = 9000;
+        public static final double againstHub = 8000;
+        public static final double lowGoal = 1500;
+        public static final double farShot = 12000;
     }
 
     public final class IntakeK {
@@ -54,11 +54,12 @@ public final class Constants {
         public static final double deployI = 0;
         public static final double deployD = 0.01;
 
-        //TODO test and tune this
-        public static final double RAISED = 0; // ticks for intake at raised position (actually this would be 0)
-        public static final double EXTENDED = neo550TicksPerRev * 1.4; // ticks for intake being extended
+        public static final double gearRatio = 1/5 * 1/5 * 1/5; // gear ratio on the intake gearbox
+        public static final double rotations = 0.4; // intake needs to rotate 0.4 rotations to reach deployed state
 
-        public static final float maxDeploy = 1000000;
+        //TODO test and tune this
+        public static final double RAISED = 0; // starting position (aka not extended aka raised) is 0
+        public static final double EXTENDED = gearRatio * rotations; // rotations for intake being extended
     }
 
     public final class ClimbK {
@@ -96,6 +97,4 @@ public final class Constants {
         public static final double heightOfCamera = 0; //TODO change this to be the actual value
         public static final double cameraAngle = 0; //TODO change this to be the actual value
     }
-
-    public static final double logTime = 0.1; // 100 milliseconds
 }

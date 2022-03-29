@@ -58,10 +58,10 @@ public class ShooterSubsystem extends SubsystemBase {
     private NetworkTableEntry shooterGood = tab.add("shooter good", false).getEntry();
 
     // presets
-    private NetworkTableEntry preset1 = tab.add("close launchpad preset", ShootK.preset1).getEntry();
-    private NetworkTableEntry preset2 = tab.add("far launchpad preset", ShootK.preset2).getEntry();
-    private NetworkTableEntry preset3 = tab.add("tarmac line preset", ShootK.tarmacPreset).getEntry();
-    private NetworkTableEntry preset4 = tab.add("low goal preset", ShootK.lowGoalPreset).getEntry();
+    private NetworkTableEntry normalShot = tab.add("normal shot preset", ShootK.normalShot).getEntry();
+    private NetworkTableEntry againstHub = tab.add("against hub preset", ShootK.againstHub).getEntry();
+    private NetworkTableEntry lowGoal = tab.add("low goal preset", ShootK.lowGoal).getEntry();
+    private NetworkTableEntry farShot = tab.add("far shot preset", ShootK.farShot).getEntry();
     
     /**
      * Makes a new ShooterSubsystem
