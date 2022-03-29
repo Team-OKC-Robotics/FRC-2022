@@ -26,16 +26,14 @@ public class ShooterSubsystem extends SubsystemBase {
      * this should be eventually (hopefully) rendered obsolete by just using vision and good maths
      */
     public enum ShooterPresets {
-        CLOSE_LAUNCHPAD,
-        FAR_LAUNCHPAD,
-        TARMAC_LINE,
-        CENTER_LINE,
-        LOW_GOAL
+        NORMAL_SHOT,
+        AGAINST_HUB,
+        LOW_GOAL,
+        FAR_SHOT
     }
 
     // actuators
     private TalonFX shooterMotor1;
-    private PIDController shooterPID;
     private CANSparkMax triggerMotor; // the shooter tower
 
     // sensors
@@ -84,7 +82,6 @@ public class ShooterSubsystem extends SubsystemBase {
             // shooterMotor1.config_kF(0, ShootK.shootF, 200);
 
             shooterMotor1.setSelectedSensorPosition(0);
-            shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
         }
 
         triggerMotor = new CANSparkMax(9, MotorType.kBrushless);
@@ -99,12 +96,14 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void setShooter(double RPM) {
         if (shooterMotor1 != null) {
-            // shooterMotor1.set(ControlMode.PercentOutput, -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity()));
-            shooterMotor1.set(ControlMode.Velocity, RPM/* * 2048.0 / 600.0*/, DemandType.ArbitraryFeedForward, 0.4); // have to convert to units / 100ms or something?
+            // based off of tuning with pheonix tuner
+            // WAIT HOLD UP I think this needs the secondary demand? of the PID loop?
+            shooterMotor1.set(ControlMode.Velocity, RPM, DemandType.ArbitraryFeedForward, 0.4);
         }
     }
 
     public void stopShooter() {
+        // coast the shooter down instead of PIDing it down which would maybe break it
         shooterMotor1.set(TalonFXControlMode.PercentOutput, 0);
     }
 
@@ -113,14 +112,14 @@ public class ShooterSubsystem extends SubsystemBase {
      * @param preset the preset to set the shooter to
      */
     public void setShooterPreset(ShooterPresets preset) {
-        if (preset == ShooterPresets.LOW_GOAL) {
-            setShooter(preset4.getDouble(ShootK.lowGoalPreset));
-        } else if (preset == ShooterPresets.TARMAC_LINE) {
-            setShooter(preset3.getDouble(ShootK.tarmacPreset));
-        } else if (preset == ShooterPresets.CLOSE_LAUNCHPAD) {
-            setShooter(preset2.getDouble(ShootK.preset2));
-        } else if (preset == ShooterPresets.FAR_LAUNCHPAD) {
-            setShooter(preset1.getDouble(ShootK.preset1));
+        if (preset == ShooterPresets.NORMAL_SHOT) {
+            setShooter(normalShot.getDouble(ShootK.normalShot));
+        } else if (preset == ShooterPresets.AGAINST_HUB) {
+            setShooter(againstHub.getDouble(ShootK.againstHub));
+        } else if (preset == ShooterPresets.LOW_GOAL) {
+            setShooter(lowGoal.getDouble(ShootK.lowGoal));
+        } else if (preset == ShooterPresets.FAR_SHOT) {
+            setShooter(farShot.getDouble(ShootK.farShot));
         }
     }
 
@@ -130,10 +129,7 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public boolean atShooterSetpoint() {
         if (shooterMotor1 != null) {
-            // return shooterPID.atSetpoint();
-            // return Math.abs(shooterMotor1.getSelectedSensorVelocity() - ShootK.tarmacPreset) < 500 && shooterPID.getVelocityError() < 100; //??? I know that's the only preset we're going for but 
-            //TODO check and make sure I'm accounting for velocity error correctly
-            return Math.abs(shooterMotor1.getClosedLoopError()) < 100 && shooterMotor1.getErrorDerivative() < 10; //???
+            return Math.abs(shooterMotor1.getClosedLoopError()) < 100 && shooterMotor1.getErrorDerivative() < 10;
         }
         return true;
     }
@@ -142,9 +138,9 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setTrigger(double power) {
         if (triggerMotor != null) {
             if (!ballDetector.get()) { // ball detector is inverse logic, so if we have ball
-                if (power <= 0) { // don't let the ball move forwards
+                if (power <= 0) { // let the ball move backwards
                     triggerMotor.set(power);
-                } else {
+                } else { // don't let the ball move forwards
                     triggerMotor.set(0);
                 }
             } else {
@@ -153,7 +149,7 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
-    // ignores ball detection
+    // ignores ball detection, for when we want to actually shoot
     public void feed(double power) {
         if (triggerMotor != null) {
             triggerMotor.set(power);
@@ -177,13 +173,10 @@ public class ShooterSubsystem extends SubsystemBase {
             // Shuffleboard on-the-fly tuning
             if (writeMode.getBoolean(false)) {
                 if (shooterMotor1 != null) {
-                    // shooterMotor1.config_kP(0, shootP.getDouble(ShootK.shootP));
-                    // shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
-                    // shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
-                    // shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
-                    // shooterPID.setP(shootP.getDouble(ShootK.shootP));
-                    // shooterPID.setI(shootI.getDouble(ShootK.shootI));
-                    // shooterPID.setD(shootD.getDouble(ShootK.shootD));
+                    shooterMotor1.config_kP(0, shootP.getDouble(ShootK.shootP));
+                    shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
+                    shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
+                    shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
                 }
             }
         }
