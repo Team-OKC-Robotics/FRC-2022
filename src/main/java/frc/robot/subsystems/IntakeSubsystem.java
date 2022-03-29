@@ -75,7 +75,7 @@ public class IntakeSubsystem extends SubsystemBase {
             indexerMotor.setIdleMode(IdleMode.kCoast);
             indexerMotor.setInverted(true);
             indexerMotor.setSmartCurrentLimit(30); // so as to not kill the baby neo
-            indxerMotor.setOpenLoopRampRate(0.1) // so as not to kill the baby neo
+            indexerMotor.setOpenLoopRampRate(0.1); // so as not to kill the baby neo
         }
 
         if (intakeMotor != null) {
@@ -139,10 +139,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setExtended(boolean extended) {
         if (deployMotor != null) {
             if (extended) { // if we're going to deploy it
-                deployPID.setSetpoint(deployedPreset.getDouble(IntakeK.EXTENDED)); // set the PID to deploy
+                // deployPID.setSetpoint(deployedPreset.getDouble(IntakeK.EXTENDED)); // set the PID to deploy
                 direction = 1; // set the direction we're going in (for limit switch purposes)
             } else {
-                deployPID.setSetpoint(IntakeK.RAISED); // same thing
+                // deployPID.setSetpoint(IntakeK.RAISED); // same thing
                 direction = -1;
             }
         }
@@ -169,14 +169,15 @@ public class IntakeSubsystem extends SubsystemBase {
         if (direction != 0) { // don't start moving unless the code has started and the intake has been told to move,
                               // so it can be moved when powered on but disabled
             if (!deployedLimitSwitch.get() && direction == -1) { // if the limit switch is pressed
-                deployed.setBoolean(true);
+                // deployed.setBoolean(true);
                 deployMotor.set(0); // stop the intake
             } else if (!retractedLimitSwitch.get() && direction == 1) { // if the retracted limit switch is pressed
-                deployed.setBoolean(false);
+                // deployed.setBoolean(false);
                 deployMotor.set(0); // stop the intake
             } else { // otherwise we're good to keep moving
-                double power = deployPID.calculate(deployEncoder.getPosition()); // calculate the power
-                if (Math.abs(power) > 0.4) { // limit the power to a max of 0.4
+                // double power = deployPID.calculate(deployEncoder.getPosition()); // calculate the power
+                double power = 0;
+                if (Math.abs(power) > 0.4) { // limit the power to a max of 0.4                
                     power = Math.copySign(0.4, power);
                 }
                 deployMotor.set(power); // move the intake

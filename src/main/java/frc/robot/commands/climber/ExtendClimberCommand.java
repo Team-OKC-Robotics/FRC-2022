@@ -25,7 +25,7 @@ public class ExtendClimberCommand extends CommandBase {
     public void initialize() {
         // might want to only reset encoders when limit switches are pressed to a known value because 
         // the encoders are relative so starting position can mess things up
-        climber.resetEncoders();
+        // climber.resetEncoders();
     }
 
     @Override

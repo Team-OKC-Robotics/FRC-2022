@@ -64,24 +64,15 @@ public final class Constants {
 
     public final class ClimbK {
         //TODO test and tune the entire climber subsystem
-        public static final double leftTiltP = 0;
-        public static final double leftTiltD = 0;
-        public static final double leftTiltI = 0;
+        public static final double tiltP = 0;
+        public static final double tiltD = 0;
+        public static final double tiltI = 0;
         
-        public static final double leftExtendP = 0.00001;
-        public static final double leftExtendI = 0;
-        public static final double leftExtendD = 0.00000001;
-        public static final double leftExtendF = 0;
+        public static final double extendP = 0.00001;
+        public static final double extendI = 0;
+        public static final double extendD = 0.00000001;
+        public static final double extendF = 0;
         
-        public static final double rightTiltP = 0;
-        public static final double rightTiltI = 0;
-        public static final double rightTiltD = 0;
-        
-        public static final double rightExtendP = 0;
-        public static final double rightExtendI = 0;
-        public static final double rightExtendD = 0;
-        public static final double rightExtendF = 0;
-
 
         public static final double gearRatio = 1/625;
         public static final double pulleyDiameter = 3; // inches

@@ -25,7 +25,7 @@ public class ShootThenDriveAuto extends Auto {
             "An auto that shoots the preloaded, then drives off the tarmac",
             6,
             new ParallelCommandGroup(new SetShooterCommand(shooter, 8000), new WaitCommand(2)), // warm up the shooter
-            new ShootAndFeedCommand(shooter, ShootK.preset1, 3), // once it's there run both the shooter and the indexer for 3 seconds
+            new ShootAndFeedCommand(shooter, ShootK.normalShot, 3), // once it's there run both the shooter and the indexer for 3 seconds
             new StopShooterCommand(shooter),
             new SetIndexerCommand(intake, 0),
             new SetTriggerCommand(shooter, 0),
