@@ -233,8 +233,8 @@ public class IntakeSubsystem extends SubsystemBase {
         }
         lastBallDetector = now; // update the variable for the last state
 
-        if (cargoCount == 2) {
-            deployPID.setSetpoint(IntakeK.RAISED);
+        if (cargoCount == 2) { // if we have 2 cargo
+            deployPID.setSetpoint(IntakeK.RAISED); // raise the intake because we're not going to be intaking anymore
         }
 
         // I feel like there's potential for some speedup here by combining these if statements
