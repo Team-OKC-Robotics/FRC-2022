@@ -66,6 +66,10 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
 
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
+
+  private final SetPowerCommand manualUp = new SetPowerCommand(0.1);
+  private final SetPowerCommand manualDown = new SetPowerCommand(-0.1);
+  private final StopCommand stop = new StopCommand();
   
   
   /**
@@ -93,9 +97,8 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
       backButton.whenPressed(teleOpDrive);
 
       // probably don't need these
-      // aButton.whenPressed(ledsOn);
-      // bButton.whenPressed(ledsOff);
-  }
+      
+   }
 
   public Command getDriveCommand() {
     // return teleopDrive;
