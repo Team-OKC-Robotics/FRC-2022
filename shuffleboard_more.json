@@ -608,28 +608,6 @@
               "_title": "write mode"
             }
           },
-          "1,2": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///Shuffleboard/shooter/close launchpad preset",
-              "_title": "close launchpad preset"
-            }
-          },
-          "1,3": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///Shuffleboard/shooter/far launchpad preset",
-              "_title": "far launchpad preset"
-            }
-          },
           "6,1": {
             "size": [
               1,
@@ -676,13 +654,35 @@
           },
           "3,2": {
             "size": [
-              2,
+              1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///Shuffleboard/shooter/tarmac line preset",
-              "_title": "Shuffleboard/shooter/tarmac line preset"
+              "_source0": "network_table:///Shuffleboard/shooter/against hub preset",
+              "_title": "Shuffleboard/shooter/against hub preset"
+            }
+          },
+          "5,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/far shot preset",
+              "_title": "Shuffleboard/shooter/far shot preset"
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/normal shot preset",
+              "_title": "Shuffleboard/shooter/normal shot preset"
             }
           }
         }

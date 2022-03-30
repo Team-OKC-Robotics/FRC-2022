@@ -32,7 +32,7 @@ public class ShooterPresetCommand extends CommandBase {
                 shooter.setShooterPreset(ShooterPresets.FAR_SHOT);
                 break;
             default:
-                shooter.setShooterPreset(ShooterPresets.NORMAL_SHOT);
+                // shooter.setShooterPreset(ShooterPresets.NORMAL_SHOT);
                 break;
         }
     }

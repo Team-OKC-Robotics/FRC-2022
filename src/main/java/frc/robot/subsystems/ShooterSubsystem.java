@@ -11,8 +11,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,6 +39,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // actuators
     private TalonFX shooterMotor1;
     private CANSparkMax triggerMotor; // the shooter tower
+    private PIDController shooterPID;
 
     // sensors
     private DigitalInput ballDetector;
@@ -61,6 +67,9 @@ public class ShooterSubsystem extends SubsystemBase {
     private NetworkTableEntry againstHub = tab.add("against hub preset", ShootK.againstHub).getEntry();
     private NetworkTableEntry lowGoal = tab.add("low goal preset", ShootK.lowGoal).getEntry();
     private NetworkTableEntry farShot = tab.add("far shot preset", ShootK.farShot).getEntry();
+
+    private DataLog log;
+    private DoubleLogEntry rpmLog;
     
     /**
      * Makes a new ShooterSubsystem
@@ -78,6 +87,7 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterMotor1.config_kP(0, ShootK.shootP, 200);
             shooterMotor1.config_kI(0, ShootK.shootI, 200);
             shooterMotor1.config_kD(0, ShootK.shootD, 200);
+            shooterMotor1.configOpenloopRamp(0);
             // shooterMotor1.config_kF(0, ShootK.shootF, 200);
 
             shooterMotor1.setSelectedSensorPosition(0);
@@ -87,6 +97,22 @@ public class ShooterSubsystem extends SubsystemBase {
         triggerMotor.setIdleMode(IdleMode.kCoast);
         triggerMotor.setSmartCurrentLimit(30); // so as to not kill the baby neo
         ballDetector = new DigitalInput(9);
+
+        DataLogManager.start();
+        log = DataLogManager.getLog();
+        rpmLog = new DoubleLogEntry(log, "/shooter/rpm");
+
+        shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
+    }
+
+    public double clamp(double minOutput, double maxOutput, double input) {
+        if (input < minOutput) {
+            return minOutput;
+        } else if (input > maxOutput) {
+            return maxOutput;
+        } else {
+            return input;
+        }
     }
 
     /**
@@ -96,8 +122,11 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setShooter(double RPM) {
         if (shooterMotor1 != null) {
             // based off of tuning with pheonix tuner
-            // WAIT HOLD UP I think this needs the secondary demand? of the PID loop?
-            shooterMotor1.set(ControlMode.Velocity, RPM, DemandType.ArbitraryFeedForward, 0.4);
+            // shooterMotor1.set(ControlMode.Velocity, RPM, DemandType.ArbitraryFeedForward, 0.4);
+            double power = -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
+            shooterOutput.setDouble(power);
+            shooterMotor1.set(ControlMode.PercentOutput, clamp(0, 1, power));
+
         }
     }
 
@@ -157,6 +186,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        rpmLog.append(shooterMotor1.getSelectedSensorVelocity());
+        
         if (!Constants.competition) {
             hasBall.setBoolean(ballDetector.get());
 
@@ -172,10 +203,13 @@ public class ShooterSubsystem extends SubsystemBase {
             // Shuffleboard on-the-fly tuning
             if (writeMode.getBoolean(false)) {
                 if (shooterMotor1 != null) {
-                    shooterMotor1.config_kP(0, shootP.getDouble(ShootK.shootP));
-                    shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
-                    shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
-                    shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
+                    // shooterMotor1.config_kP(0, shootP.getDouble(ShootK.shootP));
+                    // shooterMotor1.config_kI(0, shootI.getDouble(ShootK.shootI));
+                    // shooterMotor1.config_kD(0, shootD.getDouble(ShootK.shootD));
+                    // shooterMotor1.config_kF(0, shootF.getDouble(ShootK.shootF));
+                    shooterPID.setP(shootP.getDouble(ShootK.shootP));
+                    shooterPID.setI(shootI.getDouble(ShootK.shootI));
+                    shooterPID.setD(shootD.getDouble(ShootK.shootD));
                 }
             }
         }
