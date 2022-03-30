@@ -30,6 +30,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private double intakePos = 0;
 
     private DigitalInput ballDetector;
+    private ColorSensorV3 colorSensor;
     private int cargoCount = 0;
     private int indexerDirection = 0;
     private boolean now = false;
@@ -94,6 +95,7 @@ public class IntakeSubsystem extends SubsystemBase {
         deployedLimitSwitch = new DigitalInput(2);
         retractedLimitSwitch = new DigitalInput(3);
         ballDetector = new DigitalInput(8);
+        colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
     }
 
     public void resetDeployEncoder() {
@@ -190,17 +192,24 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         now = !ballDetector.get(); // make it normal logic
-        if (now && !lastBallDetector && indexerDirection == 1) {
-            cargoCount += 1;
-            if (cargoCount > 2) {
-                reverseReverse = true;
-                setIntake(-0.8);
-                setIndexer(-0.8);
-            } else {
-                reverseReverse = false;
+        if (now && !lastBallDetector && indexerDirection == 1 && !deployedLimitSwitch.get()) { // if we have a ball, and we didn't previously have one, and we're moving it into the robot, and the intake is deployed
+            ColorMatchResult color = colorMatcher.matchClosestColor(colorSensor.getColor()); // get the color of the ball
+            if (color == currentAlliance) { // if it's one we want
+                cargoCount += 1; // raise the cargo count
+                if (cargoCount > 2) { // if we are carrying more than two
+                    reverseReverse = true; // spit it out
+                    setIntake(-0.8);
+                    setIndexer(-0.8);
+                } else { // otherwise we're good
+                    reverseReverse = false; // and can keep on going normally
+                }
+            } else { // otherwise it's not our color of cargo
+                reverseReverse = true; // so spit it out
             }
+        } else if (!now && lastBallDetector) { // if we don't have the cargo anymore
+            reverseReverse = false; // then we can stop spitting out (might need to something so it makes it run for a certain period of time or something)
         }
-        lastBallDetector = now;
+        lastBallDetector = now; // update the variable for the last state
 
         // I feel like there's potential for some speedup here by combining these if statements
         if (!deployedLimitSwitch.get()) { // if limit switch is pressed
