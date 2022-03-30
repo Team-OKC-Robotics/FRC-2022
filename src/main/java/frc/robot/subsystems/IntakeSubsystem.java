@@ -22,7 +22,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax indexerMotor;
 
     private RelativeEncoder deployEncoder;
-    private SparkMaxPIDController extendPID;
+    private PIDController deployPID;
 
     private DigitalInput deployedLimitSwitch;
     private DigitalInput retractedLimitSwitch;
@@ -65,10 +65,7 @@ public class IntakeSubsystem extends SubsystemBase {
             deployEncoder = deployMotor.getEncoder();
             deployEncoder.setPosition(0);
 
-            extendPID = deployMotor.getPIDController();
-            extendPID.setP(IntakeK.deployP);
-            extendPID.setI(IntakeK.deployI);
-            extendPID.setD(IntakeK.deployD);
+            deployPID = new PIDController(IntakeK.deployP, IntakeK.deployI, IntakeK.deployD)
         }
 
         if (indexerMotor != null) {
@@ -123,15 +120,6 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
-    public void manualDeploy(double power) {
-        extendPID.setReference(power, ControlType.kDutyCycle);
-    }
-
-    public void manualStop() {
-        intakePos = deployEncoder.getPosition();
-        extendPID.setReference(intakePos, ControlType.kPosition);
-    }
-
     /**
      * set the intake to be extended/deployed
      * @param extended if the intake should be extended/deployed or not
@@ -139,10 +127,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setExtended(boolean extended) {
         if (deployMotor != null) {
             if (extended) { // if we're going to deploy it
-                // deployPID.setSetpoint(deployedPreset.getDouble(IntakeK.EXTENDED)); // set the PID to deploy
+                deployPID.setSetpoint(deployedPreset.getDouble(IntakeK.EXTENDED)); // set the PID to deploy
                 direction = 1; // set the direction we're going in (for limit switch purposes)
             } else {
-                // deployPID.setSetpoint(IntakeK.RAISED); // same thing
+                deployPID.setSetpoint(IntakeK.RAISED); // same thing
                 direction = -1;
             }
         }
@@ -177,8 +165,8 @@ public class IntakeSubsystem extends SubsystemBase {
             } else { // otherwise we're good to keep moving
                 // double power = deployPID.calculate(deployEncoder.getPosition()); // calculate the power
                 double power = 0;
-                if (Math.abs(power) > 0.4) { // limit the power to a max of 0.4                
-                    power = Math.copySign(0.4, power);
+                if (Math.abs(power) > 0.6) { // limit the power to a max of 0.4                
+                    power = Math.copySign(0.6, power);
                 }
                 deployMotor.set(power); // move the intake
             }
@@ -192,11 +180,9 @@ public class IntakeSubsystem extends SubsystemBase {
             }
     
             if (writeMode.getBoolean(false)) {
-                if (extendPID != null) {
-                    extendPID.setP(intakeP.getDouble(IntakeK.deployP));
-                    extendPID.setI(intakeI.getDouble(IntakeK.deployI));
-                    extendPID.setD(intakeD.getDouble(IntakeK.deployD));
-                }
+                deployPID.setP(intakeP.getDouble(IntakeK.deployP));
+                deployPID.setI(intakeI.getDouble(IntakeK.deployI));
+                deployPID.setD(intakeD.getDouble(IntakeK.deployD));
             }
             
             if (deployedLimitSwitch.get()) {
