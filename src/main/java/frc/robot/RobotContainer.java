@@ -63,6 +63,7 @@ public class RobotContainer {
   private final IntakeSubsystem intake = new IntakeSubsystem();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
   private final ClimberSubsystem climber = new ClimberSubsystem();
+  private final VisionSubsystem vision = new VisionSubsystem();
 
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
@@ -74,6 +75,7 @@ public class RobotContainer {
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
   private final QuickTeleOpDriveCommand quickTeleOpDrive = new QuickTeleOpDriveCommand(drivetrain, gamepad1);
   private final SlowTeleOpDrive slowTeleOpDrive = new SlowTeleOpDrive(drivetrain, gamepad1);
+  private final VisionAlignCommand visionAlign = new VisionAlignCommand(vision);
 
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.8);
@@ -136,7 +138,8 @@ public class RobotContainer {
       // drivetrain commands
       backButton.whenPressed(teleOpDrive);
       aButton.whenPressed(slowTeleOpDrive).whenReleased(teleOpDrive); // for lining up climber and stuff
-      bButton.whenPressed(quickTeleOpDrive).whenReleased(teleOpDrive);
+      bButton.whenPressed(quickTeleOpDrive).whenReleased(teleOpDrive); // for boooosting around/into other robots/defense
+      xButton.whenPressed(visionAlign).whenReleased(teleOpDrive); // for lining up with the hub
 
       // intake commands
       leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
