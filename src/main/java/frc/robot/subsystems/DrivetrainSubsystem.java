@@ -151,6 +151,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         resetGyro();
     }
 
+    public void setSpeedModifier(double speedMod) {
+        speedModifier = speedMod;
+    }
+
     public void setOpenLoopRampRate() {
         left1Motor.setOpenLoopRampRate(openLoopRampRate);
         left2Motor.setOpenLoopRampRate(openLoopRampRate);
