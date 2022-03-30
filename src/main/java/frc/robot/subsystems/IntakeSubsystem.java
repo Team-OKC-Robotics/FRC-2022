@@ -31,6 +31,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private DigitalInput ballDetector;
     private ColorSensorV3 colorSensor;
+    private ColorMatch colorMatcher;
+    private final Color blue;
+    private final Color red;
+    private Color currentAlliance;
     private int cargoCount = 0;
     private int indexerDirection = 0;
     private boolean now = false;
@@ -47,6 +51,9 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry deployedSwitch = tab.add("deployed switch", false).getEntry();
     private NetworkTableEntry retractedSwitch = tab.add("retracted switch", false).getEntry();
     private NetworkTableEntry extended = tab.add("extended", false).getEntry();
+    private NetworkTableEntry colorR = tab.add("color - r", 0).getEntry();
+    private NetworkTableEntry colorG = tab.add("color - g", 0).getEntry();
+    private NetworkTableEntry colorB = tab.add("color - b", 0).getEntry();
     
     // PID
     private NetworkTableEntry intakeP = tab.add("Intake kP", IntakeK.deployP).getEntry();
@@ -95,7 +102,13 @@ public class IntakeSubsystem extends SubsystemBase {
         deployedLimitSwitch = new DigitalInput(2);
         retractedLimitSwitch = new DigitalInput(3);
         ballDetector = new DigitalInput(8);
+
         colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+        colorMatcher = new ColorMatch();
+        blue = new Color(0, 0, 0);
+        red = new Color(0, 0, 0);
+        colorMatch.addColorMatch(red);
+        colorMatch.addColorMatch(blue);
     }
 
     public void resetDeployEncoder() {
@@ -191,6 +204,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (currentAlliance == null) {
+            if (DriverStation.getAlliance() == Alliance.Red) {
+                currentAlliance = red;
+            } else {
+                currentAlliance = blue;
+            }
+        }
+
+
         now = !ballDetector.get(); // make it normal logic
         if (now && !lastBallDetector && indexerDirection == 1 && !deployedLimitSwitch.get()) { // if we have a ball, and we didn't previously have one, and we're moving it into the robot, and the intake is deployed
             ColorMatchResult color = colorMatcher.matchClosestColor(colorSensor.getColor()); // get the color of the ball
@@ -261,6 +283,11 @@ public class IntakeSubsystem extends SubsystemBase {
             } else {
                 retractedSwitch.setBoolean(true);
             }
+
+            RawColor color = colorSensor.getRawColor();
+            colorR.setDouble(color.red);
+            colorG.setDouble(color.green);
+            colorB.setDouble(color.blue);
         }
     }
 }
