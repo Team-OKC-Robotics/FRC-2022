@@ -233,6 +233,10 @@ public class IntakeSubsystem extends SubsystemBase {
         }
         lastBallDetector = now; // update the variable for the last state
 
+        if (cargoCount == 2) {
+            deployPID.setSetpoint(IntakeK.RAISED);
+        }
+
         // I feel like there's potential for some speedup here by combining these if statements
         if (!deployedLimitSwitch.get()) { // if limit switch is pressed
             deployEncoder.setPosition(IntakeK.EXTENDED); // set the intake encoder to the correct position
