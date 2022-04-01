@@ -6,10 +6,12 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShootFeedTeleOpCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private double RPM;
+    private double power = 0.4;
 
-    public ShootFeedTeleOpCommand(ShooterSubsystem shooter, double RPM) {
+    public ShootFeedTeleOpCommand(ShooterSubsystem shooter, double RPM, double power) {
         this.shooter = shooter;
         this.RPM = RPM;
+        this.power = power;
 
         addRequirements(shooter);
     }
@@ -17,10 +19,10 @@ public class ShootFeedTeleOpCommand extends CommandBase {
     @Override
     public void execute() {
         shooter.setShooter(RPM);
-        if (shooter.atShooterSetpoint()) {
-            shooter.feed(1);
+        if (shooter.atShooterSetpoint()) { // if shooter is at setpoint
+            shooter.feed(power); // run the shooter
         } else {
-            shooter.feed(0);
+            shooter.setTrigger(power); // has the ball detection so it lets the cargo go back up to where it's ready to shoot
         }
     }
 

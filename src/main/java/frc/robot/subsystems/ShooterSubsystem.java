@@ -154,10 +154,7 @@ public class ShooterSubsystem extends SubsystemBase {
      * @return if the shooter is at its setpoint
      */
     public boolean atShooterSetpoint() {
-        if (shooterMotor1 != null) {
-            return Math.abs(shooterMotor1.getClosedLoopError()) < 100 && shooterMotor1.getErrorDerivative() < 10;
-        }
-        return true;
+        return shooterPID.atSetpoint() && shooterPID.getSetpoint() != 0; // we're at the setpoint if we're at it and a setpoint is actually set
     }
 
     // sets the shooter tower ("trigger") motor with ball detection
