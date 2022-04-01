@@ -1,12 +1,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -65,7 +62,7 @@ public class IntakeSubsystem extends SubsystemBase {
             deployEncoder = deployMotor.getEncoder();
             deployEncoder.setPosition(0);
 
-            deployPID = new PIDController(IntakeK.deployP, IntakeK.deployI, IntakeK.deployD)
+            deployPID = new PIDController(IntakeK.deployP, IntakeK.deployI, IntakeK.deployD);
         }
 
         if (indexerMotor != null) {

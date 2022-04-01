@@ -18,7 +18,7 @@ public class QuickTeleOpDriveCommand extends CommandBase {
     @Override
     public void initialize() {
         drivetrain.setOpenLoopRampRate(0.1); // quicker acceleration
-        drivetrian.setSpeedModifier(1); // literally max speed (be careful to not tip though)
+        drivetrain.setSpeedModifier(1); // literally max speed (be careful to not tip though)
     }
 
     @Override

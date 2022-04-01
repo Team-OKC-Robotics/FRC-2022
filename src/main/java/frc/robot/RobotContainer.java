@@ -12,8 +12,8 @@ import frc.robot.commands.climber.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.shooter.*;
+import frc.robot.commands.vision.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.ShooterSubsystem.ShooterPresets;
 import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -75,17 +75,14 @@ public class RobotContainer {
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
   private final QuickTeleOpDriveCommand quickTeleOpDrive = new QuickTeleOpDriveCommand(drivetrain, gamepad1);
   private final SlowTeleOpDrive slowTeleOpDrive = new SlowTeleOpDrive(drivetrain, gamepad1);
-  private final VisionAlignCommand visionAlign = new VisionAlignCommand(vision);
+  private final VisionAlignCommand visionAlign = new VisionAlignCommand(vision, drivetrain);
 
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.8);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
   private final SetIntakeCommand intakeOut = new SetIntakeCommand(intake, -0.8);
-  // private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
-  // private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
-  private final ManualIntakePositionCommand deployIntake = new ManualIntakePositionCommand(intake, true);
-  private final ManualIntakePositionCommand retractIntake = new ManualIntakePositionCommand(intake, false);
-  private final ManualStopIntakePositionCommand stopIntakeDeploy = new ManualStopIntakePositionCommand(intake);
+  private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
+  private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
   private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 0.5);
   private final SetIndexerCommand indexerOut = new SetIndexerCommand(intake, -0.5);
   private final SetIndexerCommand stopIndexer = new SetIndexerCommand(intake, 0);
@@ -162,8 +159,8 @@ public class RobotContainer {
       triggerButton.whenPressed(feed).whenReleased(stopTrigger).whenPressed(indexerIn).whenReleased(stopIndexer); // ignore ball detection, for shooting
       sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer).whenPressed(triggerOut).whenReleased(stopTrigger); // reverse indexer/trigger controls
       eightButton.whileHeld(indexerIn).whenReleased(stopIndexer).whileHeld(triggerIn).whenReleased(stopTrigger);
-      nineButton.whenPressed(retractIntake).whenReleased(stopIntakeDeploy);
-      tenButton.whenPressed(deployIntake).whenReleased(stopIntakeDeploy);
+      nineButton.whenPressed(retractIntake);
+      tenButton.whenPressed(deployIntake);
   }
 
   public Command getDriveCommand() {
