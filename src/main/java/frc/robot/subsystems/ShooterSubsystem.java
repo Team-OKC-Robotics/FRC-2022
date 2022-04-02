@@ -68,6 +68,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private DataLog log;
     private DoubleLogEntry rpmLog;
+    private DoubleLogEntry setpointLog;
+    private DoubleLogEntry outputLog;
+    private DoubleLogEntry calculatedLog;
+
     
     /**
      * Makes a new ShooterSubsystem
@@ -99,6 +103,9 @@ public class ShooterSubsystem extends SubsystemBase {
         DataLogManager.start();
         log = DataLogManager.getLog();
         rpmLog = new DoubleLogEntry(log, "/shooter/rpm");
+        setpointLog = new DoubleLogEntry(log, "/shooter/setpoint");
+        outputLog = new DoubleLogEntry(log, "/shooter/output");
+        calculatedLog = new DoubleLogEntry(log, "/shooter/pid-calculate");
 
         shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
     }
@@ -123,6 +130,9 @@ public class ShooterSubsystem extends SubsystemBase {
             // shooterMotor1.set(ControlMode.Velocity, RPM, DemandType.ArbitraryFeedForward, 0.4);
             double power = -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
             shooterOutput.setDouble(power);
+            calculatedLog.append(power);
+            outputLog.append(clamp(0, 1, power));
+            setpointLog.append(RPM);
             shooterMotor1.set(ControlMode.PercentOutput, clamp(0, 1, power));
 
         }
