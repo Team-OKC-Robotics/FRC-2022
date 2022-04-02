@@ -6,6 +6,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -42,6 +45,11 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry intakeD = tab.add("Intake kD", IntakeK.deployD).getEntry();
 
     private NetworkTableEntry deployedPreset = tab.add("Deployed preset", IntakeK.EXTENDED).getEntry();
+
+    private DataLog log;
+    private DoubleLogEntry posLog;
+    private DoubleLogEntry outputLog;
+    private DoubleLogEntry setpointLog;
             
     /**
      * makes a new IntakeSubsystem
@@ -79,6 +87,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
         deployedLimitSwitch = new DigitalInput(2);
         retractedLimitSwitch = new DigitalInput(3);
+        
+
+        log = DataLogManager.getLog();
+        posLog = new DoubleLogEntry(log, "/intake/pos");
+        outputLog = new DoubleLogEntry(log, "/intake/output");
+        setpointLog = new DoubleLogEntry(log, "/intake/setpoint");
+        
     }
 
     public void resetDeployEncoder() {
@@ -124,9 +139,11 @@ public class IntakeSubsystem extends SubsystemBase {
         if (deployMotor != null) {
             if (extended) { // if we're going to deploy it
                 deployPID.setSetpoint(deployedPreset.getDouble(IntakeK.EXTENDED)); // set the PID to deploy
+                setpointLog.append(IntakeK.EXTENDED);
                 direction = 1; // set the direction we're going in (for limit switch purposes)
             } else {
                 deployPID.setSetpoint(IntakeK.RAISED); // same thing
+                setpointLog.append(IntakeK.RAISED);
                 direction = -1;
             }
         }
@@ -143,6 +160,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        posLog.append(deployEncoder.getPosition());
+        outputLog.append(deployMotor.get());
+        
         // I feel like there's potential for some speedup here by combining these if statements
         if (!deployedLimitSwitch.get()) { // if limit switch is pressed
             deployEncoder.setPosition(IntakeK.EXTENDED); // set the intake encoder to the correct position

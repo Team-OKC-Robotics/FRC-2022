@@ -100,7 +100,6 @@ public class ShooterSubsystem extends SubsystemBase {
         triggerMotor.setSmartCurrentLimit(30); // so as to not kill the baby neo
         ballDetector = new DigitalInput(9);
 
-        DataLogManager.start();
         log = DataLogManager.getLog();
         rpmLog = new DoubleLogEntry(log, "/shooter/rpm");
         setpointLog = new DoubleLogEntry(log, "/shooter/setpoint");

@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
     DriverStation.silenceJoystickConnectionWarning(true);
     //camera = new HttpCamera("photoncam", "http://photonvision.local:1182/stream.mjpg", HttpCameraKind.kMJPGStreamer);
     CameraServer.startAutomaticCapture(); // get our USB camera to show up on Shuffleboard
+    DataLogManager.start();
   }
 
   /**
