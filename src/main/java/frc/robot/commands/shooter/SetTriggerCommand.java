@@ -16,13 +16,7 @@ public class SetTriggerCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (power <= 0) {
-            shooter.setTrigger(power);
-        } else if (shooter.atShooterSetpoint()) {
-            shooter.setTrigger(power);
-        } else {
-            shooter.setTrigger(0);
-        }
+        shooter.setTrigger(power);
     }
 
     @Override
