@@ -11,7 +11,7 @@ public class FeedCommand extends CommandBase {
         this.shooter = shooter;
         this.power = power;
 
-        addRequirements(shooter);
+        // addRequirements(shooter); // can't require shooter because shooter must run while trigger does
     }
 
     @Override
