@@ -13,7 +13,11 @@ import frc.robot.autos.DoNothingAuto;
 import frc.robot.autos.DriveOffLineAuto;
 import frc.robot.autos.GyroTestAuto;
 import frc.robot.commands.drivetrain.TeleOpDriveCommand;
+import frc.robot.commands.test.SetPIDCommand;
+import frc.robot.commands.test.SetPowerCommand;
+import frc.robot.commands.test.StopCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.TestSubsystem;
 import frc.robot.util.AutoChooser;
 
 /**
@@ -58,6 +62,7 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
 
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
+  private final TestSubsystem testSubsystem = new TestSubsystem();
 
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
@@ -67,9 +72,11 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
 
-  private final SetPowerCommand manualUp = new SetPowerCommand(0.1);
-  private final SetPowerCommand manualDown = new SetPowerCommand(-0.1);
-  private final StopCommand stop = new StopCommand();
+  private final SetPowerCommand manualUp = new SetPowerCommand(testSubsystem, 0.1);
+  private final SetPowerCommand manualDown = new SetPowerCommand(testSubsystem, -0.1);
+  private final StopCommand stop = new StopCommand(testSubsystem);
+  private final SetPIDCommand pidSetUp = new SetPIDCommand(testSubsystem, 0);
+  private final SetPIDCommand pidSetDown = new SetPIDCommand(testSubsystem, 100);
   
   
   /**
@@ -96,8 +103,10 @@ public class RobotContainer<setClimberCommand, SetClimbCommand> {
       // drivetrain commands
       backButton.whenPressed(teleOpDrive);
 
-      // probably don't need these
-      
+      aButton.whileHeld(manualUp).whenReleased(stop);
+      bButton.whileHeld(manualDown).whenReleased(stop);
+      // xButton.whenPressed(pidSetDown);
+      // yButton.whenPressed(pidSetUp);      
    }
 
   public Command getDriveCommand() {

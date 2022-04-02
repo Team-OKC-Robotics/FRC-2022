@@ -3,13 +3,11 @@ package frc.robot.commands.test;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TestSubsystem;
 
-public class SetPIDCommand extends CommandBase {
+public class StopCommand extends CommandBase {
     private final TestSubsystem subsystem;
-    private double value = 0;
 
-    public SetPIDCommand(TestSubsystem subsystem, double value) {
+    public StopCommand(TestSubsystem subsystem) {
         this.subsystem = subsystem;
-        this.value = value;
 
         addRequirements(subsystem);
     }
@@ -20,12 +18,7 @@ public class SetPIDCommand extends CommandBase {
 
     @Override
     public void execute() {
-        subsystem.setPID(value);
-    }
-
-    @Override
-    public void end(boolean executed) {
-        subsystem.finish();
+        subsystem.manualStop();
     }
 
     @Override
