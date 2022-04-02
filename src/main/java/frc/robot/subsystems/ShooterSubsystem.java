@@ -57,7 +57,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private NetworkTableEntry shootP = tab.add("Shooter kP", ShootK.shootP).getEntry();
     private NetworkTableEntry shootI = tab.add("Shooter kI", ShootK.shootI).getEntry();
     private NetworkTableEntry shootD = tab.add("Shooter kD", ShootK.shootD).getEntry();
-    private NetworkTableEntry shootF = tab.add("Shooter kF", ShootK.shootF).getEntry();
+    // private NetworkTableEntry shootF = tab.add("Shooter kF", ShootK.shootF).getEntry();
     private NetworkTableEntry shooterGood = tab.add("shooter good", false).getEntry();
 
     // presets

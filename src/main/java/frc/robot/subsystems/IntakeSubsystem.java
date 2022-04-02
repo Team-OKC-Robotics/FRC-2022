@@ -24,7 +24,6 @@ public class IntakeSubsystem extends SubsystemBase {
     private DigitalInput deployedLimitSwitch;
     private DigitalInput retractedLimitSwitch;
     private int direction = 0;
-    private double intakePos = 0;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("intake");
