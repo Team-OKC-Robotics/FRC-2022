@@ -98,10 +98,10 @@ public class RobotContainer {
   private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad3, 0.4);
 
   // climber
-  private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.5, true);
+  private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.8, true);
   private final ManualClimberCommand retractLeftClimber = new ManualClimberCommand(climber, -0.5, true);
   private final ManualClimberCommand stopLeftClimber = new ManualClimberCommand(climber, 0, true);
-  private final ManualClimberCommand extendRightClimber = new ManualClimberCommand(climber, 0.5, false);
+  private final ManualClimberCommand extendRightClimber = new ManualClimberCommand(climber, 0.8, false);
   private final ManualClimberCommand retractRightClimber = new ManualClimberCommand(climber, -0.5, false);
   private final ManualClimberCommand stopRightClimber = new ManualClimberCommand(climber, 0, false);
 
@@ -109,6 +109,11 @@ public class RobotContainer {
   private final ManualStopRotateClimberCommand stopLeftRotate = new ManualStopRotateClimberCommand(climber, true);
   private final ManualRotateClimberCommand rotateRightClimber = new ManualRotateClimberCommand(climber, gamepad3, false);
   private final ManualStopRotateClimberCommand stopRightRotate = new ManualStopRotateClimberCommand(climber, false);
+
+  // private final RotateClimberCommand rotateLeftClimber = new RotateClimberCommand(climber, -10, true); // rotate the climber into position
+  // private final RotateClimberCommand rotateLeftClimberBack = new RotateClimberCommand(climber, 0, true); // and rotate it back
+  // private final RotateClimberCommand rotateRightClimber = new RotateClimberCommand(climber, 10, false);
+  // private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, 0, false);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -152,8 +157,6 @@ public class RobotContainer {
       bottomLeftButton.whenPressed(retractLeftClimber);
       topRightButton.whenPressed(extendRightClimber).whenReleased(stopRightClimber);
       bottomRightButton.whenPressed(retractRightClimber);
-      elevenButton.whileHeld(rotateLeftClimber).whenReleased(stopLeftRotate);
-      twelveButton.whileHeld(rotateRightClimber).whenReleased(stopRightRotate);
       
       // intake
       triggerButton.whenPressed(feed).whenReleased(stopTrigger).whenPressed(indexerIn).whenReleased(stopIndexer); // ignore ball detection, for shooting
@@ -161,6 +164,9 @@ public class RobotContainer {
       eightButton.whileHeld(indexerIn).whenReleased(stopIndexer).whileHeld(triggerIn).whenReleased(stopTrigger);
       nineButton.whenPressed(retractIntake);
       tenButton.whenPressed(deployIntake);
+
+      elevenButton.whileHeld(rotateLeftClimber).whenReleased(stopLeftRotate);
+      // twelveButton.whenPressed(rotateLeftClimberBack);
   }
 
   public Command getDriveCommand() {

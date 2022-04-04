@@ -7,8 +7,11 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+// import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
+import com.revrobotics.SparkMaxLimitSwitch;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -92,6 +95,11 @@ public class ClimberSubsystem extends SubsystemBase {
             // get and zero the encoder
             rightTiltEncoder = rightTiltMotor.getEncoder();
             rightTiltEncoder.setPosition(0);
+
+            rightTiltMotor.setSoftLimit(SoftLimitDirection.kForward, 10);
+
+            rightTiltMotor.setIdleMode(IdleMode.kCoast); //FIXME testing purposes
+            
         }
         
         // set up the left side
@@ -112,11 +120,18 @@ public class ClimberSubsystem extends SubsystemBase {
 
         if (leftTiltMotor != null) {
             // configure motor
-            leftTiltMotor.setIdleMode(IdleMode.kBrake);
+            // leftTiltMotor.setIdleMode(IdleMode.kBrake);
+            leftTiltMotor.setIdleMode(IdleMode.kCoast); //FIXME testing purposes
+            leftTiltMotor.setInverted(false);
 
             // get and zero encoder
             leftTiltEncoder = leftTiltMotor.getEncoder();
             leftTiltEncoder.setPosition(0);
+
+            leftTiltMotor.setSoftLimit(SoftLimitDirection.kForward, -10);
+            leftTiltMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+            leftTiltMotor.setSoftLimit(SoftLimitDirection.kReverse, -10);
+            leftTiltMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
         }
 
         leftTiltPID = new PIDController(ClimbK.tiltP, ClimbK.tiltI, ClimbK.tiltD);
@@ -187,13 +202,13 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void manualTilt(double power, boolean leftSide) {
-        if (Math.abs(power) > 0.05) { // only tilt if the change is significant
+        // if (Math.abs(power) > 0.05) { // only tilt if the change is significant
             if (leftSide) {
                 leftTiltMotor.set(-power); // need to invert because opposite direction
             } else {
                 rightTiltMotor.set(power);
             }   
-        }
+        // }
     }
 
     // holds the climber in its position
@@ -201,9 +216,11 @@ public class ClimberSubsystem extends SubsystemBase {
         if (leftSide) {
             leftSetpoint = leftTiltEncoder.getPosition();
             leftStopped = true;
+            leftTiltMotor.set(0);
         } else {
             rightSetpoint = rightTiltEncoder.getPosition();
             rightStopped = true;
+            leftTiltMotor.set(0);
         }
     }
 
@@ -224,6 +241,16 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // if (leftTiltMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen).isPressed()) {
+        //     leftTiltEncoder.setPosition(0);
+        //     leftSetpoint = 1;
+        // }
+
+        if (rightTiltMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed).isPressed()) {
+            rightTiltEncoder.setPosition(0);
+            rightSetpoint = 1;
+        }
+
         // shuffleboard stuff
         if (!Constants.competition) {            
             if (leftTiltEncoder != null) {

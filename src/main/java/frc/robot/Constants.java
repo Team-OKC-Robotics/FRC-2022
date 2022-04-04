@@ -37,9 +37,9 @@ public final class Constants {
     }
 
     public final class ShootK {
-        public static final double shootP = 0.3;
+        public static final double shootP = 0.00001;
         public static final double shootI = 0;
-        public static final double shootD = 0.07;
+        public static final double shootD = 0.000005;
         public static final double shootF = 0.4;
 
         public static final double normalShot = 9000;
@@ -59,7 +59,7 @@ public final class Constants {
 
         //TODO test and tune this
         public static final double RAISED = 0; // starting position (aka not extended aka raised) is 0
-        public static final double EXTENDED = gearRatio * rotations; // rotations for intake being extended
+        public static final double EXTENDED = gearRatio * -rotations; // rotations for intake being extended
     }
 
     public final class ClimbK {
