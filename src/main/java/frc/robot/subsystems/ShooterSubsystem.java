@@ -41,6 +41,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // sensors
     private DigitalInput ballDetector;
+    private double power = 0;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("shooter");
@@ -50,6 +51,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private NetworkTableEntry ticks = tab.add("shooter ticks", 0).getEntry();
     private NetworkTableEntry shooterRPM = tab.add("shooter RPM", 0).getEntry();
     private NetworkTableEntry shooterOutput = tab.add("shooter output", 0).getEntry();
+    private NetworkTableEntry setpoint = tab.add("setpoint", 0).getEntry();
     private NetworkTableEntry velocityError = tab.add("velocity error", 0).getEntry();
     private NetworkTableEntry hasBall = tab.add("has ball?", false).getEntry();
 
@@ -107,7 +109,7 @@ public class ShooterSubsystem extends SubsystemBase {
         calculatedLog = new DoubleLogEntry(log, "/shooter/pid-calculate");
 
         shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
-        shooterPID.setTolerance(100, 10); // tolerate a variance of 100 RPM and an acceleration of 10 RPM
+        shooterPID.setTolerance(100, 100); // tolerate a variance of 100 RPM and an acceleration of 10 RPM
     }
 
     public double clamp(double minOutput, double maxOutput, double input) {
@@ -120,6 +122,10 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
+    public void resetPower() {
+        power = 0;
+    }
+
     /**
      * sets the shooter to PID to the given velocity
      * @param RPM the rpm to set the shooter to
@@ -128,12 +134,14 @@ public class ShooterSubsystem extends SubsystemBase {
         if (shooterMotor1 != null) {
             // based off of tuning with pheonix tuner
             // shooterMotor1.set(ControlMode.Velocity, RPM, DemandType.ArbitraryFeedForward, 0.4);
-            double power = -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
-            shooterOutput.setDouble(power);
+            // double power = -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
+            power += -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
+            shooterOutput.setDouble(clamp(0.1, 1, power));
+            setpoint.setDouble(RPM);
             calculatedLog.append(power);
-            outputLog.append(clamp(0, 1, power));
+            outputLog.append(clamp(0.1, 1, power));
             setpointLog.append(RPM);
-            shooterMotor1.set(ControlMode.PercentOutput, clamp(0, 1, power));
+            shooterMotor1.set(ControlMode.PercentOutput, clamp(0.1, 1, power));
 
         }
     }

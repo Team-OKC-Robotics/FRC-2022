@@ -684,6 +684,54 @@
               "_source0": "network_table:///Shuffleboard/shooter/normal shot preset",
               "_title": "Shuffleboard/shooter/normal shot preset"
             }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///Shuffleboard/shooter/has ball?",
+              "_title": "Shuffleboard/shooter/has ball?",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/setpoint",
+              "_title": "Shuffleboard/shooter/setpoint"
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///Shuffleboard/shooter/shooter good",
+              "_title": "Shuffleboard/shooter/shooter good",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "6,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/shooter output",
+              "_title": "Shuffleboard/shooter/shooter output"
+            }
           }
         }
       }

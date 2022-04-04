@@ -15,6 +15,7 @@ public class StopShooterCommand extends CommandBase {
     @Override
     public void execute() {
         shooter.stopShooter();
+        shooter.resetPower();
     }
 
     @Override
