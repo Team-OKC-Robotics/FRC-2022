@@ -5,7 +5,7 @@ pidLog = [[], []]
 setpointLog = [[], []]
 outputLog = [[], []]
 
-with open("/home/daniel/Documents/GitHub/FRC-2022/logs/shooter/log1.csv") as f:
+with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220404_233808.csv") as f:
     log = f.read().split("\n")
 
 for index, line in enumerate(log):
