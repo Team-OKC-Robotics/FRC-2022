@@ -9,6 +9,7 @@ public class ShooterPresetCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private Joystick gamepad;
     private double power;
+    private ShooterPresets preset;
 
     public ShooterPresetCommand(ShooterSubsystem shooter, Joystick gamepad, double power) {
         this.shooter = shooter;
@@ -21,21 +22,15 @@ public class ShooterPresetCommand extends CommandBase {
     @Override
     public void execute() {
         switch(gamepad.getPOV()) {
-            case 90:
-                shooter.setShooterPreset(ShooterPresets.LOW_GOAL);
-                break;
             case 180:
-                shooter.setShooterPreset(ShooterPresets.AGAINST_HUB);
-                break;
-            case 270:
-                shooter.setShooterPreset(ShooterPresets.NORMAL_SHOT);
+                preset = ShooterPresets.AGAINST_HUB;
                 break;
             case 0:
-                shooter.setShooterPreset(ShooterPresets.FAR_SHOT);
+                preset = ShooterPresets.NORMAL_SHOT;
                 break;
-            default:
-                // shooter.setShooterPreset(ShooterPresets.NORMAL_SHOT);
-                break;
+        }
+        if (preset != null) {
+            shooter.setShooterPreset(preset);
         }
     }
 
@@ -47,6 +42,6 @@ public class ShooterPresetCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false; // just run until cancelled by the scheduling of StopShooterCommand
     }
 }
