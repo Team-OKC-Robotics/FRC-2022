@@ -52,7 +52,7 @@ public final class Constants {
         //TODO test and tune this
         public static final double deployP = 0.07;
         public static final double deployI = 0;
-        public static final double deployD = 0;
+        public static final double deployD = 0.001;
 
         public static final double gearRatio = 1/5 * 1/5 * 1/5; // gear ratio on the intake gearbox
         public static final double rotations = 0.4; // intake needs to rotate 0.4 rotations to reach deployed state
