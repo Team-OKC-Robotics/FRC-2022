@@ -97,9 +97,7 @@ public class ClimberSubsystem extends SubsystemBase {
             rightTiltEncoder.setPosition(0);
 
             rightTiltMotor.setSoftLimit(SoftLimitDirection.kForward, 10);
-
-            rightTiltMotor.setIdleMode(IdleMode.kCoast); //FIXME testing purposes
-            
+            rightTiltMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
         }
         
         // set up the left side
@@ -120,17 +118,16 @@ public class ClimberSubsystem extends SubsystemBase {
 
         if (leftTiltMotor != null) {
             // configure motor
-            // leftTiltMotor.setIdleMode(IdleMode.kBrake);
-            leftTiltMotor.setIdleMode(IdleMode.kCoast); //FIXME testing purposes
+            leftTiltMotor.setIdleMode(IdleMode.kBrake);
             leftTiltMotor.setInverted(false);
 
             // get and zero encoder
             leftTiltEncoder = leftTiltMotor.getEncoder();
             leftTiltEncoder.setPosition(0);
 
-            leftTiltMotor.setSoftLimit(SoftLimitDirection.kForward, -10);
+            leftTiltMotor.setSoftLimit(SoftLimitDirection.kForward, -15);
             leftTiltMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-            leftTiltMotor.setSoftLimit(SoftLimitDirection.kReverse, -10);
+            leftTiltMotor.setSoftLimit(SoftLimitDirection.kReverse, -15);
             leftTiltMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
         }
 
