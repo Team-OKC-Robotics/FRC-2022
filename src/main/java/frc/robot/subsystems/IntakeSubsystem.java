@@ -10,6 +10,7 @@ import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -63,7 +64,7 @@ public class IntakeSubsystem extends SubsystemBase {
     
         if (deployMotor != null) {
             deployMotor.setIdleMode(IdleMode.kCoast);
-            deployMotor.setOpenLoopRampRate(1); // oh so _that's_ why it was going to slow dang
+            // deployMotor.setOpenLoopRampRate(0); // oh so _that's_ why it was going to slow dang
             // this is so the intake doesn't kill something on the way down (or up)
             
             deployEncoder = deployMotor.getEncoder();
@@ -136,9 +137,9 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param extended if the intake should be extended/deployed or not
      */
     public void setExtended(boolean extended) {
-        if (deployMotor != null) {
+        // if (deployMotor != null) {
             if (extended) { // if we're going to deploy it
-                deployPID.setSetpoint(deployedPreset.getDouble(IntakeK.EXTENDED)); // set the PID to deploy
+                deployPID.setSetpoint(IntakeK.EXTENDED); // set the PID to deploy
                 setpointLog.append(IntakeK.EXTENDED);
                 direction = 1; // set the direction we're going in (for limit switch purposes)
             } else {
@@ -146,7 +147,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 setpointLog.append(IntakeK.RAISED);
                 direction = -1;
             }
-        }
+        // }
     }
 
     /**
@@ -164,23 +165,25 @@ public class IntakeSubsystem extends SubsystemBase {
         outputLog.append(deployMotor.get());
         
         // I feel like there's potential for some speedup here by combining these if statements
-        if (!deployedLimitSwitch.get()) { // if limit switch is pressed
-            deployEncoder.setPosition(IntakeK.EXTENDED); // set the intake encoder to the correct position
-        } else if (!retractedLimitSwitch.get()) { // if the other limit switch is pressed
-            deployEncoder.setPosition(0); // then it's at 0
-        }
-           
+        // } else if (!retractedLimitSwitch.get()) { // if the other limit switch is pressed
+            //     deployEncoder.setPosition(0); // then it's at 0
+            // }
+            
         if (direction != 0) { // don't start moving unless the code has started and the intake has been told to move,
-                              // so it can be moved when powered on but disabled
-            if (!deployedLimitSwitch.get() && direction == -1) { // if the limit switch is pressed
+        // so it can be moved when powered on but disabled
+            boolean deployed = !deployedLimitSwitch.get();
+            if (deployed) { // if limit switch is pressed
+                deployEncoder.setPosition(IntakeK.EXTENDED); // set the intake encoder to the correct position
+            }
+        
+            if (direction == 1 && deployed) { // if the limit switch is pressed
                 // deployed.setBoolean(true);
                 deployMotor.set(0); // stop the intake
-            } else if (!retractedLimitSwitch.get() && direction == 1) { // if the retracted limit switch is pressed
-                // deployed.setBoolean(false);
-                deployMotor.set(0); // stop the intake
+            // } else if (!retractedLimitSwitch.get() && direction == -1) { // if the retracted limit switch is pressed
+            //     // deployed.setBoolean(false);
+            //     deployMotor.set(0); // stop the intake
             } else { // otherwise we're good to keep moving
-                // double power = deployPID.calculate(deployEncoder.getPosition()); // calculate the power
-                double power = 0;
+                double power = deployPID.calculate(deployEncoder.getPosition()); // calculate the power
                 if (Math.abs(power) > 0.6) { // limit the power to a max of 0.4                
                     power = Math.copySign(0.6, power);
                 }

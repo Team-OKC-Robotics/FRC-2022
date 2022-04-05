@@ -194,11 +194,11 @@
               "Crosshair/Show crosshair": true,
               "Crosshair/Crosshair color": "#00FF00FF",
               "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
+              "Controls/Rotation": "QUARTER_CCW",
               "compression": -1.0,
-              "fps": 10,
-              "imageWidth": 480,
-              "imageHeight": 240
+              "fps": 20,
+              "imageWidth": 240,
+              "imageHeight": 480
             }
           }
         }
@@ -926,31 +926,6 @@
               "_type": "Text View",
               "_source0": "network_table:///Shuffleboard/climber/left extend setpoint",
               "_title": "Shuffleboard/climber/left extend setpoint"
-            }
-          }
-        }
-      }
-    },
-    {
-      "title": "Tab 13",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "titleType": 0,
-        "tiles": {
-          "0,0": {
-            "size": [
-              10,
-              4
-            ],
-            "content": {
-              "_type": "Network Table Tree",
-              "_source0": "network_table:///CameraPublisher/USB Camera 0",
-              "_title": "CameraPublisher/USB Camera 0"
             }
           }
         }

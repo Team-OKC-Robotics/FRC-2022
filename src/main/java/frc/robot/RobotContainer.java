@@ -90,7 +90,7 @@ public class RobotContainer {
   
   // shooter
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
-  private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 9000);
+  // private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 9000);
   private final FeedCommand feed = new FeedCommand(shooter, 0.4);
   private final SetTriggerCommand triggerIn = new SetTriggerCommand(shooter, 0.4);
   private final SetTriggerCommand triggerOut = new SetTriggerCommand(shooter, -0.4);
@@ -162,11 +162,11 @@ public class RobotContainer {
       triggerButton.whenPressed(feed).whenReleased(stopTrigger).whenPressed(indexerIn).whenReleased(stopIndexer); // ignore ball detection, for shooting
       sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer).whenPressed(triggerOut).whenReleased(stopTrigger); // reverse indexer/trigger controls
       eightButton.whileHeld(indexerIn).whenReleased(stopIndexer).whileHeld(triggerIn).whenReleased(stopTrigger);
-      nineButton.whenPressed(retractIntake);
-      tenButton.whenPressed(deployIntake);
+      nineButton.whenPressed(deployIntake);
+      tenButton.whenPressed(retractIntake);
 
       elevenButton.whileHeld(rotateLeftClimber).whenReleased(stopLeftRotate);
-      // twelveButton.whenPressed(rotateLeftClimberBack);
+      twelveButton.whenPressed(rotateRightClimber).whenReleased(stopRightRotate);
   }
 
   public Command getDriveCommand() {
