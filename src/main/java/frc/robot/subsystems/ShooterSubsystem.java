@@ -59,7 +59,6 @@ public class ShooterSubsystem extends SubsystemBase {
     private NetworkTableEntry shootP = tab.add("Shooter kP", ShootK.shootP).getEntry();
     private NetworkTableEntry shootI = tab.add("Shooter kI", ShootK.shootI).getEntry();
     private NetworkTableEntry shootD = tab.add("Shooter kD", ShootK.shootD).getEntry();
-    // private NetworkTableEntry shootF = tab.add("Shooter kF", ShootK.shootF).getEntry();
     private NetworkTableEntry shooterGood = tab.add("shooter good", false).getEntry();
 
     // presets
@@ -134,7 +133,6 @@ public class ShooterSubsystem extends SubsystemBase {
         if (shooterMotor1 != null) {
             // based off of tuning with pheonix tuner
             // shooterMotor1.set(ControlMode.Velocity, RPM, DemandType.ArbitraryFeedForward, 0.4);
-            // double power = -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
             power += -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
             shooterOutput.setDouble(clamp(0.1, 1, power));
             setpoint.setDouble(RPM);

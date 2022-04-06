@@ -36,8 +36,6 @@ public class ShooterPresetCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        // shooter.feed(0);
-        // shooter.stopShooter();
     }
 
     @Override

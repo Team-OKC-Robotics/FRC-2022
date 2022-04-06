@@ -164,27 +164,19 @@ public class IntakeSubsystem extends SubsystemBase {
         posLog.append(deployEncoder.getPosition());
         outputLog.append(deployMotor.get());
         
-        // I feel like there's potential for some speedup here by combining these if statements
-        // } else if (!retractedLimitSwitch.get()) { // if the other limit switch is pressed
-            //     deployEncoder.setPosition(0); // then it's at 0
-            // }
             
         if (direction != 0) { // don't start moving unless the code has started and the intake has been told to move,
-        // so it can be moved when powered on but disabled
+                            // so it can be moved when powered on but disabled
             boolean deployed = !deployedLimitSwitch.get();
             if (deployed) { // if limit switch is pressed
                 deployEncoder.setPosition(IntakeK.EXTENDED); // set the intake encoder to the correct position
             }
         
             if (direction == 1 && deployed) { // if the limit switch is pressed
-                // deployed.setBoolean(true);
                 deployMotor.set(0); // stop the intake
-            // } else if (!retractedLimitSwitch.get() && direction == -1) { // if the retracted limit switch is pressed
-            //     // deployed.setBoolean(false);
-            //     deployMotor.set(0); // stop the intake
             } else { // otherwise we're good to keep moving
                 double power = deployPID.calculate(deployEncoder.getPosition()); // calculate the power
-                if (Math.abs(power) > 0.8) { // limit the power to a max of 0.4                
+                if (Math.abs(power) > 0.8) { // limit the power to a max of 0.8             
                     power = Math.copySign(0.8, power);
                 }
                 deployMotor.set(power); // move the intake

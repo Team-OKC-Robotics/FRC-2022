@@ -30,15 +30,15 @@ public class ExtendClimberCommand extends CommandBase {
 
     @Override
     public void execute() {
-        // if (distance == -1) { // if we're not going to a specific distance
-        //     climber.extend(leftSide); // just set it
-        // } else { // otherwise
-        //     if (leftSide) {
-        //         climber.setLeftExtend(distance); // set it to a specific distance
-        //     } else {
-        //         climber.setRightExtend(distance);
-        //     }
-        // }
+        if (distance == -1) { // if we're not going to a specific distance
+            climber.extend(leftSide); // just set it
+        } else { // otherwise
+            if (leftSide) {
+                climber.setLeftExtend(distance); // set it to a specific distance
+            } else {
+                climber.setRightExtend(distance);
+            }
+        }
     }
 
     @Override

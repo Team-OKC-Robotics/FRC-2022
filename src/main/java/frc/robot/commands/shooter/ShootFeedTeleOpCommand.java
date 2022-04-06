@@ -19,11 +19,7 @@ public class ShootFeedTeleOpCommand extends CommandBase {
     @Override
     public void execute() {
         shooter.setShooter(RPM);
-        // if (shooter.atShooterSetpoint()) { // if shooter is at setpoint
-            shooter.feed(power); // run the shooter
-        // } else {
-            // shooter.setTrigger(power); // has the ball detection so it lets the cargo go back up to where it's ready to shoot
-        // }
+        shooter.feed(power); // run the shooter
     }
 
     @Override

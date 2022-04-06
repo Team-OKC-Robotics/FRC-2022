@@ -16,11 +16,7 @@ public class FeedCommand extends CommandBase {
 
     @Override
     public void execute() {
-        // if (shooter.atShooterSetpoint()) {
-            shooter.feed(power);
-        // } else {
-            // shooter.feed(0);
-        // }
+        shooter.feed(power);
     }
 
     @Override

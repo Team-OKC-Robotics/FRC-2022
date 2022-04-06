@@ -90,7 +90,6 @@ public class RobotContainer {
   
   // shooter
   private final StopShooterCommand stopShooter = new StopShooterCommand(shooter);
-  // private final SetShooterCommand fastShooter = new SetShooterCommand(shooter, 9000);
   private final FeedCommand feed = new FeedCommand(shooter, 0.4);
   private final SetTriggerCommand triggerIn = new SetTriggerCommand(shooter, 0.4);
   private final SetTriggerCommand triggerOut = new SetTriggerCommand(shooter, -0.4);
@@ -109,11 +108,6 @@ public class RobotContainer {
   private final ManualStopRotateClimberCommand stopLeftRotate = new ManualStopRotateClimberCommand(climber, true);
   private final ManualRotateClimberCommand rotateRightClimber = new ManualRotateClimberCommand(climber, gamepad3, false);
   private final ManualStopRotateClimberCommand stopRightRotate = new ManualStopRotateClimberCommand(climber, false);
-
-  // private final RotateClimberCommand rotateLeftClimber = new RotateClimberCommand(climber, -10, true); // rotate the climber into position
-  // private final RotateClimberCommand rotateLeftClimberBack = new RotateClimberCommand(climber, 0, true); // and rotate it back
-  // private final RotateClimberCommand rotateRightClimber = new RotateClimberCommand(climber, 10, false);
-  // private final RotateClimberCommand rotateRightClimberBack = new RotateClimberCommand(climber, 0, false);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -173,8 +167,4 @@ public class RobotContainer {
     // return teleopDrive;
     return teleOpDrive;
   }
-
-  // public Command getIntakePositionCommand() {
-  //   return intakePositionPOVCommand;
-  // }
 }

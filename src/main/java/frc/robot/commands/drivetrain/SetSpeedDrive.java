@@ -22,7 +22,6 @@ public class SetSpeedDrive extends WaitCommand {
 
     @Override
     public void execute() {
-        // super.execute();
         drivetrain.arcadeDrive(setSpeed, 0);
     }
 

@@ -201,13 +201,11 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void manualTilt(double power, boolean leftSide) {
-        // if (Math.abs(power) > 0.05) { // only tilt if the change is significant
-            if (leftSide) {
-                leftTiltMotor.set(-power); // need to invert because opposite direction
-            } else {
-                rightTiltMotor.set(power);
-            }   
-        // }
+        if (leftSide) {
+            leftTiltMotor.set(-power); // need to invert because opposite direction
+        } else {
+            rightTiltMotor.set(power);
+        }   
     }
 
     // holds the climber in its position
@@ -240,11 +238,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // if (leftTiltMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen).isPressed()) {
-        //     leftTiltEncoder.setPosition(0);
-        //     leftSetpoint = 1;
-        // }
-
         if (rightTiltMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed).isPressed()) {
             rightTiltEncoder.setPosition(0);
             rightSetpoint = 1;
