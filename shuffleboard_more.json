@@ -694,8 +694,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///Shuffleboard/shooter/has ball?",
               "_title": "Shuffleboard/shooter/has ball?",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
+              "Colors/Color when true": "#FF0000FF",
+              "Colors/Color when false": "#00FF00FF"
             }
           },
           "6,2": {
@@ -926,6 +926,39 @@
               "_type": "Text View",
               "_source0": "network_table:///Shuffleboard/climber/left extend setpoint",
               "_title": "Shuffleboard/climber/left extend setpoint"
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/climber/Right Extend Position",
+              "_title": "Shuffleboard/climber/Right Extend Position"
+            }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/climber/Left Tilt Position",
+              "_title": "Shuffleboard/climber/Left Tilt Position"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/climber/Left Tilt Position",
+              "_title": "Shuffleboard/climber/Left Tilt Position"
             }
           }
         }
