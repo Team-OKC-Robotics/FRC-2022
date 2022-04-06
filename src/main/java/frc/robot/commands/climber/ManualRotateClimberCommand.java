@@ -19,7 +19,7 @@ public class ManualRotateClimberCommand extends CommandBase {
 
     @Override
     public void execute() {
-        climber.manualTilt(gamepad.getRawAxis(1) * 0.5, leftSide);
+        climber.manualTilt(gamepad.getRawAxis(1) * 0.8, leftSide);
     }
 
     @Override
