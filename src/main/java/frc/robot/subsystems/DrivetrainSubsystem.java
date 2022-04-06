@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveK;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -48,8 +49,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private PIDController turnPID;
     
     // other variables
-    private double speedModifier = 1; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
+    private double speedModifier = 0.75; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
     //private double headingAngle = 0; // the heading of the robot. used to drive straight in auto.
+    private double openLoopRampRate = 0.5;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("drivetrain");
@@ -77,32 +79,40 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private NetworkTableEntry resetGyro = tab.add("reset gyro", false).getEntry();
 
-
     public DrivetrainSubsystem() {
         // motor configuration
         left1Motor = new CANSparkMax(1, MotorType.kBrushless);
         left2Motor = new CANSparkMax(2, MotorType.kBrushless);
         left3Motor = new CANSparkMax(3, MotorType.kBrushless);
-        leftSide = new MotorControllerGroup(left1Motor);
+        leftSide = new MotorControllerGroup(left1Motor, left2Motor, left3Motor);
 
         right1Motor = new CANSparkMax(4, MotorType.kBrushless);
         right2Motor = new CANSparkMax(5, MotorType.kBrushless);
         right3Motor = new CANSparkMax(6, MotorType.kBrushless);
-        rightSide = new MotorControllerGroup(right1Motor);
+        rightSide = new MotorControllerGroup(right1Motor, right2Motor, right3Motor);
 
-        left1Motor.setIdleMode(IdleMode.kBrake);
-        left2Motor.setIdleMode(IdleMode.kBrake);
-        left3Motor.setIdleMode(IdleMode.kBrake);
-        right1Motor.setIdleMode(IdleMode.kBrake);
-        right2Motor.setIdleMode(IdleMode.kBrake);
-        right3Motor.setIdleMode(IdleMode.kBrake);
+        // coast mode so we don't kill the gearbox and motors (also makes driving easier)
+        left1Motor.setIdleMode(IdleMode.kCoast);
+        left2Motor.setIdleMode(IdleMode.kCoast);
+        left3Motor.setIdleMode(IdleMode.kCoast);
+        right1Motor.setIdleMode(IdleMode.kCoast);
+        right2Motor.setIdleMode(IdleMode.kCoast);
+        right3Motor.setIdleMode(IdleMode.kCoast);
 
-        rightSide.setInverted(true); //TODO figure out if this is the right way to do this
+        // for autonomous start with a fast ramp rate (not too fast otherwise we kind of break the gearboxes)
+        // we had problems with stripping gears and whatnot because we put too much force on the gears so this limits
+        // that. VEX guy said on Chief Delphi not to put too much acceleration on them otherwise they strip
+        left1Motor.setOpenLoopRampRate(0.01);
+        left2Motor.setOpenLoopRampRate(0.01);
+        left3Motor.setOpenLoopRampRate(0.01);
+        right1Motor.setOpenLoopRampRate(0.01);
+        right2Motor.setOpenLoopRampRate(0.01);
+        right3Motor.setOpenLoopRampRate(0.01);
+
+        rightSide.setInverted(true); // motors face opposite directions so +1 for left side is opposite +1 for right side, this fixes that
         drivetrain = new DifferentialDrive(leftSide, rightSide);
-       
-        //TEMP FIXME
-        drivetrain.setMaxOutput(0.2);
 
+        // get the built-in encoders of the NEOs       
         left1Encoder = left1Motor.getEncoder();
         left2Encoder = left2Motor.getEncoder();
         left3Encoder = left3Motor.getEncoder();
@@ -119,9 +129,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
         distancePID = new PIDController(DriveK.distanceP, DriveK.distanceI, DriveK.distanceD);
         headingPID = new PIDController(DriveK.headingP, DriveK.headingI, DriveK.headingD);
         turnPID = new PIDController(DriveK.turnP, DriveK.turnI, DriveK.turnD);
-        //turnPID.enableContinuousInput(-180, 180);
 
-        // Shuffleboard initilization
+        // set the tolerance of the various PIDs. this ensures we don't wait for them to be super precise before
+        // moving on (which in some cases without a kI term can be literally forever) but still ensures
+        // we've settled down close enough
+        distancePID.setTolerance(2);
+        headingPID.setTolerance(7, 1);
+        turnPID.setTolerance(7, 2);
+
+        // Shuffleboard initilization of sensor values
         leftTicks.setDouble(0);
         rightTicks.setDouble(0);
         totalTicks.setDouble(0);
@@ -135,13 +151,39 @@ public class DrivetrainSubsystem extends SubsystemBase {
         resetGyro();
     }
 
+    public void setSpeedModifier(double speedMod) {
+        speedModifier = speedMod;
+    }
+
+    public void setOpenLoopRampRate() {
+        left1Motor.setOpenLoopRampRate(openLoopRampRate);
+        left2Motor.setOpenLoopRampRate(openLoopRampRate);
+        left3Motor.setOpenLoopRampRate(openLoopRampRate);
+        right1Motor.setOpenLoopRampRate(openLoopRampRate);
+        right2Motor.setOpenLoopRampRate(openLoopRampRate);
+        right3Motor.setOpenLoopRampRate(openLoopRampRate);
+    }
+
+    public void setOpenLoopRampRate(double rate) {
+        left1Motor.setOpenLoopRampRate(rate);
+        left2Motor.setOpenLoopRampRate(rate);
+        left3Motor.setOpenLoopRampRate(rate);
+        right1Motor.setOpenLoopRampRate(rate);
+        right2Motor.setOpenLoopRampRate(rate);
+        right3Motor.setOpenLoopRampRate(rate);
+    }
+
+    public void curvatureDrive(double speed, double turn, boolean turnInPlace) {
+        drivetrain.curvatureDrive(speed, turn, turnInPlace);
+    }
+
     /**
      * Tank drives the robot. Does not auto-square the inputs.
      * @param leftSpeed left speed
      * @param rightSpeed right speed
      */
     public void tankDrive(double leftSpeed, double rightSpeed) {
-        drivetrain.tankDrive(Math.pow(leftSpeed, 3) * speedModifier, Math.pow(rightSpeed, 3) * speedModifier, false);
+        drivetrain.tankDrive(leftSpeed * speedModifier, rightSpeed * speedModifier, true);
     }
 
     /**
@@ -150,9 +192,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @param turn how much to turn the robot
      */
     public void arcadeDrive(double speed, double turn) {
-        drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, false);
+        drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, true);
     }
     
+    /**
+     * Arcade drives the robot, taking into account speedModifier
+     * @param speed the speed of the robot
+     * @param turn how much to turn the robot
+     * @param squareInputs whether or not to square the inputs for fine-grain control
+     */
+    public void arcadeDrive(double speed, double turn, boolean squareInputs) {
+        drivetrain.arcadeDrive(speed * speedModifier, turn * speedModifier, squareInputs);
+    }
+
+    /**
+     * Arcade drives the robot. Does not square the inputs.
+     * @param speed the speed of the robot
+     * @param turn how much to turn the robot
+     */
+    public void arcadeDriveAuto(double speed, double turn, boolean squareInputs) {
+        drivetrain.arcadeDrive(-speed, turn, squareInputs);
+    }
+
     /**
      * Drives the drivetrain straight for the given distance
      * @param distance the distance, in inches, to drive forwards
@@ -161,6 +222,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
         distancePID.setSetpoint(distance);
 
         arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), headingPID.calculate(getHeading()));
+    }
+
+    public void driveOnHeading(double setSpeed, double distance) {
+        distancePID.setSetpoint(distance);
+        arcadeDriveAuto(clamp(-setSpeed, setSpeed, distancePID.calculate(getEncoderAverage())), headingPID.calculate(getHeading()), false);
+    }
+
+    public double clamp(double minOutput, double maxOutput, double input) {
+        if (input < minOutput) {
+            return minOutput;
+        } else if (input > maxOutput) {
+            return maxOutput;
+        } else {
+            return input;
+        }
     }
 
     /**
@@ -188,7 +264,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the drivetrain, in inches
      */
     public double getEncoderAverage() {
-        return getInches(getLeftEncoderAverage() + getRightEncoderAverage()) / 2;
+        return (getLeftEncoderAverage() + -getRightEncoderAverage()) / 2;
     }
 
     /**
@@ -196,7 +272,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the left side of the drivetrain, in inches
      */
     public double getLeftEncoderAverage() {
-        return (left1Encoder.getPosition() + left2Encoder.getPosition() + left3Encoder.getPosition()) / 3;
+        return left1Encoder.getPosition();
     }
 
     /**
@@ -204,7 +280,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @return the average distance of the right side of the drivetrain, in inches
      */
     public double getRightEncoderAverage() {
-        return (right1Encoder.getPosition() + right2Encoder.getPosition() + right3Encoder.getPosition()) / 3;
+        return right1Encoder.getPosition();
     }
 
     /**
@@ -224,12 +300,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     /**
-     * Converts ticks from encoders into inches using the constants in Constants.DriveK
-     * @param encoderTicks the number of ticks to convert
+     * Converts rotations from encoders into inches using the constants in Constants.DriveK
+     * @param rotations the number of rotations to convert
      * @return the number of inches that the ticks is equal to
      */
-    public double getInches(double encoderTicks) {
-        return encoderTicks / DriveK.ticksPerRev * DriveK.gearRatio * Math.PI * DriveK.wheelDiameter;
+    public double getInches(double rotations) {
+        return rotations * DriveK.gearRatio * Math.PI * DriveK.wheelDiameter;
     }
 
     /**
@@ -293,34 +369,41 @@ public class DrivetrainSubsystem extends SubsystemBase {
         gyro.reset();
     }
 
+    public void setMaxOutput(double maxOutput) {
+        drivetrain.setMaxOutput(maxOutput);
+    }
+
     /**
      * Our periodic function, gets called every robot loop iteration
      * Updates shuffleboard values.
      */
     @Override
     public void periodic() {
-        // update Shuffelboard values
-        leftTicks.setDouble(getLeftEncoderAverage());
-        rightTicks.setDouble(getRightEncoderAverage());
-        totalTicks.setDouble(getEncoderAverage());
-        heading.setDouble(getHeading());
-        distanceError.setDouble(distancePID.getPositionError());
-
-        // Shuffleboard on-the-fly tuning
-        if (writeMode.getBoolean(false)) {
-            distancePID.setP(distanceP.getDouble(DriveK.distanceP));
-            distancePID.setI(distanceI.getDouble(DriveK.distanceI));
-            distancePID.setD(distanceD.getDouble(DriveK.distanceD));
-
-            headingPID.setP(headingP.getDouble(DriveK.headingP));
-            headingPID.setI(headingI.getDouble(DriveK.headingI));
-            headingPID.setD(headingD.getDouble(DriveK.headingD));
-
-            turnPID.setP(turnP.getDouble(DriveK.turnP));
-            turnPID.setI(turnI.getDouble(DriveK.turnI));
-            turnPID.setD(turnD.getDouble(DriveK.turnD));
+        if (!Constants.competition) {
+            // update Shuffelboard sensor values
+            leftTicks.setDouble(getLeftEncoderAverage());
+            rightTicks.setDouble(getRightEncoderAverage());
+            totalTicks.setDouble(getEncoderAverage());
+            heading.setDouble(getHeading());
+            distanceError.setDouble(distancePID.getPositionError());
+    
+            // Shuffleboard on-the-fly tuning
+            if (writeMode.getBoolean(false)) {
+                distancePID.setP(distanceP.getDouble(DriveK.distanceP));
+                distancePID.setI(distanceI.getDouble(DriveK.distanceI));
+                distancePID.setD(distanceD.getDouble(DriveK.distanceD));
+    
+                headingPID.setP(headingP.getDouble(DriveK.headingP));
+                headingPID.setI(headingI.getDouble(DriveK.headingI));
+                headingPID.setD(headingD.getDouble(DriveK.headingD));
+    
+                turnPID.setP(turnP.getDouble(DriveK.turnP));
+                turnPID.setI(turnI.getDouble(DriveK.turnI));
+                turnPID.setD(turnD.getDouble(DriveK.turnD));
+            }
         }
-
+        
+        // this needs to be there regardless
         if (resetGyro.getBoolean(false)) {
             resetGyro();
             resetGyro.setBoolean(false);

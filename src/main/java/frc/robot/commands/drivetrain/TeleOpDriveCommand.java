@@ -16,8 +16,14 @@ public class TeleOpDriveCommand extends CommandBase {
     }
 
     @Override
+    public void initialize() {
+        drivetrain.setOpenLoopRampRate(); // only get open loop ramp rate when we start tele op
+        drivetrain.setSpeedModifier(0.75); // so as not to tip
+    }
+
+    @Override
     public void execute() {
-        drivetrain.arcadeDrive(-gamepad.getRawAxis(1), gamepad.getRawAxis(4));
+        drivetrain.arcadeDrive(Math.pow(-gamepad.getRawAxis(1), 3), Math.pow(gamepad.getRawAxis(4), 3), false);
     }
 
     @Override

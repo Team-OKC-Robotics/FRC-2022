@@ -1,0 +1,11 @@
+lists the motors in order of need most current->need least current so we can prioritize the limited supply of 40A fuses we have
+drivetrain 1-4
+drivetrain 2 // we could probably make one on each side a 30A and not notice the difference?
+climber extend 2
+climber tilt 2 // not sure how much current these are going to draw
+shooter 1 // probably won't draw that much during cruise but at warmup and when a ball passes through probably shoots up
+intake position 1 // depends on how torquey the gearbox is?
+intake 1 // yeah don't stall out the intake, will be running continuously so
+indexer 1 // idk the compression in some spots is a bit much but I don't think too much seeing as 0.2 power is what we're using
+
+currently the indexer (for the shooter tower) and intake (either raise/lower or suck, not built yet) are 30A and everything else is 40A

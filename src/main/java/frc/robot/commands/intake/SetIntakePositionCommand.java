@@ -21,6 +21,6 @@ public class SetIntakePositionCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return intake.isExtended() == extended;
+        return true;
     }
 }

@@ -14,10 +14,10 @@ public class GyroTestAuto extends Auto {
             new DriveCommand(drivetrain, 10),
             new TurnCommand(drivetrain, 90),
             new DriveCommand(drivetrain, 10),
-            new TurnCommand(drivetrain, -45),
-            new DriveCommand(drivetrain, 5),
-            new TurnCommand(drivetrain, 45),
-            new DriveCommand(drivetrain, -5)
+            new TurnCommand(drivetrain, 90),
+            new DriveCommand(drivetrain, 10),
+            new TurnCommand(drivetrain, 90),
+            new DriveCommand(drivetrain, -10)
         );
     }
 }
