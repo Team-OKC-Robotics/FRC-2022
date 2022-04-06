@@ -82,6 +82,7 @@ public class ClimberSubsystem extends SubsystemBase {
             rightExtendMotor.setSelectedSensorPosition(0);
             rightExtendMotor.configNeutralDeadband(0);
             rightExtendMotor.setNeutralMode(NeutralMode.Brake);
+            rightExtendMotor.configOpenloopRamp(0.5);
 
             // configure PID controller
             rightExtendPID = new PIDController(ClimbK.extendP, ClimbK.extendI, ClimbK.extendD);
@@ -110,6 +111,7 @@ public class ClimberSubsystem extends SubsystemBase {
             leftExtendMotor.setSelectedSensorPosition(0);
             leftExtendMotor.configNeutralDeadband(0);
             leftExtendMotor.setNeutralMode(NeutralMode.Brake);
+            leftExtendMotor.configOpenloopRamp(0.5);
 
             // configure PID controller
             leftExtendPID = new PIDController(ClimbK.extendP, ClimbK.extendI, ClimbK.extendD);
@@ -125,9 +127,9 @@ public class ClimberSubsystem extends SubsystemBase {
             leftTiltEncoder = leftTiltMotor.getEncoder();
             leftTiltEncoder.setPosition(0);
 
-            leftTiltMotor.setSoftLimit(SoftLimitDirection.kForward, -15);
-            leftTiltMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-            leftTiltMotor.setSoftLimit(SoftLimitDirection.kReverse, -15);
+            leftTiltMotor.setSoftLimit(SoftLimitDirection.kForward, 0);
+            leftTiltMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
+            leftTiltMotor.setSoftLimit(SoftLimitDirection.kReverse, -16);
             leftTiltMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
         }
 

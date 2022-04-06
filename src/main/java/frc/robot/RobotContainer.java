@@ -154,7 +154,7 @@ public class RobotContainer {
       
       // climber
       topLeftButton.whenPressed(extendLeftClimber).whenReleased(stopLeftClimber);
-      bottomLeftButton.whenPressed(retractLeftClimber);
+      bottomLeftButton.whenPressed(retractLeftClimber).whenReleased(stopLeftClimber);
       topRightButton.whenPressed(extendRightClimber).whenReleased(stopRightClimber);
       bottomRightButton.whenPressed(retractRightClimber);
       
@@ -166,7 +166,7 @@ public class RobotContainer {
       tenButton.whenPressed(retractIntake);
 
       elevenButton.whileHeld(rotateLeftClimber).whenReleased(stopLeftRotate);
-      twelveButton.whenPressed(rotateRightClimber).whenReleased(stopRightRotate);
+      // twelveButton.whenPressed(rotateRightClimber).whenReleased(stopRightRotate);
   }
 
   public Command getDriveCommand() {
