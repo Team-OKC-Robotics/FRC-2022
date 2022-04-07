@@ -7,10 +7,39 @@ outputLog = [[], []]
 intakeSetpointLog = [[], []]
 intakeOutputLog = [[], []]
 intakePosLog = [[], []]
+leftPosLog = [[], []]
+leftOutputLog = [[], []]
+leftTiltPosLog = [[], []]
+leftTiltOutputLog = [[], []]
+rightPosLog = [[], []]
+rightOutputLog = [[], []]
+rightTiltPosLog = [[], []]
+rightTiltOutputLog = [[], []]
 
-with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220407_205909.csv") as f:
+entries = {
+    '"/shooter/rpm"':rpmLog,
+    '"shooter/pid-calculate"':pidLog,
+    '"/shooter/output"':outputLog,
+    '"/shooter/setpoint"':setpointLog,
+    '"/intake/setpoint"':intakeSetpointLog,
+    '"/intake/output"':intakeOutputLog,
+    '"/intake/pos"':intakePosLog,
+
+    '"/climber/leftPos"':leftPosLog,
+    '"/climber/leftOutput"':leftOutputLog,
+    '"/climber/leftTiltPos"':leftTiltPosLog,
+    '"/climber/leftTiltOutput"':leftTiltOutputLog,
+    '"/climber/rightPos"':rightPosLog,
+    '"/climber/rightOutput"':rightOutputLog,
+    '"/climber/rightTiltPos"':rightTiltPosLog,
+    '"/climber/rightTiltOutput"':rightTiltOutputLog,
+}
+
+with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220407_215547.csv") as f:
 # with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220407_180620_OKTU_P4.csv") as f:
     log = f.read().split("\n")
+
+
 
 for index, line in enumerate(log):
     if line.strip() == "":
@@ -20,57 +49,13 @@ for index, line in enumerate(log):
     except Exception:
         print(line)
         continue
-    # print(timestamp, id, data)
-    if (id == '"/shooter/rpm"'):
-        rpmLog[0].append(float(timestamp))
-        rpmLog[1].append(float(data))
-    elif id == '"/shooter/pid-calculate"':
-        pidLog[0].append(float(timestamp))
-        pidLog[1].append(float(data))
-    elif id == '"/shooter/output"':
-        outputLog[0].append(float(timestamp))
-        outputLog[1].append(float(data) * 4000) # so when plotted changes can be seen. this is not the right way to handle this
-        # I don't care
-    elif id == '"/shooter/setpoint"':
-        setpointLog[0].append(float(timestamp))
-        setpointLog[1].append(float(data))
-    elif id == '"/intake/setpoint"':
-        intakeSetpointLog[0].append(float(timestamp))
-        intakeSetpointLog[1].append(float(data))
-    elif id == '"/intake/output"':
-        intakeOutputLog[0].append(float(timestamp))
-        intakeOutputLog[1].append(float(data))
-    elif id == '"/intake/pos"':
-        intakePosLog[0].append(float(timestamp))
-        intakePosLog[1].append(float(data))
-
-# print(len(rpmLog)) # 1603
-# print(len(outputLog)) # 634
-# print(len(setpointLog)) # 634
-# print(len(pidLog)) # 634
-
-
-# plt.figure()
-# plt.title("just a title")
-# plt.plot(outputLog[0], outputLog[1])
-# plt.xlabel("Time (sec)")
-# plt.ylabel("output (% max)")
-
-# plt.figure()
-# plt.plot(rpmLog[0], rpmLog[1])
-# plt.xlabel("Time (sec)")
-# plt.ylabel("RPM (RPM per 200 ms or something)")
-
-# plt.figure()
-# plt.plot(setpointLog[0], setpointLog[1])
-# plt.xlabel("Time (sec)")
-# plt.ylabel("setpoint (RPM-ish)")
-
-# plt.figure()
-# plt.plot(pidLog[0], pidLog[1])
-# plt.xlabel("Time (sec)")
-# plt.ylabel("pid output (calculated)")
-# plt.show()
+    
+    try:
+        entries[id][0].append(float(timestamp))
+        entries[id][1].append(float(data))
+    except Exception:
+        print(line)
+        continue
 
 plt.figure()
 plt.plot(pidLog[0], pidLog[1])
@@ -86,5 +71,17 @@ plt.plot(intakeSetpointLog[0], intakeSetpointLog[1])
 plt.plot(intakeOutputLog[0], intakeOutputLog[1])
 plt.plot(intakePosLog[0], intakePosLog[1])
 plt.legend(("intake setpoint", "intake output", "intake pos"))
+
+plt.figure()
+plt.plot(leftOutputLog[0], leftOutputLog[1])
+plt.plot(leftPosLog[0], leftPosLog[1])
+plt.plot(leftTiltOutputLog[0], leftTiltOutputLog[1])
+plt.plot(leftTiltPosLog[0], leftTiltPosLog[1])
+
+plt.plot(rightOutputLog[0], rightOutputLog[1])
+plt.plot(rightPosLog[0], rightPosLog[1])
+plt.plot(rightTiltOutputLog[0], rightTiltOutputLog[1])
+plt.plot(rightTiltPosLog[0], rightTiltPosLog[1])
+plt.legend(("left output", "left pos", "left tilt output", "left tilt pos", "right output", "right pos", "right tilt output", "right tilt pos"))
 
 plt.show()

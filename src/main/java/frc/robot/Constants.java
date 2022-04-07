@@ -39,7 +39,7 @@ public final class Constants {
     public final class ShootK {
         public static final double shootP = 0.000005;
         public static final double shootI = 0;
-        public static final double shootD = 0.0000001;
+        public static final double shootD = 0.000000001;
         public static final double shootF = 0.4;
 
         public static final double normalShot = 9000;
