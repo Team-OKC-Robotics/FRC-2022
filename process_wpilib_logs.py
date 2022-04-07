@@ -8,8 +8,8 @@ intakeSetpointLog = [[], []]
 intakeOutputLog = [[], []]
 intakePosLog = [[], []]
 
-# with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\competition logs\FRC_20220404_233808.csv") as f:
-with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220407_180620_OKTU_P4.csv") as f:
+with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220407_205909.csv") as f:
+# with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220407_180620_OKTU_P4.csv") as f:
     log = f.read().split("\n")
 
 for index, line in enumerate(log):

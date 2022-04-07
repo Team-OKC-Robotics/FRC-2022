@@ -29,7 +29,7 @@ public final class Constants {
 
         public static final double headingP = 0.07;
         public static final double headingI = 0;
-        public static final double headingD = 0.00001;
+        public static final double headingD = 0.00005;
 
         public static final double turnP = 0.05;
         public static final double turnI = 0.000;
@@ -37,9 +37,9 @@ public final class Constants {
     }
 
     public final class ShootK {
-        public static final double shootP = 0.00001;
+        public static final double shootP = 0.000005;
         public static final double shootI = 0;
-        public static final double shootD = 0.000005;
+        public static final double shootD = 0.0000001;
         public static final double shootF = 0.4;
 
         public static final double normalShot = 9000;
