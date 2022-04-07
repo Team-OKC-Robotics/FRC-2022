@@ -8,6 +8,9 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -79,6 +82,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private NetworkTableEntry resetGyro = tab.add("reset gyro", false).getEntry();
 
+    // logging
+    private DataLog log;
+    private DoubleLogEntry leftPosLog;
+    private DoubleLogEntry leftVelocityLog;
+    private DoubleLogEntry rightPosLog;
+    private DoubleLogEntry rightVelocityLog;
+    private DoubleLogEntry headingLog;
+    private DoubleLogEntry headingVelocityLog;
+    private DoubleLogEntry xAccelerationLog;
+    private DoubleLogEntry yAccelerationLog;
+    private DoubleLogEntry leftOutputLog;
+    private DoubleLogEntry rightOutputLog;
+
     public DrivetrainSubsystem() {
         // motor configuration
         left1Motor = new CANSparkMax(1, MotorType.kBrushless);
@@ -149,6 +165,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
         resetHeadingPID();
         resetTurnPID();
         resetGyro();
+
+        log = DataLogManager.getLog();
+        leftPosLog = new DoubleLogEntry(log, "/drivetrain/leftPos");
+        leftVelocityLog = new DoubleLogEntry(log, "/drivetrain/leftVelocity");
+        rightPosLog = new DoubleLogEntry(log, "/drivetrain/rightPos");
+        rightVelocityLog = new DoubleLogEntry(log, "/drivetrain/rightVelocity");
+        headingLog = new DoubleLogEntry(log, "/drivetrain/heading");
+        headingVelocityLog = new DoubleLogEntry(log, "/drivetrain/headingVelocity");
+        xAccelerationLog = new DoubleLogEntry(log, "/drivetrain/xAcceleration");
+        yAccelerationLog = new DoubleLogEntry(log, "/drivetrain/yAcceleration");
+        leftOutputLog = new DoubleLogEntry(log, "/drivetrain/leftOutputLog");
+        rightOutputLog = new DoubleLogEntry(log, "/drivetrain/rightOutputLog");
     }
 
     public void setSpeedModifier(double speedMod) {
@@ -373,12 +401,44 @@ public class DrivetrainSubsystem extends SubsystemBase {
         drivetrain.setMaxOutput(maxOutput);
     }
 
+    public double getXAccel() {
+        return gyro.getWorldLinearAccelX();
+    }
+
+    public double getYAccel() {
+        return gyro.getWorldLinearAccelY();
+    }
+
+    public double getHeadingVelocity() {
+        return gyro.getRawGyroZ();
+    }
+
+    public double getLeftEncoderVelocity() {
+        return left1Encoder.getVelocity();
+    }
+
+    public double getRightEncoderVelocity() {
+        return right1Encoder.getVelocity();
+    }
+
     /**
      * Our periodic function, gets called every robot loop iteration
      * Updates shuffleboard values.
      */
     @Override
     public void periodic() {
+        leftPosLog.append(getLeftEncoderAverage());
+        leftVelocityLog.append(getLeftEncoderVelocity());
+        rightPosLog.append(getRightEncoderAverage());
+        rightVelocityLog.append(getRightEncoderVelocity());
+        headingLog.append(getHeading());
+        headingVelocityLog.append(getHeadingVelocity());
+        xAccelerationLog.append(getXAccel());
+        yAccelerationLog.append(getYAccel());
+        leftOutputLog.append(left1Motor.get());
+        rightOutputLog.append(right1Motor.get());
+
+
         if (!Constants.competition) {
             // update Shuffelboard sensor values
             leftTicks.setDouble(getLeftEncoderAverage());
