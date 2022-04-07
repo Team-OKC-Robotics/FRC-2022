@@ -15,6 +15,9 @@ import com.revrobotics.SparkMaxLimitSwitch;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -65,6 +68,19 @@ public class ClimberSubsystem extends SubsystemBase {
     private NetworkTableEntry leftTiltSetpoint = tab.add("left tilt setpoint", 0).getEntry();
     private NetworkTableEntry rightExtendSetpoint = tab.add("right extend setpoint", 0).getEntry();
     private NetworkTableEntry rightTiltSetpoint = tab.add("right tilt setpoint", 0).getEntry();
+
+    private DataLog log;
+    private DoubleLogEntry leftPosLog;
+    private DoubleLogEntry leftOutputLog;
+
+    private DoubleLogEntry rightPosLog;
+    private DoubleLogEntry rightOutputLog;
+
+    private DoubleLogEntry leftTiltPosLog;
+    private DoubleLogEntry leftTiltOutputLog;
+    
+    private DoubleLogEntry rightTiltPosLog;
+    private DoubleLogEntry rightTiltOutputLog;
 
     /**
      * Makes a new ClimberSubsystem
@@ -133,6 +149,16 @@ public class ClimberSubsystem extends SubsystemBase {
             leftTiltMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
         }
 
+        log = DataLogManager.getLog();
+        leftPosLog = new DoubleLogEntry(log, "/climber/leftPos");
+        leftOutputLog = new DoubleLogEntry(log, "/climber/leftOutput");
+        rightPosLog = new DoubleLogEntry(log, "/climber/rightPos");
+        rightOutputLog = new DoubleLogEntry(log, "/climber/rightOutput");
+        leftTiltPosLog = new DoubleLogEntry(log, "/climber/leftTiltPos");
+        leftTiltOutputLog = new DoubleLogEntry(log, "/climber/leftTiltOutput");
+        rightTiltPosLog = new DoubleLogEntry(log, "/climber/rightTiltPos");
+        rightTiltOutputLog = new DoubleLogEntry(log, "/climber/rightTiltOutput");
+        
         leftTiltPID = new PIDController(ClimbK.tiltP, ClimbK.tiltI, ClimbK.tiltD);
         rightTiltPID = new PIDController(ClimbK.tiltP, ClimbK.tiltI, ClimbK.tiltD);
     }
@@ -195,16 +221,20 @@ public class ClimberSubsystem extends SubsystemBase {
     public void manualExtend(double power, boolean leftSide) {
         if (leftSide) {
             leftExtendMotor.set(power);
+            leftOutputLog.append(power);
         } else {
             rightExtendMotor.set(power); // just spooled it opposite direction so this doesn't need to be inverted
+            rightOutputLog.append(power);
         }
     }
 
     public void manualTilt(double power, boolean leftSide) {
         if (leftSide) {
             leftTiltMotor.set(-power); // need to invert because opposite direction
+            leftTiltOutputLog.append(-power);
         } else {
             rightTiltMotor.set(power);
+            rightTiltOutputLog.append(-power);
         }   
     }
 
@@ -214,10 +244,12 @@ public class ClimberSubsystem extends SubsystemBase {
             leftSetpoint = leftTiltEncoder.getPosition();
             leftStopped = true;
             leftTiltMotor.set(0);
+            leftTiltOutputLog.append(0);
         } else {
             rightSetpoint = rightTiltEncoder.getPosition();
             rightStopped = true;
             leftTiltMotor.set(0);
+            rightTiltOutputLog.append(0);
         }
     }
 
@@ -238,6 +270,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        leftPosLog.append(leftExtendMotor.getSelectedSensorPosition());
+        rightPosLog.append(rightExtendMotor.getSelectedSensorPosition());
+        leftTiltPosLog.append(leftTiltEncoder.getPosition());
+        rightTiltPosLog.append(rightTiltEncoder.getPosition());
+
         if (rightTiltMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed).isPressed()) {
             rightTiltEncoder.setPosition(0);
             rightSetpoint = 1;
