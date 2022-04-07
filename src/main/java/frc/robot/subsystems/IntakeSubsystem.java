@@ -10,7 +10,6 @@ import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -44,8 +43,6 @@ public class IntakeSubsystem extends SubsystemBase {
     private NetworkTableEntry intakeP = tab.add("Intake kP", IntakeK.deployP).getEntry();
     private NetworkTableEntry intakeI = tab.add("Intake kI", IntakeK.deployI).getEntry();
     private NetworkTableEntry intakeD = tab.add("Intake kD", IntakeK.deployD).getEntry();
-
-    private NetworkTableEntry deployedPreset = tab.add("Deployed preset", IntakeK.EXTENDED).getEntry();
 
     private DataLog log;
     private DoubleLogEntry posLog;
