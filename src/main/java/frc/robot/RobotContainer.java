@@ -94,7 +94,7 @@ public class RobotContainer {
   private final SetTriggerCommand triggerIn = new SetTriggerCommand(shooter, 0.4);
   private final SetTriggerCommand triggerOut = new SetTriggerCommand(shooter, -0.4);
   private final SetTriggerCommand stopTrigger = new SetTriggerCommand(shooter, 0);
-  private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad3, 0.4);
+  private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad3);
 
   // climber
   private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.8, true);

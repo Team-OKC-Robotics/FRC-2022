@@ -8,13 +8,11 @@ import frc.robot.subsystems.ShooterSubsystem.ShooterPresets;
 public class ShooterPresetCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private Joystick gamepad;
-    private double power;
     private ShooterPresets preset;
 
-    public ShooterPresetCommand(ShooterSubsystem shooter, Joystick gamepad, double power) {
+    public ShooterPresetCommand(ShooterSubsystem shooter, Joystick gamepad) {
         this.shooter = shooter;
         this.gamepad = gamepad;
-        this.power = power;
 
         addRequirements(shooter);
     }
