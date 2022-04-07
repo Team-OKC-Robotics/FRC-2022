@@ -4,6 +4,9 @@ rpmLog = [[], []]
 pidLog = [[], []]
 setpointLog = [[], []]
 outputLog = [[], []]
+intakeSetpointLog = [[], []]
+intakeOutputLog = [[], []]
+intakePosLog = [[], []]
 
 # with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\competition logs\FRC_20220404_233808.csv") as f:
 with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220407_180620_OKTU_P4.csv") as f:
@@ -31,6 +34,15 @@ for index, line in enumerate(log):
     elif id == '"/shooter/setpoint"':
         setpointLog[0].append(float(timestamp))
         setpointLog[1].append(float(data))
+    elif id == '"/intake/setpoint"':
+        intakeSetpointLog[0].append(float(timestamp))
+        intakeSetpointLog[1].append(float(data))
+    elif id == '"/intake/output"':
+        intakeOutputLog[0].append(float(timestamp))
+        intakeOutputLog[1].append(float(data))
+    elif id == '"/intake/pos"':
+        intakePosLog[0].append(float(timestamp))
+        intakePosLog[1].append(float(data))
 
 # print(len(rpmLog)) # 1603
 # print(len(outputLog)) # 634
@@ -68,4 +80,11 @@ plt.plot(setpointLog[0], setpointLog[1])
 plt.xlabel("Time (sec)")
 plt.ylabel("data")
 plt.legend(("pid output", "output", "rpm", "setpoint"))
+
+plt.figure()
+plt.plot(intakeSetpointLog[0], intakeSetpointLog[1])
+plt.plot(intakeOutputLog[0], intakeOutputLog[1])
+plt.plot(intakePosLog[0], intakePosLog[1])
+plt.legend(("intake setpoint", "intake output", "intake pos"))
+
 plt.show()
