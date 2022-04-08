@@ -108,6 +108,9 @@ public class ShooterSubsystem extends SubsystemBase {
         outputLog = new DoubleLogEntry(log, "/shooter/output");
         calculatedLog = new DoubleLogEntry(log, "/shooter/pid-calculate");
         constantsLog = new DoubleLogEntry(log, "/shooter/constants");
+        constantsLog.append(ShootK.shootP);
+        constantsLog.append(ShootK.shootI);
+        constantsLog.append(ShootK.shootD);
 
         shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
         shooterPID.setTolerance(100, 100); // tolerate a variance of 100 RPM and an acceleration of 10 RPM
