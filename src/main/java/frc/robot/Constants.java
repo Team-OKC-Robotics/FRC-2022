@@ -39,11 +39,11 @@ public final class Constants {
     public final class ShootK {
         public static final double shootP = 0.000005;
         public static final double shootI = 0;
-        public static final double shootD = 0.000000001;
+        public static final double shootD = 0.0000000005;
         public static final double shootF = 0.4;
 
         public static final double normalShot = 9000;
-        public static final double againstHub = 8000;
+        public static final double againstHub = 8500;
         public static final double lowGoal = 1500;
         public static final double farShot = 12000;
     }
