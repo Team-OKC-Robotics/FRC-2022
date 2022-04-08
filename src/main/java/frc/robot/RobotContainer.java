@@ -101,7 +101,7 @@ public class RobotContainer {
   private final ManualClimberCommand retractLeftClimber = new ManualClimberCommand(climber, -0.5, true);
   private final ManualClimberCommand stopLeftClimber = new ManualClimberCommand(climber, 0, true);
   private final ManualClimberCommand extendRightClimber = new ManualClimberCommand(climber, 0.8, false);
-  private final ManualClimberCommand retractRightClimber = new ManualClimberCommand(climber, -0.5, false);
+  private final ManualClimberCommand retractRightClimber = new ManualClimberCommand(climber, -0.7, false);
   private final ManualClimberCommand stopRightClimber = new ManualClimberCommand(climber, 0, false);
 
   private final ManualRotateClimberCommand rotateLeftClimber = new ManualRotateClimberCommand(climber, gamepad3, true);
@@ -150,7 +150,7 @@ public class RobotContainer {
       topLeftButton.whenPressed(extendLeftClimber).whenReleased(stopLeftClimber);
       bottomLeftButton.whenPressed(retractLeftClimber).whenReleased(stopLeftClimber);
       topRightButton.whenPressed(extendRightClimber).whenReleased(stopRightClimber);
-      bottomRightButton.whenPressed(retractRightClimber);
+      bottomRightButton.whenPressed(retractRightClimber).whenReleased(stopRightClimber);
       
       // intake
       triggerButton.whenPressed(feed).whenReleased(stopTrigger).whenPressed(indexerIn).whenReleased(stopIndexer); // ignore ball detection, for shooting

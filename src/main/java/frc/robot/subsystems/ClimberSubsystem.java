@@ -98,7 +98,7 @@ public class ClimberSubsystem extends SubsystemBase {
             rightExtendMotor.setSelectedSensorPosition(0);
             rightExtendMotor.configNeutralDeadband(0);
             rightExtendMotor.setNeutralMode(NeutralMode.Brake);
-            rightExtendMotor.configOpenloopRamp(0.5);
+            rightExtendMotor.configOpenloopRamp(0);
 
             // configure PID controller
             rightExtendPID = new PIDController(ClimbK.extendP, ClimbK.extendI, ClimbK.extendD);
