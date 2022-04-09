@@ -13,8 +13,8 @@
         "tiles": {
           "0,0": {
             "size": [
-              10,
-              5
+              8,
+              4
             ],
             "content": {
               "_type": "Camera Stream",
@@ -23,11 +23,48 @@
               "Crosshair/Show crosshair": true,
               "Crosshair/Crosshair color": "#FFFFFFFF",
               "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
+              "Controls/Rotation": "QUARTER_CCW",
               "compression": -1.0,
-              "fps": 40,
-              "imageWidth": 240,
-              "imageHeight": 120
+              "fps": -1,
+              "imageWidth": 120,
+              "imageHeight": 240
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/shooter RPM",
+              "_title": "/Shuffleboard/shooter/shooter RPM"
+            }
+          },
+          "8,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///Shuffleboard/shooter/shooter good",
+              "_title": "/Shuffleboard/shooter/shooter good",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "8,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///Shuffleboard/intake/deployed switch",
+              "_title": "/Shuffleboard/intake/deployed switch",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           }
         }
@@ -100,6 +137,39 @@
               "_type": "Toggle Button",
               "_source0": "network_table:///Shuffleboard/drivetrain/reset gyro",
               "_title": "Shuffleboard/drivetrain/reset gyro"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab 9",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              9,
+              4
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://USB Camera 0",
+              "_title": "USB Camera 0",
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "QUARTER_CCW",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": 120,
+              "imageHeight": 240
             }
           }
         }
