@@ -16,7 +16,7 @@ public final class Constants {
     public static final double neo550TicksPerRev = 42; // although I think getPosition() might return in native units of rotations so this would then be 1
     public static final double neoTicksPerRev = 42;
     public static final double falconTicksPerRev = 2048;
-    public static final boolean competition = true; // if enabled, disables a lot of the automatic shuffleboard values
+    public static final boolean competition = false; // if enabled, disables a lot of the automatic shuffleboard values
 
     public final class DriveK {
         public static final double ticksPerRev = neoTicksPerRev;
@@ -39,7 +39,7 @@ public final class Constants {
     public final class ShootK {
         public static final double shootP = 0.000005;
         public static final double shootI = 0;
-        public static final double shootD = 0.0000000005;
+        public static final double shootD = 0.00000005;
         public static final double shootF = 0.4;
 
         public static final double normalShot = 9000;
