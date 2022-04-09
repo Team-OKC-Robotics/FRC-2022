@@ -178,8 +178,8 @@ public class IntakeSubsystem extends SubsystemBase {
                 deployMotor.set(0); // stop the intake
             } else { // otherwise we're good to keep moving
                 double power = deployPID.calculate(deployEncoder.getPosition()); // calculate the power
-                if (Math.abs(power) > 0.8) { // limit the power to a max of 0.8             
-                    power = Math.copySign(0.8, power);
+                if (Math.abs(power) > 0.6) { // limit the power to a max of 0.8             
+                    power = Math.copySign(0.6, power);
                 }
                 deployMotor.set(power); // move the intake
             }

@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from math import isclose
+from math import isclose, inf, nan
 import copy, random
 
 rpmLog = [[], []]
@@ -38,8 +38,8 @@ entries = {
     # '"/climber/rightTiltOutput"':rightTiltOutputLog,
 }
 
-# log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_155812_OKTU_Q14.csv"
-log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220402_215713.csv"
+log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_210622_OKTU_Q43.csv"
+# log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220402_215713.csv"
 with open(log) as f:
 # with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_175227.csv") as f:
     log = f.read().split("\n")
@@ -102,8 +102,8 @@ def calculate(state, output, param):
 def calculate_error(actualRPM, predictedRPM):
     error = 0
     for x in range(len(actualRPM)):
-        error += actualRPM[x] - predictedRPM[x]
-    error /= len(actualRPM)
+        error += abs(actualRPM[x] - predictedRPM[x])
+    # error /= len(actualRPM)
     return error
 
 # go through the output log and try to find an output close to the timestamp
@@ -117,7 +117,7 @@ def find(timestamp, last_index):
         #     return outputLog[1][index] # return that output
         if isclose(outputTime, timestamp, abs_tol=0.03):
             return outputLog[1][index], index # return that output
-        elif outputTime - timestamp > 1: # otherwise if it gets too large
+        elif outputTime - timestamp > 0.8: # otherwise if it gets too large
             return 0, index # then the output is 0
     return 0, index
 
@@ -128,7 +128,8 @@ predictedRPMLog = [[], []]
 previousState = 0
 state = 0
 last_idx = 0
-param = [0.85, 2000]
+param = [0.96, 750]
+# 0.4 * B = 9000
 for index, rpm in enumerate(rpmLog[1]):
     output, last_idx = find(rpmLog[0][index], last_idx)
     state = calculate(previousState, output, param)
@@ -157,8 +158,8 @@ for x in range(pop_size):
 best_error = 10000000
 generations = 0
 try:
-    # while best_error > 1000:
-    while generations < 5: # temporary only run for 1 generation
+    while best_error > 1000:
+    # while generations < 5: # temporary only run for 1 generation
         for param in pop:
             predictedRPMLog = [[], []]
             previousState = 0
@@ -170,17 +171,25 @@ try:
                 state = calculate(previousState, output, param)
 
                 predictedRPMLog[0].append(rpmLog[0][index]) # timestamp
+
                 predictedRPMLog[1].append(state) # append the predicted RPM at that timestamp
 
                 previousState = state
             
             error = abs(calculate_error(rpmLog[1], predictedRPMLog[1]))
+            param[2] = error
+            # if error == inf or error == nan:
+            #     pass
+            # else:
+            #     # print(error)
+            
 
             if (error < best_error):
                 best_error = error
         print(best_error)
         
-        pop.sort(key=lambda x:x[2], reverse=True) # sort according to lower fitness
+        pop.sort(key=lambda x:x[2], reverse=False) # sort according to lower fitness
+        # print(pop)
         pop = pop[:int(len(pop)/2)] # keep the top half
         pop += copy.deepcopy(pop) # rebuild using a copy of the same half
 
