@@ -19,7 +19,11 @@ public class ShootFeedTeleOpCommand extends CommandBase {
     @Override
     public void execute() {
         shooter.setShooter(RPM);
-        shooter.feed(power); // run the shooter
+        // if (shooter.atShooterSetpoint()) {
+            shooter.feed(power); // run the shooter
+        // } else {
+            shooter.feed(0);
+        // }
     }
 
     @Override

@@ -155,12 +155,17 @@ public class IntakeSubsystem extends SubsystemBase {
         // return deployEncoder.getPosition() == IntakeK.EXTENDED;
         return true;
     }
-
+    
     @Override
     public void periodic() {
         posLog.append(deployEncoder.getPosition());
         outputLog.append(deployMotor.get());
         
+        if (deployedLimitSwitch.get()) {
+            deployedSwitch.setBoolean(false);
+        } else {
+            deployedSwitch.setBoolean(true);
+        }
             
         if (direction != 0) { // don't start moving unless the code has started and the intake has been told to move,
                             // so it can be moved when powered on but disabled
@@ -193,11 +198,6 @@ public class IntakeSubsystem extends SubsystemBase {
                 deployPID.setD(intakeD.getDouble(IntakeK.deployD));
             }
             
-            if (deployedLimitSwitch.get()) {
-                deployedSwitch.setBoolean(false);
-            } else {
-                deployedSwitch.setBoolean(true);
-            }
             
             if (retractedLimitSwitch.get()) {
                 retractedSwitch.setBoolean(false);
