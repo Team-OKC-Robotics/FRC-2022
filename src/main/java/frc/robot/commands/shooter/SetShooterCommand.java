@@ -21,6 +21,7 @@ public class SetShooterCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return shooter.atShooterSetpoint();
+        // return shooter.atShooterSetpoint();
+        return true;
     }
 }

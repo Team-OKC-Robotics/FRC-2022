@@ -38,7 +38,7 @@ entries = {
     # '"/climber/rightTiltOutput"':rightTiltOutputLog,
 }
 
-log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_210622_OKTU_Q43.csv"
+log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220409_145928_OKTU_Q60.csv"
 # log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220402_215713.csv"
 with open(log) as f:
 # with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_175227.csv") as f:
@@ -70,6 +70,7 @@ plt.plot(setpointLog[0], setpointLog[1])
 plt.xlabel("Time (sec)")
 plt.ylabel("data")
 plt.legend(("pid output", "output", "rpm", "setpoint"))
+plt.show()
 
 # plt.figure()
 # plt.plot(intakeSetpointLog[0], intakeSetpointLog[1])
@@ -90,6 +91,8 @@ plt.legend(("pid output", "output", "rpm", "setpoint"))
 # plt.legend(("left output", "left pos", "left tilt output", "left tilt pos", "right output", "right pos", "right tilt output", "right tilt pos"))
 
 # plt.show()
+
+raise SystemExit
 
 def calculate(state, output, param):
     try:
@@ -128,10 +131,11 @@ predictedRPMLog = [[], []]
 previousState = 0
 state = 0
 last_idx = 0
-param = [0.96, 750]
+param = [0.9, 50]
 # 0.4 * B = 9000
 for index, rpm in enumerate(rpmLog[1]):
-    output, last_idx = find(rpmLog[0][index], last_idx)
+    # output, last_idx = find(rpmLog[0][index], last_idx)
+    output = outputLog[1][index]
     state = calculate(previousState, output, param)
 
     predictedRPMLog[0].append(rpmLog[0][index]) # timestamp
@@ -144,10 +148,10 @@ error = abs(calculate_error(rpmLog[1], predictedRPMLog[1]))
 
 print(calculate_error(rpmLog[1], predictedRPMLog[1]))
 
-# plt.plot(predictedRPMLog[0], predictedRPMLog[1])
-# plt.show()
+plt.plot(predictedRPMLog[0], predictedRPMLog[1])
+plt.show()
 
-# raise SystemExit
+raise SystemExit
 
 pop = []
 pop_size = 50
@@ -211,6 +215,8 @@ print(pop[0])
 plt.plot(predictedRPMLog[0], predictedRPMLog[1])
 plt.show()
 
+# x = state
+# u = control
 # x* = Ax + Bu
 # def simulate_system(params):
 #     global outputLog, rpmLog

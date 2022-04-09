@@ -70,6 +70,7 @@ public class RobotContainer {
   private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter, intake); // drives the robot backwards
   private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
   private final DriveOffLineAuto driveOffLineAuto = new DriveOffLineAuto(drivetrain); // just drives the robot backwards
+  private final SysIdAuto sysIdAuto = new SysIdAuto(shooter);
   
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
@@ -114,7 +115,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // add the autos to the chooser
-    AutoChooser.addAutos(shootThenDrive, twoBallAuto, driveOffLineAuto, doNothingAuto /*, gyroTestAuto*/);
+    AutoChooser.addAutos(sysIdAuto, shootThenDrive, twoBallAuto, driveOffLineAuto, doNothingAuto /*, gyroTestAuto*/);
     AutoChooser.addGamepad(gamepad1);
     resetDeploy.schedule();
 

@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -143,23 +144,24 @@ public class ShooterSubsystem extends SubsystemBase {
      * @param RPM the rpm to set the shooter to
      */
     public void setShooter(double RPM) {
-        if (shooterMotor1 != null) {
-            // based off of tuning with pheonix tuner
-            // shooterMotor1.set(ControlMode.Velocity, RPM, DemandType.ArbitraryFeedForward, 0.4);
-            power += -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
-            // if (atShooterSetpoint()) {
-            //     // do nothing
-            // } else {
-            //     power += tempPower;
-            // }
-            shooterOutput.setDouble(clamp(0.1, 1, power));
-            setpoint.setDouble(RPM);
-            calculatedLog.append(power);
-            outputLog.append(clamp(0.1, 1, power));
-            setpointLog.append(RPM);
-            shooterMotor1.set(ControlMode.PercentOutput, clamp(0.1, 1, power));
-            averageRPM = rollingRpmAverage.calculate(shooterMotor1.getSelectedSensorVelocity());
-        }
+        shooterMotor1.set(ControlMode.PercentOutput, RPM);
+        // if (shooterMotor1 != null) {
+        //     // based off of tuning with pheonix tuner
+        //     // shooterMotor1.set(ControlMode.Velocity, RPM, DemandType.ArbitraryFeedForward, 0.4);
+        //     power += -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
+        //     // if (atShooterSetpoint()) {
+        //     //     // do nothing
+        //     // } else {
+        //     //     power += tempPower;
+        //     // }
+        //     // shooterOutput.setDouble(clamp(0.1, 1, power));
+        //     // setpoint.setDouble(RPM);
+        //     // calculatedLog.append(power);
+        //     // outputLog.append(clamp(0.1, 1, power));
+        //     // setpointLog.append(RPM);
+        //     shooterMotor1.set(ControlMode.PercentOutput, clamp(0.1, 1, power));
+        //     averageRPM = rollingRpmAverage.calculate(shooterMotor1.getSelectedSensorVelocity());
+        // }
     }
 
     public void stopShooter() {
@@ -217,8 +219,9 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         rpmLog.append(shooterMotor1.getSelectedSensorVelocity());
-        shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
-        hasBallEntry.append(ballDetector.get());
+        outputLog.append(shooterMotor1.getMotorOutputVoltage());
+        // shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
+        // hasBallEntry.append(ballDetector.get());
         
         if (!Constants.competition) {
             hasBall.setBoolean(ballDetector.get());
