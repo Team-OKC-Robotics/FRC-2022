@@ -21,6 +21,7 @@ entries = {
     '"shooter/pid-calculate"':pidLog,
     '"/shooter/output"':outputLog,
     '"/shooter/setpoint"':setpointLog,
+
     '"/intake/setpoint"':intakeSetpointLog,
     '"/intake/output"':intakeOutputLog,
     '"/intake/pos"':intakePosLog,
@@ -35,8 +36,9 @@ entries = {
     '"/climber/rightTiltOutput"':rightTiltOutputLog,
 }
 
-with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220407_215547.csv") as f:
-# with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220407_180620_OKTU_P4.csv") as f:
+# with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220407_215547.csv") as f:
+with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_210622_OKTU_Q43.csv") as f:
+# with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_175227.csv") as f:
     log = f.read().split("\n")
 
 
@@ -54,7 +56,7 @@ for index, line in enumerate(log):
         entries[id][0].append(float(timestamp))
         entries[id][1].append(float(data))
     except Exception:
-        print(line)
+        # print(line)
         continue
 
 plt.figure()
@@ -85,3 +87,4 @@ plt.plot(rightTiltPosLog[0], rightTiltPosLog[1])
 plt.legend(("left output", "left pos", "left tilt output", "left tilt pos", "right output", "right pos", "right tilt output", "right tilt pos"))
 
 plt.show()
+

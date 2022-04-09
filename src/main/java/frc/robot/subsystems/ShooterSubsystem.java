@@ -11,7 +11,10 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -42,6 +45,9 @@ public class ShooterSubsystem extends SubsystemBase {
     // sensors
     private DigitalInput ballDetector;
     private double power = 0;
+    private double tempPower = 0;
+    private LinearFilter rollingRpmAverage;
+    private double averageRPM = 0;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("shooter");
@@ -73,7 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private DoubleLogEntry outputLog;
     private DoubleLogEntry calculatedLog;
     private DoubleLogEntry constantsLog;
-
+    private BooleanLogEntry hasBallEntry;
     
     /**
      * Makes a new ShooterSubsystem
@@ -108,12 +114,14 @@ public class ShooterSubsystem extends SubsystemBase {
         outputLog = new DoubleLogEntry(log, "/shooter/output");
         calculatedLog = new DoubleLogEntry(log, "/shooter/pid-calculate");
         constantsLog = new DoubleLogEntry(log, "/shooter/constants");
+        hasBallEntry = new BooleanLogEntry(log, "/shooter/hasBall");
         constantsLog.append(ShootK.shootP);
         constantsLog.append(ShootK.shootI);
         constantsLog.append(ShootK.shootD);
 
         shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
         shooterPID.setTolerance(100, 100); // tolerate a variance of 100 RPM and an acceleration of 10 RPM
+        rollingRpmAverage = LinearFilter.movingAverage(10);
     }
 
     public double clamp(double minOutput, double maxOutput, double input) {
@@ -139,13 +147,18 @@ public class ShooterSubsystem extends SubsystemBase {
             // based off of tuning with pheonix tuner
             // shooterMotor1.set(ControlMode.Velocity, RPM, DemandType.ArbitraryFeedForward, 0.4);
             power += -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
+            // if (atShooterSetpoint()) {
+            //     // do nothing
+            // } else {
+            //     power += tempPower;
+            // }
             shooterOutput.setDouble(clamp(0.1, 1, power));
             setpoint.setDouble(RPM);
             calculatedLog.append(power);
             outputLog.append(clamp(0.1, 1, power));
             setpointLog.append(RPM);
             shooterMotor1.set(ControlMode.PercentOutput, clamp(0.1, 1, power));
-
+            averageRPM = rollingRpmAverage.calculate(shooterMotor1.getSelectedSensorVelocity());
         }
     }
 
@@ -176,6 +189,7 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public boolean atShooterSetpoint() {
         return shooterPID.atSetpoint() && shooterPID.getSetpoint() != 0; // we're at the setpoint if we're at it and a setpoint is actually set
+        // return shooterPID.getSetpoint() != 0 && Math.abs(averageRPM - shooterPID.getSetpoint()) < 100;
     }
 
     // sets the shooter tower ("trigger") motor with ball detection
@@ -203,6 +217,8 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         rpmLog.append(shooterMotor1.getSelectedSensorVelocity());
+        shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
+        hasBallEntry.append(ballDetector.get());
         
         if (!Constants.competition) {
             hasBall.setBoolean(ballDetector.get());
@@ -210,7 +226,6 @@ public class ShooterSubsystem extends SubsystemBase {
             // update Shuffelboard values
             if (shooterMotor1 != null) {
                 ticks.setDouble(shooterMotor1.getSelectedSensorPosition());
-                shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
                 velocityError.setDouble(shooterMotor1.getClosedLoopError());
                 shooterGood.setBoolean(atShooterSetpoint());
                 shooterOutput.setDouble(shooterMotor1.getMotorOutputPercent());
