@@ -97,17 +97,9 @@ public class RobotContainer {
   private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad3);
 
   // climber
-  private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.8, true);
-  private final ManualClimberCommand retractLeftClimber = new ManualClimberCommand(climber, -0.5, true);
-  private final ManualClimberCommand stopLeftClimber = new ManualClimberCommand(climber, 0, true);
-  private final ManualClimberCommand extendRightClimber = new ManualClimberCommand(climber, 0.8, false);
-  private final ManualClimberCommand retractRightClimber = new ManualClimberCommand(climber, -0.7, false);
-  private final ManualClimberCommand stopRightClimber = new ManualClimberCommand(climber, 0, false);
-
-  private final ManualRotateClimberCommand rotateLeftClimber = new ManualRotateClimberCommand(climber, gamepad3, true);
-  private final ManualStopRotateClimberCommand stopLeftRotate = new ManualStopRotateClimberCommand(climber, true);
-  private final ManualRotateClimberCommand rotateRightClimber = new ManualRotateClimberCommand(climber, gamepad3, false);
-  private final ManualStopRotateClimberCommand stopRightRotate = new ManualStopRotateClimberCommand(climber, false);
+  private final ManualClimberCommand extendClimber = new ManualClimberCommand(climber, 0.8);
+  private final ManualClimberCommand retractClimber = new ManualClimberCommand(climber, -0.5);
+  private final ManualClimberCommand stopClimber = new ManualClimberCommand(climber, 0);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -116,7 +108,7 @@ public class RobotContainer {
     // add the autos to the chooser
     AutoChooser.addAutos(shootThenDrive, twoBallAuto, driveOffLineAuto, doNothingAuto /*, gyroTestAuto*/);
     AutoChooser.addGamepad(gamepad1);
-    resetDeploy.schedule();
+    resetDeploy.schedule(); // reset the intake at the start of the match???
 
     // Configure the button bindings
     configureButtonBindings();
@@ -143,14 +135,11 @@ public class RobotContainer {
 
       // fun flight stick controls (this is really fun can confirm)
       // shooter
-      // sideButton.whenPressed(fastShooter).whenReleased(stopShooter);
       sideButton.whenPressed(shooterPresets).whenReleased(stopShooter);
       
       // climber
-      topLeftButton.whenPressed(extendLeftClimber).whenReleased(stopLeftClimber);
-      bottomLeftButton.whenPressed(retractLeftClimber).whenReleased(stopLeftClimber);
-      topRightButton.whenPressed(extendRightClimber).whenReleased(stopRightClimber);
-      bottomRightButton.whenPressed(retractRightClimber).whenReleased(stopRightClimber);
+      topLeftButton.whenPressed(extendClimber).whenReleased(stopClimber);
+      bottomLeftButton.whenPressed(retractClimber).whenReleased(stopClimber);
       
       // intake
       triggerButton.whenPressed(feed).whenReleased(stopTrigger).whenPressed(indexerIn).whenReleased(stopIndexer); // ignore ball detection, for shooting
@@ -158,13 +147,9 @@ public class RobotContainer {
       eightButton.whileHeld(indexerIn).whenReleased(stopIndexer).whileHeld(triggerIn).whenReleased(stopTrigger);
       nineButton.whenPressed(deployIntake);
       tenButton.whenPressed(retractIntake);
-
-      elevenButton.whileHeld(rotateLeftClimber).whenReleased(stopLeftRotate);
-      // twelveButton.whenPressed(rotateRightClimber).whenReleased(stopRightRotate);
   }
 
   public Command getDriveCommand() {
-    // return teleopDrive;
     return teleOpDrive;
   }
 }
