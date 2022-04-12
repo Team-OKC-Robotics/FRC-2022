@@ -38,8 +38,9 @@ entries = {
     # '"/climber/rightTiltOutput"':rightTiltOutputLog,
 }
 
-log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220409_145928_OKTU_Q60.csv"
-# log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220402_215713.csv"
+# log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220409_145928_OKTU_Q60.csv"
+# log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220409_182038.csv"
+log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220409_183136.csv"
 with open(log) as f:
 # with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_175227.csv") as f:
     log = f.read().split("\n")
