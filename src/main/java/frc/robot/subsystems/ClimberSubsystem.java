@@ -5,13 +5,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
-// import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
-import com.revrobotics.SparkMaxLimitSwitch;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -27,31 +20,17 @@ import frc.robot.Constants.ClimbK;
 public class ClimberSubsystem extends SubsystemBase {
     private WPI_TalonFX rightExtendMotor;
     private PIDController rightExtendPID;
-    private CANSparkMax rightTiltMotor;
-    private RelativeEncoder rightTiltEncoder;
-    private PIDController rightTiltPID;
 
     private WPI_TalonFX leftExtendMotor;
     private PIDController leftExtendPID;
-    private CANSparkMax leftTiltMotor;
-    private RelativeEncoder leftTiltEncoder;
-    private PIDController leftTiltPID;
-
-    // start out at zero and hold until otherwise told to
-    private double leftSetpoint = 0;
-    private double rightSetpoint = 0;
-    private boolean leftStopped = true;
-    private boolean rightStopped = true;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("climber");
     private NetworkTableEntry writeMode = tab.add("Write Mode", false).getEntry();
 
     // sensor
-    private NetworkTableEntry leftTiltPos = tab.add("Left Tilt Position", 0).getEntry();
     private NetworkTableEntry leftExtendPos = tab.add("Left Extend Position", 0).getEntry();
 
-    private NetworkTableEntry rightTiltPos = tab.add("Right Tilt Position", 0).getEntry();
     private NetworkTableEntry rightExtendPos = tab.add("Right Extend Position", 0).getEntry();
 
     // PIDs (the presets can be the same though because it's the same hardware
@@ -59,15 +38,9 @@ public class ClimberSubsystem extends SubsystemBase {
     private NetworkTableEntry extendI = tab.add("extend kI", ClimbK.extendI).getEntry();
     private NetworkTableEntry extendD = tab.add("extend kD", ClimbK.extendD).getEntry();
     
-    private NetworkTableEntry tiltP = tab.add("tilt kP", ClimbK.tiltP).getEntry();
-    private NetworkTableEntry tiltI = tab.add("tilt kI", ClimbK.tiltI).getEntry();
-    private NetworkTableEntry tiltD = tab.add("tilt kD", ClimbK.tiltD).getEntry();
-        
     // auto-climbing stuff
     private NetworkTableEntry leftExtendSetpoint = tab.add("left extend setpoint", 0).getEntry();
-    private NetworkTableEntry leftTiltSetpoint = tab.add("left tilt setpoint", 0).getEntry();
     private NetworkTableEntry rightExtendSetpoint = tab.add("right extend setpoint", 0).getEntry();
-    private NetworkTableEntry rightTiltSetpoint = tab.add("right tilt setpoint", 0).getEntry();
 
     private DataLog log;
     private DoubleLogEntry leftPosLog;
@@ -76,12 +49,6 @@ public class ClimberSubsystem extends SubsystemBase {
     private DoubleLogEntry rightPosLog;
     private DoubleLogEntry rightOutputLog;
 
-    private DoubleLogEntry leftTiltPosLog;
-    private DoubleLogEntry leftTiltOutputLog;
-    
-    private DoubleLogEntry rightTiltPosLog;
-    private DoubleLogEntry rightTiltOutputLog;
-
     /**
      * Makes a new ClimberSubsystem
      * the climber consists (maybe) of some motors to move like an arm thing and also two winches
@@ -89,7 +56,6 @@ public class ClimberSubsystem extends SubsystemBase {
      */
     public ClimberSubsystem() {
         rightExtendMotor = new WPI_TalonFX(13);
-        rightTiltMotor = new CANSparkMax(14, MotorType.kBrushless);
 
         // set up the right side
         if (rightExtendMotor != null) {
@@ -105,21 +71,8 @@ public class ClimberSubsystem extends SubsystemBase {
             rightExtendPID.setTolerance(1000); // tolerance in ticks, might want to change to inches
         }
 
-        if (rightTiltMotor != null) {
-            // configure motor
-            rightTiltMotor.setIdleMode(IdleMode.kBrake);
-
-            // get and zero the encoder
-            rightTiltEncoder = rightTiltMotor.getEncoder();
-            rightTiltEncoder.setPosition(0);
-
-            rightTiltMotor.setSoftLimit(SoftLimitDirection.kForward, 10);
-            rightTiltMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-        }
-        
         // set up the left side
         leftExtendMotor = new WPI_TalonFX(15);
-        leftTiltMotor = new CANSparkMax(16, MotorType.kBrushless);
         
         if (leftExtendMotor != null) {
             // set up the integrated sensor and make motor brake mode
@@ -134,33 +87,11 @@ public class ClimberSubsystem extends SubsystemBase {
             leftExtendPID.setTolerance(1000); // tolerance in ticks, might want to change to inches
         }
 
-        if (leftTiltMotor != null) {
-            // configure motor
-            leftTiltMotor.setIdleMode(IdleMode.kBrake);
-            leftTiltMotor.setInverted(false);
-
-            // get and zero encoder
-            leftTiltEncoder = leftTiltMotor.getEncoder();
-            leftTiltEncoder.setPosition(0);
-
-            leftTiltMotor.setSoftLimit(SoftLimitDirection.kForward, 0);
-            leftTiltMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
-            leftTiltMotor.setSoftLimit(SoftLimitDirection.kReverse, -16);
-            leftTiltMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        }
-
         log = DataLogManager.getLog();
         leftPosLog = new DoubleLogEntry(log, "/climber/leftPos");
         leftOutputLog = new DoubleLogEntry(log, "/climber/leftOutput");
         rightPosLog = new DoubleLogEntry(log, "/climber/rightPos");
         rightOutputLog = new DoubleLogEntry(log, "/climber/rightOutput");
-        leftTiltPosLog = new DoubleLogEntry(log, "/climber/leftTiltPos");
-        leftTiltOutputLog = new DoubleLogEntry(log, "/climber/leftTiltOutput");
-        rightTiltPosLog = new DoubleLogEntry(log, "/climber/rightTiltPos");
-        rightTiltOutputLog = new DoubleLogEntry(log, "/climber/rightTiltOutput");
-        
-        leftTiltPID = new PIDController(ClimbK.tiltP, ClimbK.tiltI, ClimbK.tiltD);
-        rightTiltPID = new PIDController(ClimbK.tiltP, ClimbK.tiltI, ClimbK.tiltD);
     }
 
     /**
@@ -169,16 +100,10 @@ public class ClimberSubsystem extends SubsystemBase {
      * physce it's actually not in inches it's just in ticks
      */
     public void setLeftExtend(double ticks) {
-        leftExtendPID.setSetpoint(ticks);
-        leftExtendMotor.set(TalonFXControlMode.PercentOutput, leftExtendPID.calculate(leftExtendMotor.getSelectedSensorPosition()));
-    }
-
-    /**
-     * Sets the left tilt motor to the specified angle, in degrees (probably)
-     * @param angle the angle to set the left climber arm to 
-     */
-    public void setLeftTilt(double angle) {
-        leftTiltMotor.set(leftTiltPID.calculate(angle, leftTiltEncoder.getPosition()));
+        if (leftExtendMotor != null) {
+            leftExtendPID.setSetpoint(ticks);
+            leftExtendMotor.set(TalonFXControlMode.PercentOutput, leftExtendPID.calculate(leftExtendMotor.getSelectedSensorPosition()));
+        }
     }
 
     /**
@@ -192,64 +117,27 @@ public class ClimberSubsystem extends SubsystemBase {
         }
     }
 
-    /**
-     * Sets the right tilt motor to the specified angle, in degrees (probably)
-     * @param angle the angle to set the right climber arm to 
-     */
-    public void setRightTilt(double angle) {
-        rightTiltMotor.set(rightTiltPID.calculate(angle, rightTiltEncoder.getPosition()));
-    }
 
     // document all this stuff
     public boolean atLeftExtendSetpoint() {
         return leftExtendPID.atSetpoint();
     }
 
-    public boolean atLeftTiltSetpoint() {
-        return leftTiltPID.atSetpoint();
-    }
-
     public boolean atRightExtendSetpoint() {
         return rightExtendPID.atSetpoint();
     }
 
-    public boolean atRightTiltSetpoint() {
-        return rightTiltPID.atSetpoint();
-    }
-
     //TODO document all the manual stuff    
-    public void manualExtend(double power, boolean leftSide) {
-        if (leftSide) {
+    public void manualExtend(double power) {
+        // sets both climbers so we don't have to change CAN IDs when we hot-swap the climbers
+        if (leftExtendMotor != null) {
             leftExtendMotor.set(power);
             leftOutputLog.append(power);
-        } else {
+        }
+
+        if (rightExtendMotor != null) {
             rightExtendMotor.set(power); // just spooled it opposite direction so this doesn't need to be inverted
             rightOutputLog.append(power);
-        }
-    }
-
-    public void manualTilt(double power, boolean leftSide) {
-        if (leftSide) {
-            leftTiltMotor.set(-power); // need to invert because opposite direction
-            leftTiltOutputLog.append(-power);
-        } else {
-            rightTiltMotor.set(power);
-            rightTiltOutputLog.append(-power);
-        }   
-    }
-
-    // holds the climber in its position
-    public void stopClimber(boolean leftSide) {
-        if (leftSide) {
-            leftSetpoint = leftTiltEncoder.getPosition();
-            leftStopped = true;
-            leftTiltMotor.set(0);
-            leftTiltOutputLog.append(0);
-        } else {
-            rightSetpoint = rightTiltEncoder.getPosition();
-            rightStopped = true;
-            leftTiltMotor.set(0);
-            rightTiltOutputLog.append(0);
         }
     }
 
@@ -262,37 +150,28 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void resetEncoders() {
-        leftExtendMotor.setSelectedSensorPosition(0);
-        rightExtendMotor.setSelectedSensorPosition(0);
-        leftTiltEncoder.setPosition(0);
-        rightTiltEncoder.setPosition(0);
+        if (leftExtendMotor != null) {
+            leftExtendMotor.setSelectedSensorPosition(0);
+        } else if (rightExtendMotor != null) {
+            rightExtendMotor.setSelectedSensorPosition(0);
+        }
     }
 
     @Override
     public void periodic() {
-        leftPosLog.append(leftExtendMotor.getSelectedSensorPosition());
-        rightPosLog.append(rightExtendMotor.getSelectedSensorPosition());
-        leftTiltPosLog.append(leftTiltEncoder.getPosition());
-        rightTiltPosLog.append(rightTiltEncoder.getPosition());
-
-        if (rightTiltMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed).isPressed()) {
-            rightTiltEncoder.setPosition(0);
-            rightSetpoint = 1;
+        if (leftExtendMotor != null) {
+            leftPosLog.append(leftExtendMotor.getSelectedSensorPosition());
+        } else if (rightExtendMotor != null) {
+            rightPosLog.append(rightExtendMotor.getSelectedSensorPosition());
         }
 
+
         // shuffleboard stuff
-        if (!Constants.competition) {            
-            if (leftTiltEncoder != null) {
-                leftTiltPos.setDouble(leftTiltEncoder.getPosition());
-            }
-        
+        if (!Constants.competition) {
             if (leftExtendMotor != null) {
                 leftExtendPos.setDouble(leftExtendMotor.getSelectedSensorPosition());
             }
         
-            if (rightTiltEncoder != null) {
-                rightTiltPos.setDouble(rightTiltEncoder.getVelocity());
-            }
             if (rightExtendMotor != null) {
                 rightExtendPos.setDouble(rightExtendMotor.getSelectedSensorPosition());
             }
@@ -305,19 +184,11 @@ public class ClimberSubsystem extends SubsystemBase {
                     leftExtendPID.setD(extendD.getDouble(ClimbK.extendD));
                 }
         
-                leftTiltPID.setP(tiltP.getDouble(ClimbK.tiltP));
-                leftTiltPID.setI(tiltI.getDouble(ClimbK.tiltI));
-                leftTiltPID.setD(tiltD.getDouble(ClimbK.tiltD));
-    
                 if (rightExtendMotor != null) {
                     rightExtendPID.setP(extendP.getDouble(ClimbK.extendP));
                     rightExtendPID.setI(extendI.getDouble(ClimbK.extendI));
                     rightExtendPID.setD(extendD.getDouble(ClimbK.extendD));
                 }
-    
-                rightTiltPID.setP(tiltP.getDouble(ClimbK.tiltP));
-                rightTiltPID.setI(tiltI.getDouble(ClimbK.tiltI));
-                rightTiltPID.setD(tiltD.getDouble(ClimbK.tiltD));
             }
         }
     }

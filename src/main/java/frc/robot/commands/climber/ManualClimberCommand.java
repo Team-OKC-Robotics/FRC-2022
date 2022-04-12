@@ -6,19 +6,17 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class ManualClimberCommand extends CommandBase {
     private final ClimberSubsystem climber;
     private double power = 0;
-    private boolean leftSide;
 
-    public ManualClimberCommand(ClimberSubsystem climber, double power, boolean leftSide) {
+    public ManualClimberCommand(ClimberSubsystem climber, double power) {
         this.climber = climber;
         this.power = power;
-        this.leftSide = leftSide;
 
         addRequirements(climber);
     }
 
     @Override
     public void execute() {
-        climber.manualExtend(power, leftSide);
+        climber.manualExtend(power);
     }
 
     @Override
