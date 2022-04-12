@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveK;
+import frc.robot.util.FrcUtil;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     // actuators
@@ -254,17 +255,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void driveOnHeading(double setSpeed, double distance) {
         distancePID.setSetpoint(distance);
-        arcadeDriveAuto(clamp(-setSpeed, setSpeed, distancePID.calculate(getEncoderAverage())), headingPID.calculate(getHeading()), false);
-    }
-
-    public double clamp(double minOutput, double maxOutput, double input) {
-        if (input < minOutput) {
-            return minOutput;
-        } else if (input > maxOutput) {
-            return maxOutput;
-        } else {
-            return input;
-        }
+        arcadeDriveAuto(FrcUtil.clamp(-setSpeed, setSpeed, distancePID.calculate(getEncoderAverage())), headingPID.calculate(getHeading()), false);
     }
 
     /**

@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShootK;
+import frc.robot.util.FrcUtil;
 
 public class ShooterSubsystem extends SubsystemBase {
     /**
@@ -124,16 +125,6 @@ public class ShooterSubsystem extends SubsystemBase {
         rollingRpmAverage = LinearFilter.movingAverage(7);
     }
 
-    public double clamp(double minOutput, double maxOutput, double input) {
-        if (input < minOutput) {
-            return minOutput;
-        } else if (input > maxOutput) {
-            return maxOutput;
-        } else {
-            return input;
-        }
-    }
-
     public void resetPower() {
         power = 0;
     }
@@ -152,10 +143,10 @@ public class ShooterSubsystem extends SubsystemBase {
             // } else {
             //     power += tempPower;
             // }
-            shooterOutput.setDouble(clamp(0.1, 1, power));
+            shooterOutput.setDouble(FrcUtil.clamp(0.1, 1, power));
             setpoint.setDouble(RPM);
             setpointLog.append(RPM);
-            shooterMotor1.set(ControlMode.PercentOutput, clamp(0.1, 1, power));
+            shooterMotor1.set(ControlMode.PercentOutput, FrcUtil.clamp(0.1, 1, power));
             averageRPM = rollingRpmAverage.calculate(shooterMotor1.getSelectedSensorVelocity());
         }
     }
@@ -215,7 +206,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         rpmLog.append(shooterMotor1.getSelectedSensorVelocity());
-        outputLog.append(clamp(0.1, 1, power));
+        outputLog.append(FrcUtil.clamp(0.1, 1, power));
         shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
         hasBallEntry.append(ballDetector.get());
         
