@@ -121,7 +121,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
         shooterPID.setTolerance(100, 100); // tolerate a variance of 100 RPM and an acceleration of 10 RPM
-        rollingRpmAverage = LinearFilter.movingAverage(10);
+        rollingRpmAverage = LinearFilter.movingAverage(7);
     }
 
     public double clamp(double minOutput, double maxOutput, double input) {
@@ -154,8 +154,6 @@ public class ShooterSubsystem extends SubsystemBase {
             // }
             shooterOutput.setDouble(clamp(0.1, 1, power));
             setpoint.setDouble(RPM);
-            calculatedLog.append(power);
-            outputLog.append(clamp(0.1, 1, power));
             setpointLog.append(RPM);
             shooterMotor1.set(ControlMode.PercentOutput, clamp(0.1, 1, power));
             averageRPM = rollingRpmAverage.calculate(shooterMotor1.getSelectedSensorVelocity());
@@ -217,6 +215,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         rpmLog.append(shooterMotor1.getSelectedSensorVelocity());
+        outputLog.append(clamp(0.1, 1, power));
         shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
         hasBallEntry.append(ballDetector.get());
         
