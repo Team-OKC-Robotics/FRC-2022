@@ -1,7 +1,5 @@
 package frc.robot.autos;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.drivetrain.SetSpeedDrive;
 import frc.robot.commands.intake.SetIndexerCommand;
 import frc.robot.commands.shooter.SetShooterCommand;
@@ -24,12 +22,8 @@ public class ShootThenDriveAuto extends Auto {
             new StopShooterCommand(shooter),
             new SetIndexerCommand(intake, 0),
             new SetTriggerCommand(shooter, 0),
-            // new DriveCommand(drivetrain, -70),
-            // new DriveSetSpeedCommand(drivetrain, -20, -0.5),
             new SetSpeedDrive(drivetrain, -0.5, 3.5),
-            new SetSpeedDrive(drivetrain, 0, 0.1),
-            // new SetIntakePositionCommand(intatake, true), // deploy the intake to be ready for tele-op
-            new WaitCommand(3) // wait for the intake to get fully deployed
+            new SetSpeedDrive(drivetrain, 0, 0.1)
         );
     }
 }
