@@ -72,7 +72,7 @@ public class ClimberSubsystem extends SubsystemBase {
         }
 
         // set up the left side
-        leftExtendMotor = new WPI_TalonFX(15);
+        // leftExtendMotor = new WPI_TalonFX(15);
         
         if (leftExtendMotor != null) {
             // set up the integrated sensor and make motor brake mode

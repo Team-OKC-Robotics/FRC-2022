@@ -37,8 +37,11 @@ public final class Constants {
     }
 
     public final class ShootK {
+        // public static final double shootP = 1;
         public static final double shootP = 0.000005;
+        // public static final double shootI = 0.001;
         public static final double shootI = 0;
+        // public static final double shootD = 0;
         public static final double shootD = 0.00000005;
         public static final double shootF = 0.4;
 
