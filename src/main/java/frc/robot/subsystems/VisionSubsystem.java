@@ -17,6 +17,7 @@ import frc.robot.Constants.VisionK;
 
 public class VisionSubsystem extends SubsystemBase {
     private PhotonCamera camera;
+    private PhotonCamera driverCamera;
     private Relay leds;
     private PIDController visionPID;
 
@@ -35,6 +36,9 @@ public class VisionSubsystem extends SubsystemBase {
         camera = new PhotonCamera("mmal_service_16.1");
         camera.setPipelineIndex(1);
         camera.setDriverMode(false);
+
+        driverCamera = new PhotonCamera("HD_USB_CAMERA");
+        driverCamera.setDriverMode(true);
 
         visionPID = new PIDController(VisionK.kP, VisionK.kI, VisionK.kD);
         visionPID.setSetpoint(0);

@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -23,6 +25,9 @@ public class Robot extends TimedRobot {
   
   private RobotContainer m_robotContainer;
 
+  private UsbCamera driverCamera1;
+  private UsbCamera driverCamera2;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -34,7 +39,16 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true);
     //camera = new HttpCamera("photoncam", "http://photonvision.local:1182/stream.mjpg", HttpCameraKind.kMJPGStreamer);
-    CameraServer.startAutomaticCapture(); // get our USB camera to show up on Shuffleboard
+    driverCamera1 = CameraServer.startAutomaticCapture(0); // get our USB camera to show up on Shuffleboard
+    
+    driverCamera1.setPixelFormat(PixelFormat.kMJPEG);
+    driverCamera1.setResolution(320, 240);
+    // driverCamera1.setFPS(20);
+    
+    // driverCamera2 = CameraServer.startAutomaticCapture(1);
+    // driverCamera1.setPixelFormat(PixelFormat.kMJPEG);
+    // driverCamera2.setResolution(320, 240);
+    // driverCamera2.setFPS(20);
     DataLogManager.start();
   }
 
