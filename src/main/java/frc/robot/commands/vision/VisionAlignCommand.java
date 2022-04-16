@@ -20,6 +20,7 @@ public class VisionAlignCommand extends CommandBase {
     public void initialize() {
         vision.resetVisionPID();
         vision.setLeds(true);
+        drivetrain.setOpenLoopRampRate(0.1);
     }
 
     @Override
@@ -29,12 +30,13 @@ public class VisionAlignCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        if (interrupted) {
-            DriverStation.reportWarning("we are interrupted", false);
-        }
-        DriverStation.reportWarning("yes the end() is getting called", false);
+        // if (interrupted) {
+        //     DriverStation.reportWarning("we are interrupted", false);
+        // }
+        // DriverStation.reportWarning("yes the end() is getting called", false);
         drivetrain.arcadeDrive(0, 0);
         vision.setLeds(false);
+        drivetrain.setOpenLoopRampRate();
     }
     
     @Override

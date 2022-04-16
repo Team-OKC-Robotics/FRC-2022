@@ -34,8 +34,8 @@ public class VisionSubsystem extends SubsystemBase {
      */
     public VisionSubsystem() {
         camera = new PhotonCamera("mmal_service_16.1");
-        camera.setPipelineIndex(1);
         camera.setDriverMode(false);
+        camera.setPipelineIndex(0);
 
         driverCamera = new PhotonCamera("HD_USB_CAMERA");
         driverCamera.setDriverMode(true);
@@ -63,7 +63,7 @@ public class VisionSubsystem extends SubsystemBase {
             PhotonPipelineResult result = camera.getLatestResult();
     
             if (result.hasTargets()) {
-                return -result.getBestTarget().getYaw();
+                return -result.getBestTarget().getYaw() - 0.1;
             }
         }
         return 0;
