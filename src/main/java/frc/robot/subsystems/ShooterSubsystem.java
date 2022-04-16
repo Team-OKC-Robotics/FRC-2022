@@ -61,6 +61,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private NetworkTableEntry setpoint = tab.add("setpoint", 0).getEntry();
     private NetworkTableEntry velocityError = tab.add("velocity error", 0).getEntry();
     private NetworkTableEntry hasBall = tab.add("has ball?", false).getEntry();
+    private NetworkTableEntry temperature = tab.add("shooter temperature", 0).getEntry();
 
     // PID
     private NetworkTableEntry shootP = tab.add("Shooter kP", ShootK.shootP).getEntry();
@@ -81,6 +82,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private DoubleLogEntry calculatedLog;
     private DoubleLogEntry constantsLog;
     private BooleanLogEntry hasBallEntry;
+    private DoubleLogEntry temperatureLog;
     
     /**
      * Makes a new ShooterSubsystem
@@ -116,12 +118,14 @@ public class ShooterSubsystem extends SubsystemBase {
         calculatedLog = new DoubleLogEntry(log, "/shooter/pid-calculate");
         constantsLog = new DoubleLogEntry(log, "/shooter/constants");
         hasBallEntry = new BooleanLogEntry(log, "/shooter/hasBall");
+        temperatureLog = new DoubleLogEntry(log, "/shooter/temperature");
         constantsLog.append(ShootK.shootP);
         constantsLog.append(ShootK.shootI);
         constantsLog.append(ShootK.shootD);
 
         shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
         shooterPID.setTolerance(100, 100); // tolerate a variance of 100 RPM and an acceleration of 10 RPM
+        shooterPID.setIntegratorRange(-0.005, 0.005);
         rollingRpmAverage = LinearFilter.movingAverage(7);
     }
 
@@ -137,7 +141,7 @@ public class ShooterSubsystem extends SubsystemBase {
         if (shooterMotor1 != null) {
             // based off of tuning with pheonix tuner
             // shooterMotor1.set(ControlMode.Velocity, RPM, DemandType.ArbitraryFeedForward, 0.4);
-            power += -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
+            power = -shooterPID.calculate(RPM, shooterMotor1.getSelectedSensorVelocity());
             // if (atShooterSetpoint()) {
             //     // do nothing
             // } else {
@@ -209,6 +213,8 @@ public class ShooterSubsystem extends SubsystemBase {
         outputLog.append(FrcUtil.clamp(0.1, 1, power));
         shooterRPM.setDouble(shooterMotor1.getSelectedSensorVelocity());
         hasBallEntry.append(ballDetector.get());
+        temperature.setDouble(shooterMotor1.getTemperature());
+        temperatureLog.append(shooterMotor1.getTemperature());
         
         if (!Constants.competition) {
             hasBall.setBoolean(ballDetector.get());

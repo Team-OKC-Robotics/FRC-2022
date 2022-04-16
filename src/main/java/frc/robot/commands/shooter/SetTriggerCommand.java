@@ -11,7 +11,7 @@ public class SetTriggerCommand extends CommandBase {
         this.shooter = shooter;
         this.power = power;
         
-        addRequirements(shooter);
+        // addRequirements(shooter);
     }
 
     @Override
