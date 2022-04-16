@@ -16,7 +16,7 @@ public final class Constants {
     public static final double neo550TicksPerRev = 42; // although I think getPosition() might return in native units of rotations so this would then be 1
     public static final double neoTicksPerRev = 42;
     public static final double falconTicksPerRev = 2048;
-    public static final boolean competition = false; // if enabled, disables a lot of the automatic shuffleboard values
+    public static final boolean competition = true; // if enabled, disables a lot of the automatic shuffleboard values
 
     public final class DriveK {
         public static final double ticksPerRev = neoTicksPerRev;
@@ -37,12 +37,12 @@ public final class Constants {
     }
 
     public final class ShootK {
-        // public static final double shootP = 1;
-        public static final double shootP = 0.000005;
-        // public static final double shootI = 0.001;
-        public static final double shootI = 0;
-        // public static final double shootD = 0;
-        public static final double shootD = 0.00000005;
+        public static final double shootP = 0.002;
+        // public static final double shootP = 0.000005;
+        public static final double shootI = 0.0001;
+        // public static final double shootI = 0;
+        public static final double shootD = 0;
+        // public static final double shootD = 0.00000005;
         public static final double shootF = 0.4;
 
         public static final double normalShot = 9000;
@@ -82,9 +82,9 @@ public final class Constants {
 
     public final class VisionK {
         //TODO test and tune
-        public static final double kP = 0.03;
+        public static final double kP = 0.07;
         public static final double kI = 0;
-        public static final double kD = 0.001;
+        public static final double kD = 0.00001;
         public static final double heightOfGoal = 0; //TODO change this to be the actual value
         public static final double heightOfCamera = 0; //TODO change this to be the actual value
         public static final double cameraAngle = 0; //TODO change this to be the actual value
