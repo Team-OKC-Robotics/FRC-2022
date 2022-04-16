@@ -15,8 +15,10 @@ import frc.robot.commands.shooter.*;
 import frc.robot.commands.vision.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.AutoChooser;
+import frc.robot.util.TriggerButton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -43,6 +45,7 @@ public class RobotContainer {
   private JoystickButton startButton = new JoystickButton(gamepad1, 8);
   private JoystickButton rightStickButton = new JoystickButton(gamepad1, 10);
   private JoystickButton leftStickButton = new JoystickButton(gamepad1, 9);
+  private TriggerButton rightTrigger = new TriggerButton(gamepad1, false);
 
   private JoystickButton triggerButton = new JoystickButton(gamepad3, 1); // 1
   private JoystickButton sideButton = new JoystickButton(gamepad3, 2); // 2
@@ -67,8 +70,9 @@ public class RobotContainer {
 
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
-  private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter, intake); // drives the robot backwards
-  private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
+  private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter, intake, vision); // drives the robot backwards
+  private final ShootButNoTaxiAuto shootNoDrive = new ShootButNoTaxiAuto(drivetrain, shooter);
+  private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake, vision); // drives the robot backwards
   private final DriveOffLineAuto driveOffLineAuto = new DriveOffLineAuto(drivetrain); // just drives the robot backwards
   
   // commands
@@ -127,7 +131,8 @@ public class RobotContainer {
       backButton.whenPressed(teleOpDrive);
       aButton.whenPressed(slowTeleOpDrive).whenReleased(teleOpDrive); // for lining up climber and stuff
       bButton.whenPressed(quickTeleOpDrive).whenReleased(teleOpDrive); // for boooosting around/into other robots/defense
-      xButton.whenPressed(visionAlign).whenReleased(teleOpDrive); // for lining up with the hub
+      // xButton.whenPressed(visionAlign).whenReleased(teleOpDrive); // for lining up with the hub
+      rightTrigger.whileActiveContinuous(visionAlign).whenInactive(teleOpDrive);
 
       // intake commands
       leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
