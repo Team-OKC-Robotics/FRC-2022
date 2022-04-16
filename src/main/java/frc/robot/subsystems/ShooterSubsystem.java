@@ -125,7 +125,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         shooterPID = new PIDController(ShootK.shootP, ShootK.shootI, ShootK.shootD);
         shooterPID.setTolerance(100, 100); // tolerate a variance of 100 RPM and an acceleration of 10 RPM
-        shooterPID.setIntegratorRange(-0.005, 0.005);
+        shooterPID.setIntegratorRange(-0.5, 0.5);
         rollingRpmAverage = LinearFilter.movingAverage(7);
     }
 
