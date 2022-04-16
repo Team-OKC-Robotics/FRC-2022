@@ -11,13 +11,15 @@ import frc.robot.commands.intake.SetIntakePositionCommand;
 import frc.robot.commands.shooter.SetShooterCommand;
 import frc.robot.commands.shooter.ShootAndFeedCommand;
 import frc.robot.commands.shooter.StopShooterCommand;
+import frc.robot.commands.vision.VisionAlignCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Auto;
 
 public class TwoBallAuto extends Auto {
-    public TwoBallAuto(DrivetrainSubsystem drivetrain, ShooterSubsystem shooter, IntakeSubsystem intake) {
+    public TwoBallAuto(DrivetrainSubsystem drivetrain, ShooterSubsystem shooter, IntakeSubsystem intake, VisionSubsystem vision) {
         super(
                 "Two ball auto",
                 "An auto that shoots the preloaded, turns around, picks up the ball behind it, goes back, and shoots it",
@@ -29,6 +31,7 @@ public class TwoBallAuto extends Auto {
 
                 new DriveSetSpeedCommand(drivetrain, 40, 0.3), // drive to pick up the balls (slowly so we don't run into anything too hard)
                 new TurnCommand(drivetrain, -180), // turn back
+                new VisionAlignCommand(vision, drivetrain),
                 new SetShooterCommand(shooter, 8500), // warmup the shooter
                 new DriveSetSpeedCommand(drivetrain, 40, 0.4), // drive back
 
