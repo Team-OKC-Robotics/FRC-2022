@@ -55,7 +55,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // other variables
     private double speedModifier = 0.75; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
     //private double headingAngle = 0; // the heading of the robot. used to drive straight in auto.
-    private double openLoopRampRate = 0.5;
+    private double openLoopRampRate = 0.75;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("drivetrain");
