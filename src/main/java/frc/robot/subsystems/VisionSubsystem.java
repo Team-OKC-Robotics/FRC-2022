@@ -6,6 +6,10 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DataLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.Relay.Value;
@@ -26,6 +30,10 @@ public class VisionSubsystem extends SubsystemBase {
     private NetworkTableEntry toggleMode = tab.add("toggle camera", false).getEntry();
     private NetworkTableEntry ledMode = tab.add("toggle leds", false).getEntry();
 
+    private DataLog log;
+    private DoubleLogEntry xDifferenceLog;
+    private DoubleLogEntry visionConstantsLog;
+
     
     /**
      * Makes a new VisionSubsystem
@@ -42,7 +50,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         visionPID = new PIDController(VisionK.kP, VisionK.kI, VisionK.kD);
         visionPID.setSetpoint(0);
-        visionPID.setTolerance(0.5);
+        visionPID.setTolerance(0.5, 0.1);
 
         // instatiate all the relays because for some reason this is the only way to one of them work
         leds = new Relay(0, Direction.kBoth);
@@ -51,6 +59,13 @@ public class VisionSubsystem extends SubsystemBase {
         leds = new Relay(2, Direction.kBoth);
 
         leds.set(Value.kOff); // turn the leds off (yes I know it says kOn)
+        
+        log = DataLogManager.getLog();
+        xDifferenceLog = new DoubleLogEntry(log, "/vision/xdifference");
+        visionConstantsLog = new DoubleLogEntry(log, "/vision/constants");
+        visionConstantsLog.append(VisionK.kP);
+        visionConstantsLog.append(VisionK.kI);
+        visionConstantsLog.append(VisionK.kD);
     }
 
     /**
@@ -136,6 +151,8 @@ public class VisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        xDifferenceLog.append(getXDifference());
+
         if (!Constants.competition) {
             // leds.set(ledMode.getBoolean(false) ? Value.kForward : Value.kOff); // I think that's how you use ternary
             // idk I use Python man

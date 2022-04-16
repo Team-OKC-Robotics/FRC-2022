@@ -110,7 +110,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // add the autos to the chooser
-    AutoChooser.addAutos(shootThenDrive, twoBallAuto, driveOffLineAuto, doNothingAuto /*, gyroTestAuto*/);
+    AutoChooser.addAutos(twoBallAuto, shootThenDrive, driveOffLineAuto, doNothingAuto, shootNoDrive /*, gyroTestAuto*/);
     AutoChooser.addGamepad(gamepad1);
     resetDeploy.schedule(); // reset the intake at the start of the match???
 

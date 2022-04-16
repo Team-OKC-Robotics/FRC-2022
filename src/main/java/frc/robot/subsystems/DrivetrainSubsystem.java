@@ -150,7 +150,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // set the tolerance of the various PIDs. this ensures we don't wait for them to be super precise before
         // moving on (which in some cases without a kI term can be literally forever) but still ensures
         // we've settled down close enough
-        distancePID.setTolerance(2);
+        distancePID.setTolerance(1);
         headingPID.setTolerance(7, 1);
         turnPID.setTolerance(7, 2);
 
@@ -255,7 +255,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void driveOnHeading(double setSpeed, double distance) {
         distancePID.setSetpoint(distance);
-        arcadeDriveAuto(FrcUtil.clamp(-setSpeed, setSpeed, distancePID.calculate(getEncoderAverage())), headingPID.calculate(getHeading()), false);
+        arcadeDriveAuto(FrcUtil.clamp(-setSpeed, setSpeed, distancePID.calculate(getEncoderAverage())), /*headingPID.calculate(getHeading())*/ 0, false);
     }
 
     /**
@@ -428,6 +428,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         yAccelerationLog.append(getYAccel());
         leftOutputLog.append(left1Motor.get());
         rightOutputLog.append(right1Motor.get());
+
+        distanceError.setDouble(distancePID.getPositionError());
 
 
         if (!Constants.competition) {

@@ -24,8 +24,8 @@ public final class Constants {
         public static final double wheelDiameter = 6;
 
         public static final double distanceP = 0.065;
-        public static final double distanceI = 0.002;
-        public static final double distanceD = 0.001;
+        public static final double distanceI = 0;
+        public static final double distanceD = 0.00000001;
 
         public static final double headingP = 0.07;
         public static final double headingI = 0;
@@ -45,8 +45,8 @@ public final class Constants {
         // public static final double shootD = 0.00000005;
         public static final double shootF = 0.4;
 
-        public static final double normalShot = 9000;
-        public static final double againstHub = 8500;
+        public static final double normalShot = 9500;
+        public static final double againstHub = 8700;
         public static final double lowGoal = 1500;
         public static final double farShot = 12000;
     }
@@ -82,9 +82,9 @@ public final class Constants {
 
     public final class VisionK {
         //TODO test and tune
-        public static final double kP = 0.07;
-        public static final double kI = 0;
-        public static final double kD = 0.00001;
+        public static final double kP = 0.3;
+        public static final double kI = 0.01;
+        public static final double kD = 0.05;
         public static final double heightOfGoal = 0; //TODO change this to be the actual value
         public static final double heightOfCamera = 0; //TODO change this to be the actual value
         public static final double cameraAngle = 0; //TODO change this to be the actual value

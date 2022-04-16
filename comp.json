@@ -48,7 +48,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "14,0": {
+          "10,0": {
             "size": [
               5,
               3
@@ -57,7 +57,7 @@
               "_type": "Camera Stream",
               "_source0": "camera_server://HD_USB_Camera-output",
               "_title": "HD_USB_Camera-output",
-              "Crosshair/Show crosshair": true,
+              "Crosshair/Show crosshair": false,
               "Crosshair/Crosshair color": "#FFFFFFFF",
               "Controls/Show controls": true,
               "Controls/Rotation": "NONE",
@@ -67,7 +67,7 @@
               "imageHeight": 0
             }
           },
-          "19,0": {
+          "15,0": {
             "size": [
               4,
               3
@@ -86,7 +86,7 @@
               "imageHeight": -1
             }
           },
-          "15,4": {
+          "17,3": {
             "size": [
               1,
               1
@@ -99,21 +99,21 @@
           },
           "0,0": {
             "size": [
-              13,
+              10,
               5
             ],
             "content": {
               "_type": "Camera Stream",
               "_source0": "camera_server://USB Camera 0",
               "_title": "USB Camera 0",
-              "Crosshair/Show crosshair": true,
+              "Crosshair/Show crosshair": false,
               "Crosshair/Crosshair color": "#FFFFFFFF",
               "Controls/Show controls": true,
               "Controls/Rotation": "NONE",
               "compression": -1.0,
-              "fps": -1,
-              "imageWidth": 0,
-              "imageHeight": 0
+              "fps": 20,
+              "imageWidth": 200,
+              "imageHeight": 100
             }
           }
         }
@@ -187,15 +187,26 @@
               "_source0": "network_table:///Shuffleboard/drivetrain/reset gyro",
               "_title": "Shuffleboard/drivetrain/reset gyro"
             }
+          },
+          "7,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/drivetrain/distance error",
+              "_title": "Shuffleboard/drivetrain/distance error"
+            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": -389.0,
-    "y": 0.0,
-    "width": 3541.0,
-    "height": 896.0
+    "x": -6.400000095367432,
+    "y": 1.600000023841858,
+    "width": 2826.39990234375,
+    "height": 868.7999877929688
   }
 }
