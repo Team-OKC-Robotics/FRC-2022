@@ -11,7 +11,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "8,0": {
+          "15,3": {
             "size": [
               1,
               1
@@ -22,7 +22,7 @@
               "_title": "/Shuffleboard/shooter/shooter RPM"
             }
           },
-          "8,1": {
+          "14,3": {
             "size": [
               1,
               1
@@ -35,7 +35,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "8,2": {
+          "16,3": {
             "size": [
               1,
               1
@@ -48,34 +48,64 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "0,0": {
+          "14,0": {
             "size": [
-              4,
-              4
-            ],
-            "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://USB Camera 0",
-              "_title": "USB Camera 0",
-              "Crosshair/Show crosshair": true,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "QUARTER_CCW",
-              "compression": -1.0,
-              "fps": 20,
-              "imageWidth": 240,
-              "imageHeight": 120
-            }
-          },
-          "4,0": {
-            "size": [
-              4,
+              5,
               3
             ],
             "content": {
               "_type": "Camera Stream",
               "_source0": "camera_server://HD_USB_Camera-output",
               "_title": "HD_USB_Camera-output",
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": 0,
+              "imageHeight": 0
+            }
+          },
+          "19,0": {
+            "size": [
+              4,
+              3
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://mmal_service_16.1-output",
+              "_title": "mmal_service_16.1-output",
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
+            }
+          },
+          "15,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Shuffleboard/shooter/shooter temperature",
+              "_title": "Shuffleboard/shooter/shooter temperature"
+            }
+          },
+          "0,0": {
+            "size": [
+              13,
+              5
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://USB Camera 0",
+              "_title": "USB Camera 0",
               "Crosshair/Show crosshair": true,
               "Crosshair/Crosshair color": "#FFFFFFFF",
               "Controls/Show controls": true,
@@ -163,9 +193,9 @@
     }
   ],
   "windowGeometry": {
-    "x": 1528.0,
-    "y": -8.0,
-    "width": 1616.0,
-    "height": 876.0
+    "x": -389.0,
+    "y": 0.0,
+    "width": 3541.0,
+    "height": 896.0
   }
 }
