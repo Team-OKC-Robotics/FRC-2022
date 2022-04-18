@@ -5,6 +5,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 //import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DataLogEntry;
@@ -24,6 +25,7 @@ public class VisionSubsystem extends SubsystemBase {
     private PhotonCamera driverCamera;
     private Relay leds;
     private PIDController visionPID;
+    private SlewRateLimiter slewRateLimiter;
 
     //Shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("vision");
@@ -66,6 +68,8 @@ public class VisionSubsystem extends SubsystemBase {
         visionConstantsLog.append(VisionK.kP);
         visionConstantsLog.append(VisionK.kI);
         visionConstantsLog.append(VisionK.kD);
+
+        slewRateLimiter = new SlewRateLimiter(1.5);
     }
 
     /**
@@ -89,6 +93,7 @@ public class VisionSubsystem extends SubsystemBase {
      */
     public void resetVisionPID() {
         visionPID.reset();
+        // slewRateLimiter.reset(0);
     }
 
     /**
@@ -98,6 +103,7 @@ public class VisionSubsystem extends SubsystemBase {
      */
     public double getOutput() {
         return visionPID.calculate(getXDifference());
+        // return slewRateLimiter.calculate(visionPID.calculate(getXDifference()));
     }
 
     /**

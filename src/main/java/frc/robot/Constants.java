@@ -23,17 +23,17 @@ public final class Constants {
         public static final double gearRatio = 1/9.64; //probably wrote that correctly
         public static final double wheelDiameter = 6;
 
-        public static final double distanceP = 0.065;
+        public static final double distanceP = 0.03;
         public static final double distanceI = 0;
-        public static final double distanceD = 0.00000001;
+        public static final double distanceD = 0;
 
         public static final double headingP = 0.07;
         public static final double headingI = 0;
         public static final double headingD = 0.00005;
 
         public static final double turnP = 0.05;
-        public static final double turnI = 0.000;
-        public static final double turnD = 0.009;
+        public static final double turnI = 0;
+        public static final double turnD = 0;
     }
 
     public final class ShootK {
@@ -82,7 +82,7 @@ public final class Constants {
 
     public final class VisionK {
         //TODO test and tune
-        public static final double kP = 0.3;
+        public static final double kP = 0.2;
         public static final double kI = 0.01;
         public static final double kD = 0.05;
         public static final double heightOfGoal = 0; //TODO change this to be the actual value

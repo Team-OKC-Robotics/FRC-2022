@@ -250,12 +250,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void driveDistance(double distance) {
         distancePID.setSetpoint(distance);
 
-        arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), headingPID.calculate(getHeading()));
+        arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), 0 /* headingPID.calculate(getHeading())*/);
     }
 
     public void driveOnHeading(double setSpeed, double distance) {
         distancePID.setSetpoint(distance);
-        arcadeDriveAuto(FrcUtil.clamp(-setSpeed, setSpeed, distancePID.calculate(getEncoderAverage())), /*headingPID.calculate(getHeading())*/ 0, false);
+        arcadeDriveAuto(FrcUtil.clamp(-setSpeed, setSpeed, -distancePID.calculate(getEncoderAverage())), /*headingPID.calculate(getHeading())*/ 0, false);
     }
 
     /**

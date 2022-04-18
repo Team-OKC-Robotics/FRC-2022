@@ -42,6 +42,11 @@ public class TurnCommand extends CommandBase {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        drivetrain.setMaxOutput(1);
+    }
+
+    @Override
     public boolean isFinished() {
         return drivetrain.atTurnSetpoint();
     }

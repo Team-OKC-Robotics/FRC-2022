@@ -1,6 +1,5 @@
 package frc.robot.commands.vision;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -20,12 +19,13 @@ public class VisionAlignCommand extends CommandBase {
     public void initialize() {
         vision.resetVisionPID();
         vision.setLeds(true);
-        drivetrain.setOpenLoopRampRate(0.1);
+        drivetrain.setOpenLoopRampRate(0.5);
+        // drivetrain.setMaxOutput(0.3);
     }
 
     @Override
     public void execute() {
-        drivetrain.arcadeDrive(0, vision.getOutput());
+        drivetrain.arcadeDrive(0, vision.getOutput(), true);
     }
 
     @Override
