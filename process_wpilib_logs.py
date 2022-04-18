@@ -6,26 +6,37 @@ rpmLog = [[], []]
 pidLog = [[], []]
 setpointLog = [[], []]
 outputLog = [[], []]
+hasBallLog = [[], []]
+
 intakeSetpointLog = [[], []]
 intakeOutputLog = [[], []]
 intakePosLog = [[], []]
+
+
 leftPosLog = [[], []]
 leftOutputLog = [[], []]
 leftTiltPosLog = [[], []]
 leftTiltOutputLog = [[], []]
+
 rightPosLog = [[], []]
 rightOutputLog = [[], []]
 rightTiltPosLog = [[], []]
 rightTiltOutputLog = [[], []]
 
 xDifferenceLog = [[], []]
+
+rightDriveOutputLog = [[], []]
 leftDriveOutputLog = [[], []]
+headingLog = [[], []]
+rightDriveVelocityLog = [[], []]
+leftDriveVelocityLog = [[], []]
 
 entries = {
     '"/shooter/rpm"':rpmLog,
     '"shooter/pid-calculate"':pidLog,
     '"/shooter/output"':outputLog,
     '"/shooter/setpoint"':setpointLog,
+    '"/shooter/hasBall"':hasBallLog,
 
     '"/intake/setpoint"':intakeSetpointLog,
     '"/intake/output"':intakeOutputLog,
@@ -41,7 +52,12 @@ entries = {
     '"/climber/rightTiltOutput"':rightTiltOutputLog,
 
     '"/vision/xdifference"':xDifferenceLog,
+
+    '"/drivetrain/rightOutputLog"':rightDriveOutputLog,
     '"/drivetrain/leftOutputLog"':leftDriveOutputLog,
+    '"/drivetrain/rightVelocity"':rightDriveVelocityLog,
+    '"/drivetrain/leftVelocity"':leftDriveVelocityLog,
+    '"/drivetrain/heading"':headingLog,
 }
 
 # log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_210622_OKTU_Q43.csv"
@@ -64,7 +80,10 @@ for index, line in enumerate(log):
     try:
         entries[id][0].append(float(timestamp))
         entries[id][1].append(float(data))
+    except KeyError:
+        continue
     except Exception:
+        entries[id][1].append(1000 if bool(data) else 0)
         # print(line)
         continue
 
@@ -73,9 +92,10 @@ plt.plot(pidLog[0], pidLog[1])
 plt.plot(outputLog[0], outputLog[1])
 plt.plot(rpmLog[0], rpmLog[1])
 plt.plot(setpointLog[0], setpointLog[1])
+plt.plot(hasBallLog[0], hasBallLog[1])
 plt.xlabel("Time (sec)")
 plt.ylabel("data")
-plt.legend(("pid output", "output", "rpm", "setpoint"))
+plt.legend(("pid output", "output", "rpm", "setpoint", "has ball"))
 
 plt.figure()
 plt.plot(intakeSetpointLog[0], intakeSetpointLog[1])
@@ -99,6 +119,14 @@ plt.figure()
 plt.plot(xDifferenceLog[0], xDifferenceLog[1])
 plt.plot(leftDriveOutputLog[0], leftDriveOutputLog[1])
 plt.legend(("vision error", "left drivetrain output"))
+
+plt.figure()
+plt.plot(rightDriveOutputLog[0], rightDriveOutputLog[1])
+plt.plot(leftDriveOutputLog[0], leftDriveOutputLog[1])
+plt.plot(rightDriveVelocityLog[0], rightDriveVelocityLog[1])
+plt.plot(leftDriveVelocityLog[0], leftDriveVelocityLog[1])
+plt.plot(headingLog[0], headingLog[1])
+plt.legend(("right drivetrain output", "left drivetrain output", "right velocity", "left velocity", "heading"))
 
 plt.show()
 raise SystemExit
