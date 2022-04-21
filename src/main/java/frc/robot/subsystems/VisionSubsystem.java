@@ -7,6 +7,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DataLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -35,6 +36,7 @@ public class VisionSubsystem extends SubsystemBase {
     private DataLog log;
     private DoubleLogEntry xDifferenceLog;
     private DoubleLogEntry visionConstantsLog;
+    private BooleanLogEntry isAligning;
 
     
     /**
@@ -65,6 +67,7 @@ public class VisionSubsystem extends SubsystemBase {
         log = DataLogManager.getLog();
         xDifferenceLog = new DoubleLogEntry(log, "/vision/xdifference");
         visionConstantsLog = new DoubleLogEntry(log, "/vision/constants");
+        isAligning = new BooleanLogEntry(log, "/vision/isAligning");
         visionConstantsLog.append(VisionK.kP);
         visionConstantsLog.append(VisionK.kI);
         visionConstantsLog.append(VisionK.kD);
@@ -102,6 +105,7 @@ public class VisionSubsystem extends SubsystemBase {
      * @return the output of the vision PID controller
      */
     public double getOutput() {
+        isAligning.append(true);
         return visionPID.calculate(getXDifference());
         // return slewRateLimiter.calculate(visionPID.calculate(getXDifference()));
     }

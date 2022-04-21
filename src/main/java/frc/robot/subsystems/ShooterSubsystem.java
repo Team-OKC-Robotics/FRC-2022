@@ -115,7 +115,7 @@ public class ShooterSubsystem extends SubsystemBase {
         rpmLog = new DoubleLogEntry(log, "/shooter/rpm");
         setpointLog = new DoubleLogEntry(log, "/shooter/setpoint");
         outputLog = new DoubleLogEntry(log, "/shooter/output");
-        calculatedLog = new DoubleLogEntry(log, "/shooter/pid-calculate");
+        // calculatedLog = new DoubleLogEntry(log, "/shooter/pid-calculate");
         constantsLog = new DoubleLogEntry(log, "/shooter/constants");
         hasBallEntry = new BooleanLogEntry(log, "/shooter/hasBall");
         temperatureLog = new DoubleLogEntry(log, "/shooter/temperature");
