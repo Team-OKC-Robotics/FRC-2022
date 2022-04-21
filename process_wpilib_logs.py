@@ -61,7 +61,7 @@ entries = {
 }
 
 # log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_210622_OKTU_Q43.csv"
-log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\drivetrain\FRC_20220418_191842.csv"
+log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\drivetrain\FRC_20220420_231944_CARVER_P7.csv"
 with open(log) as f:
 # with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_175227.csv") as f:
     log = f.read().split("\n")
@@ -83,7 +83,7 @@ for index, line in enumerate(log):
     except KeyError:
         continue
     except Exception:
-        entries[id][1].append(1000 if bool(data) else 0)
+        entries[id][1].append(1000 if data == "true" else 0)
         # print(line)
         continue
 
