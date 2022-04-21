@@ -31,7 +31,7 @@ public class TwoBallAuto extends Auto {
 
                 new DriveSetSpeedCommand(drivetrain, 30, 0.3), // drive to pick up the balls (slowly so we don't run into anything too hard)
                 new TurnCommand(drivetrain, -175, 0.2), // turn back
-                new DriveSetSpeedCommand(drivetrain, 35, 0.3), // drive back
+                new DriveSetSpeedCommand(drivetrain, 30, 0.3), // drive back
                 new SetShooterCommand(shooter, 9500), // warmup the shooter
                 new VisionAlignCommand(vision, drivetrain), // line up
 

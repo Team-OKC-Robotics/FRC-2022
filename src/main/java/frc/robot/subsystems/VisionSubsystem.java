@@ -54,7 +54,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         visionPID = new PIDController(VisionK.kP, VisionK.kI, VisionK.kD);
         visionPID.setSetpoint(0);
-        visionPID.setTolerance(0.5, 0.1);
+        visionPID.setTolerance(0.5, 0.05);
 
         // instatiate all the relays because for some reason this is the only way to one of them work
         leds = new Relay(0, Direction.kBoth);

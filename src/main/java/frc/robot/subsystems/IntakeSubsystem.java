@@ -27,6 +27,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private DigitalInput deployedLimitSwitch;
     private DigitalInput retractedLimitSwitch;
     private int direction = 0;
+    private boolean switchHasBeenPressed = false;
 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("intake");
@@ -165,6 +166,7 @@ public class IntakeSubsystem extends SubsystemBase {
             deployedSwitch.setBoolean(false);
         } else {
             deployedSwitch.setBoolean(true);
+            switchHasBeenPressed = true;
         }
             
         if (direction != 0) { // don't start moving unless the code has started and the intake has been told to move,
@@ -177,11 +179,17 @@ public class IntakeSubsystem extends SubsystemBase {
             if (direction == 1 && deployed) { // if the limit switch is pressed
                 deployMotor.set(0); // stop the intake
             } else { // otherwise we're good to keep moving
-                double power = deployPID.calculate(deployEncoder.getPosition()); // calculate the power
-                if (Math.abs(power) > 0.6) { // limit the power to a max of 0.8             
-                    power = Math.copySign(0.6, power);
+                if (switchHasBeenPressed) {
+                    double power = deployPID.calculate(deployEncoder.getPosition()); // calculate the power
+                    if (Math.abs(power) > 0.6) { // limit the power to a max of 0.8             
+                        power = Math.copySign(0.6, power);
+                    }
+                    deployMotor.set(power); // move the intake
+                } else {
+                    if (direction == 1) {
+                        deployMotor.set(0.4);
+                    }
                 }
-                deployMotor.set(power); // move the intake
             }
         }
         

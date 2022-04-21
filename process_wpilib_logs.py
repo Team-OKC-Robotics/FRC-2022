@@ -61,7 +61,7 @@ entries = {
 }
 
 # log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_210622_OKTU_Q43.csv"
-log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\drivetrain\FRC_20220420_231944_CARVER_P7.csv"
+log = r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\drivetrain\FRC_20220421_133712.csv"
 with open(log) as f:
 # with open(r"C:\Users\teamo\Documents\GitHub\FRC-2022\logs\all\FRC_20220408_175227.csv") as f:
     log = f.read().split("\n")
