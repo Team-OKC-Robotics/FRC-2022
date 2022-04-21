@@ -1,9 +1,10 @@
 package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class TurnCommand extends CommandBase {
+public class TurnCommand extends WaitCommand {
     private final DrivetrainSubsystem drivetrain;
     private double angle = 0;
     private double maxOutput = 1;
@@ -13,14 +14,16 @@ public class TurnCommand extends CommandBase {
      * @param drivetrain the drivetrain subsystem for the command to control
      * @param angle the angle, in degrees, to turn the robot by
      */
-    public TurnCommand(DrivetrainSubsystem drivetrain, double angle) {
+    public TurnCommand(DrivetrainSubsystem drivetrain, double angle, double timeout) {
+        super(timeout);
         this.drivetrain = drivetrain;
         this.angle = angle;
 
         addRequirements(drivetrain);
     }
 
-    public TurnCommand(DrivetrainSubsystem drivetrain, double angle, double maxOutput) {
+    public TurnCommand(DrivetrainSubsystem drivetrain, double angle, double maxOutput, double timeout) {
+        super(timeout);
         this.drivetrain = drivetrain;
         this.angle = angle;
         this.maxOutput = maxOutput;
@@ -30,6 +33,7 @@ public class TurnCommand extends CommandBase {
 
     @Override
     public void initialize() {
+        super.initialize();
         drivetrain.resetTurnPID();
         drivetrain.resetEncoders();
         drivetrain.resetGyro();
@@ -48,6 +52,6 @@ public class TurnCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return drivetrain.atTurnSetpoint();
+        return drivetrain.atTurnSetpoint() || super.isFinished();
     }
 }

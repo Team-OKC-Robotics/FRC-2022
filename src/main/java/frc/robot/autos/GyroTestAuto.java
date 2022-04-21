@@ -12,11 +12,11 @@ public class GyroTestAuto extends Auto {
             "an auto that tests the drivetrain so we can get all the kinks worked out",
             0,
             new DriveCommand(drivetrain, 10),
-            new TurnCommand(drivetrain, 90),
+            new TurnCommand(drivetrain, 90, 5),
             new DriveCommand(drivetrain, 10),
-            new TurnCommand(drivetrain, 90),
+            new TurnCommand(drivetrain, 90, 5),
             new DriveCommand(drivetrain, 10),
-            new TurnCommand(drivetrain, 90),
+            new TurnCommand(drivetrain, 90, 5),
             new DriveCommand(drivetrain, -10)
         );
     }

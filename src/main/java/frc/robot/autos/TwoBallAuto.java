@@ -27,13 +27,13 @@ public class TwoBallAuto extends Auto {
                 new SetIntakePositionCommand(intake, true), // deploy the intake
                 new SetIntakeCommand(intake, 1), // run the intake
                 new SetIndexerCommand(intake, 0.4), // and indexer
-                new WaitCommand(1), // wait for intake to reach fully deployed
+                new WaitCommand(0.8), // wait for intake to reach fully deployed
 
-                new DriveSetSpeedCommand(drivetrain, 30, 0.3), // drive to pick up the balls (slowly so we don't run into anything too hard)
-                new TurnCommand(drivetrain, -175, 0.2), // turn back
-                new DriveSetSpeedCommand(drivetrain, 30, 0.3), // drive back
+                new DriveSetSpeedCommand(drivetrain, 30, 0.3, 4), // drive to pick up the balls (slowly so we don't run into anything too hard)
+                new TurnCommand(drivetrain, -177, 0.2, 5), // turn back
+                new DriveSetSpeedCommand(drivetrain, 33.5, 0.3, 4), // drive back
                 new SetShooterCommand(shooter, 9500), // warmup the shooter
-                new VisionAlignCommand(vision, drivetrain), // line up
+                // new VisionAlignCommand(vision, drivetrain), // line up
 
                 new ShootAndFeedCommand(shooter, ShootK.normalShot, 0.4, 6), // once it's there run both the shooter and the indexer for 6 seconds
                 new StopShooterCommand(shooter), // stop the shoote
