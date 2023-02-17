@@ -17,7 +17,6 @@ public class TeleOpDriveCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        drivetrain.setOpenLoopRampRate(); // only get open loop ramp rate when we start tele op
         drivetrain.setSpeedModifier(0.75); // so as not to tip
     }
 

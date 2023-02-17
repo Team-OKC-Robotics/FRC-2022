@@ -7,12 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.autos.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.shooter.*;
 import frc.robot.subsystems.*;
-import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -61,12 +59,9 @@ public class RobotContainer {
   private final IntakeSubsystem intake = new IntakeSubsystem();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
   
-  // autos
-  private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
   
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
-  private final QuickTeleOpDriveCommand quickTeleOpDrive = new QuickTeleOpDriveCommand(drivetrain, gamepad1);
   private final SlowTeleOpDrive slowTeleOpDrive = new SlowTeleOpDrive(drivetrain, gamepad1);
   
   // intake
@@ -93,8 +88,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // add the autos to the chooser
-    AutoChooser.addAutos(doNothingAuto);
-    AutoChooser.addGamepad(gamepad1);
     resetDeploy.schedule();
 
     // Configure the button bindings
@@ -113,7 +106,6 @@ public class RobotContainer {
       // drivetrain commands
       backButton.whenPressed(teleOpDrive);
       aButton.whenPressed(slowTeleOpDrive).whenReleased(teleOpDrive); // for lining up climber and stuff
-      bButton.whenPressed(quickTeleOpDrive).whenReleased(teleOpDrive); // for boooosting around/into other robots/defense
 
       // intake commands
       leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
