@@ -33,7 +33,6 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     DriverStation.silenceJoystickConnectionWarning(true);
     //camera = new HttpCamera("photoncam", "http://photonvision.local:1182/stream.mjpg", HttpCameraKind.kMJPGStreamer);
-    CameraServer.startAutomaticCapture(); // get our USB camera to show up on Shuffleboard
     DataLogManager.start();
   }
 
