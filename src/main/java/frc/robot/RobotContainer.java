@@ -8,11 +8,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.autos.*;
-import frc.robot.commands.climber.*;
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.shooter.*;
-import frc.robot.commands.vision.*;
 import frc.robot.subsystems.*;
 import frc.robot.util.AutoChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -62,21 +60,15 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
-  private final ClimberSubsystem climber = new ClimberSubsystem();
-  private final VisionSubsystem vision = new VisionSubsystem();
-
+  
   // autos
   private final DoNothingAuto doNothingAuto = new DoNothingAuto(drivetrain); // drives the robot 0 inches
-  private final ShootThenDriveAuto shootThenDrive = new ShootThenDriveAuto(drivetrain, shooter, intake); // drives the robot backwards
-  private final TwoBallAuto twoBallAuto = new TwoBallAuto(drivetrain, shooter, intake); // drives the robot backwards
-  private final DriveOffLineAuto driveOffLineAuto = new DriveOffLineAuto(drivetrain); // just drives the robot backwards
   
   // commands
   private final TeleOpDriveCommand teleOpDrive = new TeleOpDriveCommand(drivetrain, gamepad1);
   private final QuickTeleOpDriveCommand quickTeleOpDrive = new QuickTeleOpDriveCommand(drivetrain, gamepad1);
   private final SlowTeleOpDrive slowTeleOpDrive = new SlowTeleOpDrive(drivetrain, gamepad1);
-  private final VisionAlignCommand visionAlign = new VisionAlignCommand(vision, drivetrain);
-
+  
   // intake
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.8);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
@@ -96,25 +88,12 @@ public class RobotContainer {
   private final SetTriggerCommand stopTrigger = new SetTriggerCommand(shooter, 0);
   private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad3, 0.4);
 
-  // climber
-  private final ManualClimberCommand extendLeftClimber = new ManualClimberCommand(climber, 0.8, true);
-  private final ManualClimberCommand retractLeftClimber = new ManualClimberCommand(climber, -0.5, true);
-  private final ManualClimberCommand stopLeftClimber = new ManualClimberCommand(climber, 0, true);
-  private final ManualClimberCommand extendRightClimber = new ManualClimberCommand(climber, 0.8, false);
-  private final ManualClimberCommand retractRightClimber = new ManualClimberCommand(climber, -0.5, false);
-  private final ManualClimberCommand stopRightClimber = new ManualClimberCommand(climber, 0, false);
-
-  private final ManualRotateClimberCommand rotateLeftClimber = new ManualRotateClimberCommand(climber, gamepad3, true);
-  private final ManualStopRotateClimberCommand stopLeftRotate = new ManualStopRotateClimberCommand(climber, true);
-  private final ManualRotateClimberCommand rotateRightClimber = new ManualRotateClimberCommand(climber, gamepad3, false);
-  private final ManualStopRotateClimberCommand stopRightRotate = new ManualStopRotateClimberCommand(climber, false);
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // add the autos to the chooser
-    AutoChooser.addAutos(shootThenDrive, twoBallAuto, driveOffLineAuto, doNothingAuto /*, gyroTestAuto*/);
+    AutoChooser.addAutos(doNothingAuto);
     AutoChooser.addGamepad(gamepad1);
     resetDeploy.schedule();
 
@@ -135,7 +114,6 @@ public class RobotContainer {
       backButton.whenPressed(teleOpDrive);
       aButton.whenPressed(slowTeleOpDrive).whenReleased(teleOpDrive); // for lining up climber and stuff
       bButton.whenPressed(quickTeleOpDrive).whenReleased(teleOpDrive); // for boooosting around/into other robots/defense
-      xButton.whenPressed(visionAlign).whenReleased(teleOpDrive); // for lining up with the hub
 
       // intake commands
       leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
@@ -146,22 +124,13 @@ public class RobotContainer {
       // sideButton.whenPressed(fastShooter).whenReleased(stopShooter);
       sideButton.whenPressed(shooterPresets).whenReleased(stopShooter);
       
-      // climber
-      topLeftButton.whenPressed(extendLeftClimber).whenReleased(stopLeftClimber);
-      bottomLeftButton.whenPressed(retractLeftClimber).whenReleased(stopLeftClimber);
-      topRightButton.whenPressed(extendRightClimber).whenReleased(stopRightClimber);
-      bottomRightButton.whenPressed(retractRightClimber);
-      
       // intake
       triggerButton.whenPressed(feed).whenReleased(stopTrigger).whenPressed(indexerIn).whenReleased(stopIndexer); // ignore ball detection, for shooting
       sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer).whenPressed(triggerOut).whenReleased(stopTrigger); // reverse indexer/trigger controls
       eightButton.whileHeld(indexerIn).whenReleased(stopIndexer).whileHeld(triggerIn).whenReleased(stopTrigger);
       nineButton.whenPressed(deployIntake);
       tenButton.whenPressed(retractIntake);
-
-      elevenButton.whileHeld(rotateLeftClimber).whenReleased(stopLeftRotate);
-      // twelveButton.whenPressed(rotateRightClimber).whenReleased(stopRightRotate);
-  }
+ }
 
   public Command getDriveCommand() {
     // return teleopDrive;
