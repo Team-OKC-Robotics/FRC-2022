@@ -22,7 +22,7 @@ public class TeleOpDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrain.arcadeDrive(Math.pow(-gamepad.getRawAxis(1), 3), Math.pow(gamepad.getRawAxis(4), 3), false);
+        drivetrain.arcadeDrive(-gamepad.getRawAxis(1), gamepad.getRawAxis(4), false);
     }
 
     @Override
