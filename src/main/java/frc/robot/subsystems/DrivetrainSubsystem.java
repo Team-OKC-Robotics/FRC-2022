@@ -1,16 +1,13 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,21 +16,11 @@ import frc.robot.Constants.DriveK;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     // actuators
-    private CANSparkMax left1Motor;
-    private CANSparkMax left2Motor;
-    private CANSparkMax left3Motor;
+    private Victor left1Motor;
+    private Victor left2Motor;
 
-    private CANSparkMax right1Motor;
-    private CANSparkMax right2Motor;
-    private CANSparkMax right3Motor;
-
-    private RelativeEncoder left1Encoder;
-    private RelativeEncoder left2Encoder;
-    private RelativeEncoder left3Encoder;
-
-    private RelativeEncoder right1Encoder;
-    private RelativeEncoder right2Encoder;
-    private RelativeEncoder right3Encoder;
+    private Victor right1Motor;
+    private Victor right2Motor;
     
     private MotorControllerGroup leftSide;
     private MotorControllerGroup rightSide;
@@ -50,9 +37,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     // other variables
     private double speedModifier = 0.75; // the speed modifier for the drivetrain (the joystick input is multiplied by this value)
-    //private double headingAngle = 0; // the heading of the robot. used to drive straight in auto.
-    private double openLoopRampRate = 0.5;
-
+ 
     // shuffleboard
     private ShuffleboardTab tab = Shuffleboard.getTab("drivetrain");
     private NetworkTableEntry writeMode = tab.add("Write Mode", false).getEntry();
@@ -81,45 +66,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public DrivetrainSubsystem() {
         // motor configuration
-        left1Motor = new CANSparkMax(1, MotorType.kBrushless);
-        left2Motor = new CANSparkMax(2, MotorType.kBrushless);
-        left3Motor = new CANSparkMax(3, MotorType.kBrushless);
-        leftSide = new MotorControllerGroup(left1Motor, left2Motor, left3Motor);
+        left1Motor = new Victor(1);
+        left2Motor = new Victor(2);
+        leftSide = new MotorControllerGroup(left1Motor, left2Motor);
 
-        right1Motor = new CANSparkMax(4, MotorType.kBrushless);
-        right2Motor = new CANSparkMax(5, MotorType.kBrushless);
-        right3Motor = new CANSparkMax(6, MotorType.kBrushless);
-        rightSide = new MotorControllerGroup(right1Motor, right2Motor, right3Motor);
-
-        // coast mode so we don't kill the gearbox and motors (also makes driving easier)
-        left1Motor.setIdleMode(IdleMode.kCoast);
-        left2Motor.setIdleMode(IdleMode.kCoast);
-        left3Motor.setIdleMode(IdleMode.kCoast);
-        right1Motor.setIdleMode(IdleMode.kCoast);
-        right2Motor.setIdleMode(IdleMode.kCoast);
-        right3Motor.setIdleMode(IdleMode.kCoast);
-
-        // for autonomous start with a fast ramp rate (not too fast otherwise we kind of break the gearboxes)
-        // we had problems with stripping gears and whatnot because we put too much force on the gears so this limits
-        // that. VEX guy said on Chief Delphi not to put too much acceleration on them otherwise they strip
-        left1Motor.setOpenLoopRampRate(0.01);
-        left2Motor.setOpenLoopRampRate(0.01);
-        left3Motor.setOpenLoopRampRate(0.01);
-        right1Motor.setOpenLoopRampRate(0.01);
-        right2Motor.setOpenLoopRampRate(0.01);
-        right3Motor.setOpenLoopRampRate(0.01);
+        right1Motor = new Victor(3);
+        right2Motor = new Victor(4);
+        rightSide = new MotorControllerGroup(right1Motor, right2Motor);
 
         rightSide.setInverted(true); // motors face opposite directions so +1 for left side is opposite +1 for right side, this fixes that
         drivetrain = new DifferentialDrive(leftSide, rightSide);
-
-        // get the built-in encoders of the NEOs       
-        left1Encoder = left1Motor.getEncoder();
-        left2Encoder = left2Motor.getEncoder();
-        left3Encoder = left3Motor.getEncoder();
-    
-        right1Encoder = right1Motor.getEncoder();
-        right2Encoder = right2Motor.getEncoder();
-        right3Encoder = right3Motor.getEncoder();
 
         // sensor configuration
         gyro = new AHRS(SPI.Port.kMXP); // plugged into the big port thing on the RoboRIO
@@ -143,8 +99,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         totalTicks.setDouble(0);
         heading.setDouble(0);
 
-        // reset the subsystem
-        resetEncoders();
         resetDistancePID();
         resetHeadingPID();
         resetTurnPID();
@@ -155,24 +109,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         speedModifier = speedMod;
     }
 
-    public void setOpenLoopRampRate() {
-        left1Motor.setOpenLoopRampRate(openLoopRampRate);
-        left2Motor.setOpenLoopRampRate(openLoopRampRate);
-        left3Motor.setOpenLoopRampRate(openLoopRampRate);
-        right1Motor.setOpenLoopRampRate(openLoopRampRate);
-        right2Motor.setOpenLoopRampRate(openLoopRampRate);
-        right3Motor.setOpenLoopRampRate(openLoopRampRate);
-    }
-
-    public void setOpenLoopRampRate(double rate) {
-        left1Motor.setOpenLoopRampRate(rate);
-        left2Motor.setOpenLoopRampRate(rate);
-        left3Motor.setOpenLoopRampRate(rate);
-        right1Motor.setOpenLoopRampRate(rate);
-        right2Motor.setOpenLoopRampRate(rate);
-        right3Motor.setOpenLoopRampRate(rate);
-    }
-
+   
     public void curvatureDrive(double speed, double turn, boolean turnInPlace) {
         drivetrain.curvatureDrive(speed, turn, turnInPlace);
     }
@@ -214,21 +151,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         drivetrain.arcadeDrive(-speed, turn, squareInputs);
     }
 
-    /**
-     * Drives the drivetrain straight for the given distance
-     * @param distance the distance, in inches, to drive forwards
-     */
-    public void driveDistance(double distance) {
-        distancePID.setSetpoint(distance);
-
-        arcadeDrive(distancePID.calculate(getInches(getEncoderAverage())), headingPID.calculate(getHeading()));
-    }
-
-    public void driveOnHeading(double setSpeed, double distance) {
-        distancePID.setSetpoint(distance);
-        arcadeDriveAuto(clamp(-setSpeed, setSpeed, distancePID.calculate(getEncoderAverage())), headingPID.calculate(getHeading()), false);
-    }
-
     public double clamp(double minOutput, double maxOutput, double input) {
         if (input < minOutput) {
             return minOutput;
@@ -257,46 +179,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // uh wait why is this here
         //headingAngle = getHeading();
         headingPID.setSetpoint(getHeading());
-    }
-
-    /**
-     * Gets the average of both sides of the drivetrain
-     * @return the average distance of the drivetrain, in inches
-     */
-    public double getEncoderAverage() {
-        return (getLeftEncoderAverage() + -getRightEncoderAverage()) / 2;
-    }
-
-    /**
-     * Gets the average of the left side of the drivetrain
-     * @return the average distance of the left side of the drivetrain, in inches
-     */
-    public double getLeftEncoderAverage() {
-        return left1Encoder.getPosition();
-    }
-
-    /**
-     * Gets the average of the right side of the drivetrain
-     * @return the average distance of the right side of the drivetrain, in inches
-     */
-    public double getRightEncoderAverage() {
-        return right1Encoder.getPosition();
-    }
-
-    /**
-     * Resets the encoders and the corresponding Shuffleboard entries
-     */
-    public void resetEncoders() {
-        left1Encoder.setPosition(0);
-        left2Encoder.setPosition(0);
-        left3Encoder.setPosition(0);
-        right1Encoder.setPosition(0);
-        right2Encoder.setPosition(0);
-        right3Encoder.setPosition(0);
-
-        totalTicks.setDouble(0);
-        leftTicks.setDouble(0);
-        rightTicks.setDouble(0);
     }
 
     /**
@@ -381,9 +263,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic() {
         if (!Constants.competition) {
             // update Shuffelboard sensor values
-            leftTicks.setDouble(getLeftEncoderAverage());
-            rightTicks.setDouble(getRightEncoderAverage());
-            totalTicks.setDouble(getEncoderAverage());
             heading.setDouble(getHeading());
             distanceError.setDouble(distancePID.getPositionError());
     
