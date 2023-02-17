@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // gamepads
   private final Joystick gamepad1 = new Joystick(0);
-  private final Joystick gamepad3 = new Joystick(2);
 
   // buttons
   private JoystickButton aButton = new JoystickButton(gamepad1, 1);
@@ -39,20 +38,6 @@ public class RobotContainer {
   private JoystickButton startButton = new JoystickButton(gamepad1, 8);
   private JoystickButton rightStickButton = new JoystickButton(gamepad1, 10);
   private JoystickButton leftStickButton = new JoystickButton(gamepad1, 9);
-
-  private JoystickButton triggerButton = new JoystickButton(gamepad3, 1); // 1
-  private JoystickButton sideButton = new JoystickButton(gamepad3, 2); // 2
-  private JoystickButton topLeftButton = new JoystickButton(gamepad3, 5); // 5 
-  private JoystickButton topRightButton = new JoystickButton(gamepad3, 6); // 6
-  private JoystickButton bottomLeftButton = new JoystickButton(gamepad3, 3); // 3
-  private JoystickButton bottomRightButton = new JoystickButton(gamepad3, 4); // 4
-  private JoystickButton sevenButton = new JoystickButton(gamepad3, 7); // as they are named
-  private JoystickButton eightButton = new JoystickButton(gamepad3, 8); // as they are named
-  private JoystickButton nineButton = new JoystickButton(gamepad3, 9); // as they are named
-  private JoystickButton tenButton = new JoystickButton(gamepad3, 10); // as they are named
-  private JoystickButton elevenButton = new JoystickButton(gamepad3, 11); // as they are named
-  private JoystickButton twelveButton = new JoystickButton(gamepad3, 12); // 12
-  
 
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
@@ -68,8 +53,6 @@ public class RobotContainer {
   private final SetIntakeCommand intakeIn = new SetIntakeCommand(intake, 0.8);
   private final SetIntakeCommand stopIntake = new SetIntakeCommand(intake, 0);
   private final SetIntakeCommand intakeOut = new SetIntakeCommand(intake, -0.8);
-  private final SetIntakePositionCommand deployIntake = new SetIntakePositionCommand(intake, true);
-  private final SetIntakePositionCommand retractIntake = new SetIntakePositionCommand(intake, false);
   private final SetIndexerCommand indexerIn = new SetIndexerCommand(intake, 0.5);
   private final SetIndexerCommand indexerOut = new SetIndexerCommand(intake, -0.5);
   private final SetIndexerCommand stopIndexer = new SetIndexerCommand(intake, 0);
@@ -81,7 +64,8 @@ public class RobotContainer {
   private final SetTriggerCommand triggerIn = new SetTriggerCommand(shooter, 0.4);
   private final SetTriggerCommand triggerOut = new SetTriggerCommand(shooter, -0.4);
   private final SetTriggerCommand stopTrigger = new SetTriggerCommand(shooter, 0);
-  private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad3, 0.4);
+  private final ShooterPresetCommand shooterPresets = new ShooterPresetCommand(shooter, gamepad1, 0.4);
+  private final SetShooterCommand setShooter = new SetShooterCommand(shooter, 1600);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -105,8 +89,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
       // drivetrain commands
       backButton.whenPressed(teleOpDrive);
-      aButton.whenPressed(slowTeleOpDrive).whenReleased(teleOpDrive); // for lining up climber and stuff
-
+     
       // intake commands
       leftBumper.whenPressed(intakeIn).whenReleased(stopIntake);
       rightBumper.whenPressed(intakeOut).whenReleased(stopIntake);
@@ -114,14 +97,12 @@ public class RobotContainer {
       // fun flight stick controls (this is really fun can confirm)
       // shooter
       // sideButton.whenPressed(fastShooter).whenReleased(stopShooter);
-      sideButton.whenPressed(shooterPresets).whenReleased(stopShooter);
+      xButton.whenPressed(setShooter).whenReleased(stopShooter);
       
       // intake
-      triggerButton.whenPressed(feed).whenReleased(stopTrigger).whenPressed(indexerIn).whenReleased(stopIndexer); // ignore ball detection, for shooting
-      sevenButton.whenPressed(indexerOut).whenReleased(stopIndexer).whenPressed(triggerOut).whenReleased(stopTrigger); // reverse indexer/trigger controls
-      eightButton.whileHeld(indexerIn).whenReleased(stopIndexer).whileHeld(triggerIn).whenReleased(stopTrigger);
-      nineButton.whenPressed(deployIntake);
-      tenButton.whenPressed(retractIntake);
+      bButton.whenPressed(feed).whenReleased(stopTrigger).whenPressed(indexerIn).whenReleased(stopIndexer); // ignore ball detection, for shooting
+      yButton.whenPressed(indexerOut).whenReleased(stopIndexer).whenPressed(triggerOut).whenReleased(stopTrigger); // reverse indexer/trigger controls
+      aButton.whileHeld(indexerIn).whenReleased(stopIndexer).whileHeld(triggerIn).whenReleased(stopTrigger);
  }
 
   public Command getDriveCommand() {
