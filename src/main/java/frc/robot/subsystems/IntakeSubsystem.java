@@ -58,7 +58,8 @@ public class IntakeSubsystem extends SubsystemBase {
      * there's also a 'pass-through' or 'indexer' motor to move the balls along to the shooter
      */
     public IntakeSubsystem() {
-        deployMotor = new CANSparkMax(10, MotorType.kBrushless);
+        // deployMotor = new CANSparkMax(10, MotorType.kBrushless);
+        deployMotor = null;
         indexerMotor = new CANSparkMax(7, MotorType.kBrushless); // not the shooter tower but the middle indexer
         intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
     
@@ -161,10 +162,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        posLog.append(deployEncoder.getPosition());
-        outputLog.append(deployMotor.get());
-        
-            
         if (direction != 0) { // don't start moving unless the code has started and the intake has been told to move,
                             // so it can be moved when powered on but disabled
             boolean deployed = !deployedLimitSwitch.get();
